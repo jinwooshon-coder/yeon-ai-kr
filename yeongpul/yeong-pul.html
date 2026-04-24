@@ -937,7 +937,7 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
       <input type="text" id="signupName" placeholder="이름" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:8px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
       <input type="text" id="signupEmail" placeholder="이메일 주소" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:8px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
       <input type="password" id="signupPw" placeholder="비밀번호 (6자 이상)" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:8px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
-      <input type="text" id="signupCode" placeholder="학원 코드 (선택사항)" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:4px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
+      <input type="text" id="signupCode" placeholder="학원 등록 코드 (필수)" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:4px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
       <p style="font-size:13px;color:var(--color-text-light);margin:0 0 12px 4px;">가입 후 설정에서 언제든 입력할 수 있습니다.</p>
       <button onclick="emailSignup()" style="width:100%;padding:12px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:12px;">회원가입</button>
 
@@ -8435,14 +8435,17 @@ function emailLogin(){
   alert('안녕하세요, '+acc.name+'님! 🎓\n로그인되었습니다.');
 }
 
+const STUDENT_ENROLLMENT_CODES = ["2EP9TA", "2MG4PQ", "2WWNZG", "3YM3B3", "4KZVPT", "4TKS2B", "5HA2WV", "5QMRGL", "64U5YL", "6EHNP4", "7FUQTX", "8SRWBW", "98U765", "9R4STZ", "AL7ETW", "CB4E3J", "CCTNUX", "CGUWRL", "CL2S5C", "CQDLBV", "D4G8QG", "D6CBF9", "DFU8EV", "EU9JNT", "EUY22K", "FHP879", "GP66QG", "HH5T75", "JCNAXF", "JEDVYB", "JUQTXC", "KV5UBB", "MCNZ3G", "P9PXN6", "QGFFTG", "QWFEQ5", "RW9WSA", "SBAG7P", "T7BG8M", "UQVQFY", "UWGWNQ", "V68PPZ", "VT6MZZ", "WZVRYW", "XLQRCU", "Y9CD2W", "YQV5KP", "YUCX4J", "YUKY2T", "ZWLF25"];
 function emailSignup(){
   try{
   const name = (document.getElementById('signupName').value||'').trim();
   const email = (document.getElementById('signupEmail').value||'').trim();
   const pw = document.getElementById('signupPw').value||'';
+  const code = (document.getElementById('signupCode') ? document.getElementById('signupCode').value : '').trim().toUpperCase();
   if(!name||!email||!pw){ alert('이름, 이메일, 비밀번호를 모두 입력해 주세요.'); return; }
   if(pw.length<6){ alert('비밀번호는 6자 이상이어야 합니다.'); return; }
   if(!email.includes('@')){ alert('올바른 이메일 형식을 입력해 주세요.'); return; }
+  if(!STUDENT_ENROLLMENT_CODES.includes(code)){ alert('학원 등록 코드가 올바르지 않습니다.\n선생님에게 받은 6자리 코드를 확인해 주세요.'); return; }
 
   const accounts = readAccounts();
 
