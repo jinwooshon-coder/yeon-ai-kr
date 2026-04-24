@@ -914,7 +914,14 @@ input::placeholder, textarea::placeholder {
  </script>
  </div>
  <div style="display:flex;gap:4px;align-items:center;">
- <button id="appLoginBtn" onclick="showAuthModal()" style="padding:6px 14px;border:1px solid var(--color-primary);border-radius:8px;background:none;color:var(--color-primary);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;" onmouseover="this.style.background='var(--color-primary)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--color-primary)'">로그인</button>
+ <button class="refresh-btn" onclick="openQRModal()" title="QR 공유">
+ <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+  <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>
+  <rect x="5" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="16" y="5" width="3" height="3" fill="currentColor" stroke="none"/><rect x="5" y="16" width="3" height="3" fill="currentColor" stroke="none"/>
+  <path d="M14 14h2v2h-2zM18 14h2v2h-2zM14 18h2v2h-2zM18 18h2v2h-2z" fill="currentColor" stroke="none"/>
+ </svg>
+</button>
+<button id="appLoginBtn" onclick="showAuthModal()" style="padding:6px 14px;border:1px solid var(--color-primary);border-radius:8px;background:none;color:var(--color-primary);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;" onmouseover="this.style.background='var(--color-primary)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--color-primary)'">로그인</button>
  <button class="refresh-btn" onclick="openSettingsModal()" title="설정">
  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
  </button>
@@ -932,6 +939,24 @@ input::placeholder, textarea::placeholder {
  </div>
 </div>
 
+<!-- QR 공유 모달 -->
+<div id="qrShareModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.45);display:none;align-items:center;justify-content:center;" onclick="if(event.target===this)closeQRModal()">
+ <div style="background:var(--color-bg);border-radius:16px;padding:28px 24px;max-width:300px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.22);">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+   <span style="font-size:15px;font-weight:700;color:var(--color-text);">앱 공유</span>
+   <button onclick="closeQRModal()" style="border:none;background:none;cursor:pointer;color:var(--color-text-light);font-size:20px;line-height:1;padding:0;">&#x2715;</button>
+  </div>
+  <div id="qrCodeCanvas" style="display:flex;justify-content:center;margin-bottom:14px;"></div>
+  <p style="font-size:12px;color:var(--color-text-light);margin:0 0 14px;">QR코드를 스캔하면 바로 접속할 수 있습니다</p>
+  <div style="display:flex;gap:8px;">
+   <button onclick="copyAppLink()" id="copyLinkBtn" style="flex:1;padding:10px;border:1.5px solid var(--color-primary);border-radius:10px;background:none;color:var(--color-primary);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+    링크 복사
+   </button>
+   <button onclick="closeQRModal()" style="flex:1;padding:10px;border:none;border-radius:10px;background:var(--color-surface);color:var(--color-text);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;">닫기</button>
+  </div>
+ </div>
+</div>
 <!-- 로그인/회원가입 모달 -->
 <div class="print-modal-bg" id="authModal" onclick="if(event.target===this)closeAuthModal()">
  <div class="print-modal" style="max-width:400px;">
@@ -993,8 +1018,8 @@ input::placeholder, textarea::placeholder {
  </div>
  
  <input type="password" id="signupPw" placeholder="비밀번호 (4자 이상)" style="width:100%;padding:12px 14px;border:1px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:8px;background:var(--color-bg);color:var(--color-text);box-sizing:border-box;">
- <input type="text" id="signupCode" placeholder="추천 코드 (선택사항)" style="width:100%;padding:12px 14px;border:1px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:4px;background:var(--color-bg);color:var(--color-text);box-sizing:border-box;">
- <p style="font-size:13px;color:var(--color-text-light);margin:0 0 12px 4px;">가입 후 설정에서 언제든 입력할 수 있습니다.</p>
+ <input type="text" id="signupCode" placeholder="학원 등록 코드 (필수)" style="width:100%;padding:12px 14px;border:1px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:4px;background:var(--color-bg);color:var(--color-text);box-sizing:border-box;">
+ <p style="font-size:13px;color:var(--color-text-light);margin:0 0 12px 4px;">선생님에게 받은 6자리 코드를 입력하세요.</p>
  <button onclick="emailSignup()" style="width:100%;padding:12px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:12px;">회원가입</button>
 
  <div style="text-align:center;">
@@ -2371,8 +2396,8 @@ input::placeholder, textarea::placeholder {
  <!-- 빈 상태 -->
  <div class="card" id="tlEmptyCard">
  <div class="tl-empty">
- 위 입력 창에 문장을 붙여넣거나 사진을 업로드하고 <strong>분석하기</strong>를 누르면<br>
- 자동 감지된 학습 항목이 여기에 표시됩니다.
+ 수학 문제를 사진으로 올리거나 직접 입력한 후 <strong>분석하기</strong>를 누르면<br>
+ AI 오답 분석 결과가 여기에 표시됩니다.
  </div>
  </div>
 </div>
@@ -9353,13 +9378,15 @@ function emailLogin(){
  alert('안녕하세요, '+acc.name+'님! \n로그인되었습니다.');
 }
 
+const STUDENT_ENROLLMENT_CODES = ["2EP9TA", "2MG4PQ", "2WWNZG", "3YM3B3", "4KZVPT", "4TKS2B", "5HA2WV", "5QMRGL", "64U5YL", "6EHNP4", "7FUQTX", "8SRWBW", "98U765", "9R4STZ", "AL7ETW", "CB4E3J", "CCTNUX", "CGUWRL", "CL2S5C", "CQDLBV", "D4G8QG", "D6CBF9", "DFU8EV", "EU9JNT", "EUY22K", "FHP879", "GP66QG", "HH5T75", "JCNAXF", "JEDVYB", "JUQTXC", "KV5UBB", "MCNZ3G", "P9PXN6", "QGFFTG", "QWFEQ5", "RW9WSA", "SBAG7P", "T7BG8M", "UQVQFY", "UWGWNQ", "V68PPZ", "VT6MZZ", "WZVRYW", "XLQRCU", "Y9CD2W", "YQV5KP", "YUCX4J", "YUKY2T", "ZWLF25"];
 function emailSignup(){
  const name = document.getElementById('signupName').value.trim();
- const email = document.getElementById('signupEmail').value.trim();
+ const email = document.getElementById('signupEmail') ? document.getElementById('signupEmail').value.trim() : (name+'@supul.local');
  const pw = document.getElementById('signupPw').value;
- if(!name||!email||!pw){ alert('이름, 이메일, 비밀번호를 모두 입력해 주세요.'); return; }
- if(pw.length<6){ alert('비밀번호는 6자 이상이어야 합니다.'); return; }
- if(!email.includes('@')){ alert('올바른 이메일 형식을 입력해 주세요.'); return; }
+ const code = (document.getElementById('signupCode').value||'').trim().toUpperCase();
+ if(!name||!pw){ alert('아이디와 비밀번호를 입력해 주세요.'); return; }
+ if(pw.length<4){ alert('비밀번호는 4자 이상이어야 합니다.'); return; }
+ if(!STUDENT_ENROLLMENT_CODES.includes(code)){ alert('학원 등록 코드가 올바르지 않습니다.\n선생님에게 받은 6자리 코드를 확인해 주세요.'); return; }
 
  const accounts = readAccounts();
 
@@ -14538,6 +14565,47 @@ function dismissInstallBanner(){
   }
 })();
 </script>
+
+// ===== QR 공유 모달 =====
+var _qrGenerated = false;
+function openQRModal(){
+ var m = document.getElementById('qrShareModal');
+ if(!m) return;
+ m.style.display = 'flex';
+ if(!_qrGenerated){
+  _qrGenerated = true;
+  var c = document.getElementById('qrCodeCanvas');
+  c.innerHTML = '';
+  var url = window.location.href.split('?')[0].split('#')[0];
+  if(typeof QRCode !== 'undefined'){
+   new QRCode(c, {text: url, width:180, height:180, colorDark:'#2d3748', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.M});
+  } else {
+   c.innerHTML = '<p style="font-size:12px;color:var(--color-text-light);">QR 로딩 중...</p>';
+   var s = document.createElement('script');
+   s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js';
+   s.onload = function(){
+    c.innerHTML = '';
+    var url2 = window.location.href.split('?')[0].split('#')[0];
+    new QRCode(c, {text: url2, width:180, height:180, colorDark:'#2d3748', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.M});
+   };
+   document.head.appendChild(s);
+  }
+ }
+}
+function closeQRModal(){
+ var m = document.getElementById('qrShareModal');
+ if(m) m.style.display = 'none';
+}
+function copyAppLink(){
+ var url = window.location.href.split('?')[0].split('#')[0];
+ navigator.clipboard.writeText(url).then(function(){
+  var btn = document.getElementById('copyLinkBtn');
+  if(btn){ var orig=btn.innerHTML; btn.textContent='복사됨!'; setTimeout(function(){ btn.innerHTML=orig; }, 1500); }
+ }).catch(function(){
+  prompt('아래 링크를 복사하세요:', url);
+ });
+}
+
 </body>
 </html>
                                                                                                                                                      
