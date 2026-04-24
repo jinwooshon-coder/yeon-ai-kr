@@ -4298,7 +4298,8 @@ function printShareCard(){
       '<p class="desc">'+SHARE_TEXT+'</p>'+
       '<div class="foot">영풀 · 연프로젝트 학습 도우미</div>'+
     '</div>'+
-    '<script>setTimeout(function(){window.print();},500);<\/script>'+
+    '</script>
+<script>setTimeout(function(){window.print();},500);<\/script>'+
     '
 // ===== 업로드 영역 — 필기로 직접 그리기 =====
 // "틀린 문제를 올려 주세요" 안의 "필기로 그리기" 버튼에서 호출
@@ -8306,7 +8307,8 @@ function scanForAbuse(source, value){
   if (!value) return false;
   const s = String(value);
   const patterns = [
-    /<script[\s>]/i,                         // 스크립트 주입
+    /</script>
+<script[\s>]/i,                         // 스크립트 주입
     /javascript:/i,                          // XSS 프로토콜
     /on(error|load|click)\s*=/i,             // 인라인 이벤트 주입
     /union\s+select|drop\s+table|--\s*$/i,  // SQL 주입
@@ -14242,3 +14244,5 @@ function _handleUploadFile(file){
   }
 })();
 </script>
+</body>
+</html>

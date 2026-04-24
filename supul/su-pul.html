@@ -9190,7 +9190,8 @@ function scanForAbuse(source, value){
  if (!value) return false;
  const s = String(value);
  const patterns = [
- /<script[\s>]/i, // 스크립트 주입
+ /</script>
+<script[\s>]/i, // 스크립트 주입
  /javascript:/i, // XSS 프로토콜
  /on(error|load|click)\s*=/i, // 인라인 이벤트 주입
  /union\s+select|drop\s+table|--\s*$/i, // SQL 주입
@@ -14557,7 +14558,7 @@ function dismissInstallBanner(){
  b.classList.add('hidden');
  localStorage.setItem('supul_install_dismissed', '1');
 }
-</script>
+
 
 <!-- 공통 스킬: Yeon Focus Tracker (집중도 감지) -->
 <script src="yeon-focus-tracker.js"></script>
@@ -14581,7 +14582,7 @@ function dismissInstallBanner(){
   }
 })();
 </script>
-
+<script>
 // ===== QR 공유 모달 =====
 var _qrGenerated = false;
 function openQRModal(){
@@ -14622,3 +14623,6 @@ function copyAppLink(){
  });
 }
 
+function analyzeFromDrawingPad(){ sendDrawingToAnalyze(); }
+</script></body>
+</html>
