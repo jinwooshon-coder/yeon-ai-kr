@@ -14626,4 +14626,26 @@ function copyAppLink(){
 function analyzeFromDrawingPad(){ sendDrawingToAnalyze(); }
 
 function openDrawingPadModal(){
-  var m =
+  var m = document.getElementById('drawingPadModal');
+  if(!m) return;
+  var frame = document.getElementById('drawingPadFrame');
+  if(frame && !frame.src) frame.src = './drawing-pad.html';
+  m.style.display = 'flex';
+}
+function closeDrawingPadModal(){
+  var m = document.getElementById('drawingPadModal');
+  if(m) m.style.display = 'none';
+}
+function sendDrawingToAnalyze(){
+  var frame = document.getElementById('drawingPadFrame');
+  if(!frame || !frame.contentWindow) { closeDrawingPadModal(); return; }
+  try {
+    var FC = frame.contentWindow.FC;
+    if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 시도하세요.'); return; }
+    var dataURL = FC.toDataURL({format:'png', multiplier:2});
+    closeDrawingPadModal();
+    window._openImageEditor(dataURL, function(ed){ processOcrFromDataUrl(ed); });
+  } catch(e){ closeDrawingPadModal(); console.error('그림판 캡처 오류', e); }
+}
+</script></body>
+</html>
