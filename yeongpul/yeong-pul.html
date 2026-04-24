@@ -2017,10 +2017,13 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
       <div class="label" id="ocrProgressLabel">인식 준비 중...</div>
     </div>
 
-    <div style="margin:14px 0 6px;font-size:13px;color:var(--color-text-light);">또는 직접 입력 / 붙여넣기</div>
-    <textarea id="tlInput" class="text-input" placeholder="여기에 영어 문장이나 지문을 붙여넣으세요.&#10;&#10;예: If I were rich, I would travel the world. The book was so interesting that I couldn't put it down."></textarea>
+    <div style="margin:14px 0 6px;font-size:13px;color:var(--color-text-light);">또는 그림판으로 직접 작성</div>
+    <div style="position:relative;width:100%;border:1.5px solid var(--color-muted);border-radius:12px;overflow:hidden;background:var(--color-surface);">
+      <iframe id="drawingPadFrame" src="./drawing-pad.html" style="width:100%;height:500px;border:none;display:block;" allowfullscreen></iframe>
+    </div>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-      <button class="btn-primary" onclick="analyzeText()">분석하기</button>
+      <button class="btn-primary" onclick="analyzeFromDrawingPad()">분석하기</button>
+      <button class="btn-secondary" onclick="clearDrawingPad()">지우기</button>
       <button class="btn-secondary" onclick="loadTextSample()">샘플 불러오기</button>
       <button class="btn-secondary" onclick="clearTextInput()">지우기</button>
     </div>
@@ -4283,7 +4286,39 @@ function printShareCard(){
       '<div class="foot">영풀 · 연프로젝트 학습 도우미</div>'+
     '</div>'+
     '<script>setTimeout(function(){window.print();},500);<\/script>'+
-    '</body></html>'
+    '
+// ===== 그림판 iframe 연동 =====
+function analyzeFromDrawingPad(){
+  var frame = document.getElementById('drawingPadFrame');
+  if(!frame || !frame.contentWindow){ return; }
+  try{
+    var FC = frame.contentWindow.FC;
+    if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 눌러주세요.'); return; }
+    var dataURL = FC.toDataURL({format:'png', multiplier:2});
+    if(typeof window._openImageEditor === 'function'){
+      window._openImageEditor(dataURL, function(editedDataUrl){
+        if(typeof processOcrFromDataUrl === 'function') processOcrFromDataUrl(editedDataUrl);
+        else if(typeof analyzeImageData === 'function') analyzeImageData(editedDataUrl);
+      });
+    } else if(typeof processOcrFromDataUrl === 'function'){
+      processOcrFromDataUrl(dataURL);
+    }
+  }catch(e){
+    alert('그림판 연결 오류: '+e.message);
+  }
+}
+function clearDrawingPad(){
+  var frame = document.getElementById('drawingPadFrame');
+  if(!frame || !frame.contentWindow) return;
+  try{
+    var cw = frame.contentWindow;
+    if(typeof cw.clearAllPages === 'function') cw.clearAllPages();
+    else if(typeof cw.newPage === 'function') cw.newPage();
+    else frame.src = frame.src;
+  }catch(e){ frame.src = frame.src; }
+}
+
+</body></html>'
   );
   win.document.close();
 }
@@ -9076,6 +9111,38 @@ function downloadCardAsImage(cardEl){
 }` : ''}
 
 <\/script>
+
+// ===== 그림판 iframe 연동 =====
+function analyzeFromDrawingPad(){
+  var frame = document.getElementById('drawingPadFrame');
+  if(!frame || !frame.contentWindow){ return; }
+  try{
+    var FC = frame.contentWindow.FC;
+    if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 눌러주세요.'); return; }
+    var dataURL = FC.toDataURL({format:'png', multiplier:2});
+    if(typeof window._openImageEditor === 'function'){
+      window._openImageEditor(dataURL, function(editedDataUrl){
+        if(typeof processOcrFromDataUrl === 'function') processOcrFromDataUrl(editedDataUrl);
+        else if(typeof analyzeImageData === 'function') analyzeImageData(editedDataUrl);
+      });
+    } else if(typeof processOcrFromDataUrl === 'function'){
+      processOcrFromDataUrl(dataURL);
+    }
+  }catch(e){
+    alert('그림판 연결 오류: '+e.message);
+  }
+}
+function clearDrawingPad(){
+  var frame = document.getElementById('drawingPadFrame');
+  if(!frame || !frame.contentWindow) return;
+  try{
+    var cw = frame.contentWindow;
+    if(typeof cw.clearAllPages === 'function') cw.clearAllPages();
+    else if(typeof cw.newPage === 'function') cw.newPage();
+    else frame.src = frame.src;
+  }catch(e){ frame.src = frame.src; }
+}
+
 </body>
 </html>`;
 }
@@ -14473,5 +14540,37 @@ function _handleUploadFile(file){
   }
 })();
 </script>
+
+// ===== 그림판 iframe 연동 =====
+function analyzeFromDrawingPad(){
+  var frame = document.getElementById('drawingPadFrame');
+  if(!frame || !frame.contentWindow){ return; }
+  try{
+    var FC = frame.contentWindow.FC;
+    if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 눌러주세요.'); return; }
+    var dataURL = FC.toDataURL({format:'png', multiplier:2});
+    if(typeof window._openImageEditor === 'function'){
+      window._openImageEditor(dataURL, function(editedDataUrl){
+        if(typeof processOcrFromDataUrl === 'function') processOcrFromDataUrl(editedDataUrl);
+        else if(typeof analyzeImageData === 'function') analyzeImageData(editedDataUrl);
+      });
+    } else if(typeof processOcrFromDataUrl === 'function'){
+      processOcrFromDataUrl(dataURL);
+    }
+  }catch(e){
+    alert('그림판 연결 오류: '+e.message);
+  }
+}
+function clearDrawingPad(){
+  var frame = document.getElementById('drawingPadFrame');
+  if(!frame || !frame.contentWindow) return;
+  try{
+    var cw = frame.contentWindow;
+    if(typeof cw.clearAllPages === 'function') cw.clearAllPages();
+    else if(typeof cw.newPage === 'function') cw.newPage();
+    else frame.src = frame.src;
+  }catch(e){ frame.src = frame.src; }
+}
+
 </body>
 </html>

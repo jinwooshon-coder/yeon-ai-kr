@@ -2213,12 +2213,13 @@ input::placeholder, textarea::placeholder {
  </button>
  </div>
 
- <div style="margin:14px 0 6px;font-size:13px;color:var(--color-text-light);">또는 직접 입력 / 붙여넣기</div>
- <textarea id="tlInput" class="text-input" placeholder="여기에 수학 문제를 직접 입력하세요.&#10;&#10;예: x² + 5x + 6 = 0 을 인수분해하시오.\n또는 사진을 올리면 AI가 자동 인식합니다."></textarea>
+ <div style="margin:14px 0 6px;font-size:13px;color:var(--color-text-light);">또는 그림판으로 직접 작성</div>
+ <div style="position:relative;width:100%;border:1.5px solid var(--color-muted);border-radius:12px;overflow:hidden;background:var(--color-surface);">
+  <iframe id="drawingPadFrame" src="./drawing-pad.html" style="width:100%;height:500px;border:none;display:block;" allowfullscreen></iframe>
+ </div>
  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
- <button class="btn-primary" onclick="analyzeText()">분석하기</button>
- <button class="btn-secondary" onclick="loadTextSample()">샘플 불러오기</button>
- <button class="btn-secondary" onclick="clearTextInput()">지우기</button>
+  <button class="btn-primary" onclick="analyzeFromDrawingPad()">분석하기</button>
+  <button class="btn-secondary" onclick="clearDrawingPad()">지우기</button>
  </div>
 
  <!-- 풀이 엔진 퀵 셀렉터 -->
@@ -14604,6 +14605,37 @@ function copyAppLink(){
  }).catch(function(){
   prompt('아래 링크를 복사하세요:', url);
  });
+}
+
+
+// ===== 그림판 iframe 연동 =====
+function analyzeFromDrawingPad(){
+ var frame = document.getElementById('drawingPadFrame');
+ if(!frame || !frame.contentWindow){ return; }
+ try{
+  var FC = frame.contentWindow.FC;
+  if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 눌러주세요.'); return; }
+  var dataURL = FC.toDataURL({format:'png', multiplier:2});
+  if(typeof window._openImageEditor === 'function'){
+   window._openImageEditor(dataURL, function(editedDataUrl){
+    if(typeof processOcrFromDataUrl === 'function') processOcrFromDataUrl(editedDataUrl);
+   });
+  } else if(typeof processOcrFromDataUrl === 'function'){
+   processOcrFromDataUrl(dataURL);
+  }
+ }catch(e){
+  alert('그림판 연결 오류: '+e.message);
+ }
+}
+function clearDrawingPad(){
+ var frame = document.getElementById('drawingPadFrame');
+ if(!frame || !frame.contentWindow) return;
+ try{
+  var cw = frame.contentWindow;
+  if(typeof cw.clearAllPages === 'function') cw.clearAllPages();
+  else if(typeof cw.newPage === 'function') cw.newPage();
+  else frame.src = frame.src;
+ }catch(e){ frame.src = frame.src; }
 }
 
 </body>
