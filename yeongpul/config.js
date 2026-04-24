@@ -6,21 +6,17 @@
  *
  * ⚠️ 주의: 이 파일은 브라우저에서 공개됩니다.
  *   - ADMIN_CODE 는 숨김 진입 1차선일 뿐, 민감한 키는 절대 두지 마세요.
- *   - Anthropic/카카오 REST 키 등은 Netlify Functions 에서만 사용합니다.
+ *   - Netlify 의존성 제거 완료 (2026-04-25) — Apps Script 직접 연결
  */
 window.YEON_CONFIG = {
   // ============================================
-  // 백엔드 (Google Apps Script)
+  // 백엔드 (Google Apps Script — 직접 연결)
   // ============================================
-  // 백엔드 API 프록시 URL (Netlify Functions 경유 — SECRET 숨김)
-  // '/.netlify/functions/api' 이면 같은 도메인의 서버리스 함수를 사용합니다.
+  // Netlify Functions 제거 후 Apps Script 에 직접 연결합니다.
   // 빈 값이거나 PASTE_YOUR_URL_HERE 이면 localStorage 데모 모드로 동작합니다.
-  APPS_SCRIPT_URL: '/.netlify/functions/api',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwnA2B6a4VPdkJ8KyvZcmhXalfI2xHgzHACeqChKqgzuiXpdX1rM26hHRkUMUF-oc00/exec',
 
-  // ⚠️ SECRET 은 더 이상 여기에 두지 않습니다!
-  // Netlify 환경변수 (APPS_SCRIPT_SECRET) 에만 존재합니다.
-  // 아래 값은 호환용 더미 — 실제 인증은 서버에서 처리됩니다.
-  APPS_SCRIPT_SECRET: 'server-side-only',
+  APPS_SCRIPT_SECRET: 'yeon-secret-xr7k2m9pq4',
 
   // ============================================
   // 관리자

@@ -254,6 +254,51 @@ nav a:hover { color:var(--ink); }
 .course-info p { font-size:0.85rem; color:var(--ink-faint); }
 .course-arrow { color:var(--thread); font-size:1.2rem; }
 
+/* ===== 학습 도구 ===== */
+.tools-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px;
+}
+.tool-card {
+  border:1px solid var(--border); background:#fff;
+  transition:box-shadow .2s, transform .2s; overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.tool-card:hover { box-shadow:0 8px 28px rgba(29,29,27,.10); transform:translateY(-3px); }
+.tool-card-top {
+  padding:32px 28px 24px;
+  flex:1;
+}
+.tool-badge {
+  display:inline-block;
+  font-size:10px; letter-spacing:1.5px; font-weight:700; text-transform:uppercase;
+  background:var(--thread-soft); color:var(--thread-strong);
+  padding:4px 10px; margin-bottom:16px;
+}
+.tool-icon {
+  width:48px; height:48px; margin-bottom:16px;
+}
+.tool-card h3 {
+  font-family:var(--font-title); font-size:1.25rem; font-weight:800;
+  color:var(--ink); margin-bottom:6px;
+}
+.tool-card p { font-size:0.87rem; color:var(--ink-soft); line-height:1.8; }
+.tool-card-foot {
+  border-top:1px solid var(--border);
+  padding:16px 28px;
+  display:flex; align-items:center; justify-content:space-between;
+}
+.tool-chips { display:flex; gap:8px; flex-wrap:wrap; }
+.tool-chip {
+  font-size:11px; padding:3px 10px;
+  border:1px solid var(--border); color:var(--ink-faint);
+}
+.tool-link {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.85rem; font-weight:700; color:var(--thread);
+  text-decoration:none; transition:color .2s;
+}
+.tool-link:hover { color:var(--thread-strong); }
+
 /* ===== 연락처 ===== */
 .contact-band {
   background:var(--ink); color:#fff;
@@ -310,7 +355,7 @@ footer a { color:var(--thread); }
     <nav id="nav">
       <a href="#method">학습법</a>
       <a href="#courses">코스</a>
-      <a href="#immersion">몰입</a>
+      <a href="#tools">학습 도구</a>
       <a href="#contact">상담 신청</a>
     </nav>
     <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')">≡</button>
@@ -413,6 +458,93 @@ footer a { color:var(--thread); }
       </div>
       <span class="course-arrow">→</span>
     </div>
+  </div>
+</div>
+
+<!-- 학습 도구 -->
+<div class="section" id="tools">
+  <div class="section-label">학습 도구</div>
+  <h2 class="section-title">연플래닝 학습툴</h2>
+  <p class="section-sub">영어와 수학, 과목별 전용 도구로 매일 꾸준히 실력을 쌓습니다. 선생님과 연플래너가 함께 연동됩니다.</p>
+  <div class="tools-grid">
+
+    <!-- 영풀 -->
+    <div class="tool-card">
+      <div class="tool-card-top">
+        <div class="tool-badge">완성</div>
+        <svg class="tool-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--thread);">
+          <rect x="6" y="10" width="36" height="28" rx="3"/>
+          <path d="M16 20h16M16 26h10"/>
+          <circle cx="36" cy="32" r="5" fill="var(--thread)" stroke="none"/>
+          <path d="M34 32l1.5 1.5L38 30" stroke="#fff" stroke-width="1.8" fill="none"/>
+        </svg>
+        <h3>영풀</h3>
+        <p>영어 단어·문장 학습 전용 도구. 발음 듣기, 받아쓰기, 5.2.5.5 복습 주기까지 — 선생님이 지정한 단어를 학생이 스스로 익힙니다.</p>
+      </div>
+      <div class="tool-card-foot">
+        <div class="tool-chips">
+          <span class="tool-chip">영어</span>
+          <span class="tool-chip">단어</span>
+          <span class="tool-chip">발음</span>
+        </div>
+        <a class="tool-link" href="/yeongpul/" target="_blank">
+          열기
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- 수풀 -->
+    <div class="tool-card">
+      <div class="tool-card-top">
+        <div class="tool-badge">완성</div>
+        <svg class="tool-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--thread);">
+          <rect x="6" y="10" width="36" height="28" rx="3"/>
+          <path d="M18 24l4 4 8-8"/>
+          <path d="M14 18h8M14 30h6"/>
+        </svg>
+        <h3>수풀 AI</h3>
+        <p>수학 문제 풀이 학습 도구. AI가 틀린 유형을 분석하고, 다음에 풀어야 할 문제를 제안합니다. 선생님 관리도구와 실시간 연동됩니다.</p>
+      </div>
+      <div class="tool-card-foot">
+        <div class="tool-chips">
+          <span class="tool-chip">수학</span>
+          <span class="tool-chip">AI 분석</span>
+          <span class="tool-chip">문제풀이</span>
+        </div>
+        <a class="tool-link" href="/supul/" target="_blank">
+          열기
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- 과풀 (준비중) -->
+    <div class="tool-card" style="opacity:0.55;">
+      <div class="tool-card-top">
+        <div class="tool-badge" style="background:var(--border);color:var(--ink-faint);">준비중</div>
+        <svg class="tool-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--ink-faint);">
+          <circle cx="24" cy="24" r="14"/>
+          <path d="M24 16v8l5 3"/>
+        </svg>
+        <h3>과풀</h3>
+        <p>과학 개념 학습 전용 도구. 개념 카드·실험 노트·오답 정리까지 준비 중입니다.</p>
+      </div>
+      <div class="tool-card-foot">
+        <div class="tool-chips">
+          <span class="tool-chip">과학</span>
+          <span class="tool-chip">개념</span>
+        </div>
+        <span class="tool-link" style="color:var(--ink-faint);cursor:default;">곧 출시</span>
+      </div>
+    </div>
+
   </div>
 </div>
 
