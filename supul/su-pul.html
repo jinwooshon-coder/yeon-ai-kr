@@ -957,6 +957,19 @@ input::placeholder, textarea::placeholder {
   </div>
  </div>
 </div>
+<!-- 그림판 모달 -->
+<div id="drawingPadModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
+ <div style="position:relative;width:96vw;height:90vh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#f8f2ea;border-bottom:1px solid #e8ddca;flex-shrink:0;">
+   <span style="font-size:15px;font-weight:700;color:#7a6a52;">그림판으로 수식 작성</span>
+   <div style="display:flex;gap:8px;">
+    <button onclick="sendDrawingToAnalyze()" style="padding:8px 18px;border:none;border-radius:10px;background:#7a6a52;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">분석하기</button>
+    <button onclick="closeDrawingPadModal()" style="padding:8px 14px;border:1px solid #e8ddca;border-radius:10px;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;">닫기</button>
+   </div>
+  </div>
+  <iframe id="drawingPadFrame" src="./drawing-pad.html" style="flex:1;width:100%;border:none;" allowfullscreen></iframe>
+ </div>
+</div>
 <!-- 로그인/회원가입 모달 -->
 <div class="print-modal-bg" id="authModal" onclick="if(event.target===this)closeAuthModal()">
  <div class="print-modal" style="max-width:400px;">
@@ -2213,13 +2226,15 @@ input::placeholder, textarea::placeholder {
  </button>
  </div>
 
- <div style="margin:14px 0 6px;font-size:13px;color:var(--color-text-light);">또는 그림판으로 직접 작성</div>
- <div style="position:relative;width:100%;border:1.5px solid var(--color-muted);border-radius:12px;overflow:hidden;background:var(--color-surface);">
-  <iframe id="drawingPadFrame" src="./drawing-pad.html" style="width:100%;height:500px;border:none;display:block;" allowfullscreen></iframe>
- </div>
+ <div style="margin:14px 0 6px;font-size:13px;color:var(--color-text-light);">또는 직접 입력 / 붙여넣기</div>
+ <textarea id="tlInput" class="text-input" placeholder="여기에 수학 문제를 직접 입력하세요.&#10;&#10;예: x² + 5x + 6 = 0 을 인수분해하시오.&#10;또는 사진을 올리면 AI가 자동 인식합니다."></textarea>
  <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-  <button class="btn-primary" onclick="analyzeFromDrawingPad()">분석하기</button>
-  <button class="btn-secondary" onclick="clearDrawingPad()">지우기</button>
+ <button class="btn-primary" onclick="analyzeText()">분석하기</button>
+ <button class="btn-secondary" onclick="openDrawingPadModal()" title="그림판으로 수식 입력">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>그림판
+ </button>
+ <button class="btn-secondary" onclick="loadTextSample()">샘플</button>
+ <button class="btn-secondary" onclick="clearTextInput()">지우기</button>
  </div>
 
  <!-- 풀이 엔진 퀵 셀렉터 -->
@@ -14607,37 +14622,3 @@ function copyAppLink(){
  });
 }
 
-
-// ===== 그림판 iframe 연동 =====
-function analyzeFromDrawingPad(){
- var frame = document.getElementById('drawingPadFrame');
- if(!frame || !frame.contentWindow){ return; }
- try{
-  var FC = frame.contentWindow.FC;
-  if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 눌러주세요.'); return; }
-  var dataURL = FC.toDataURL({format:'png', multiplier:2});
-  if(typeof window._openImageEditor === 'function'){
-   window._openImageEditor(dataURL, function(editedDataUrl){
-    if(typeof processOcrFromDataUrl === 'function') processOcrFromDataUrl(editedDataUrl);
-   });
-  } else if(typeof processOcrFromDataUrl === 'function'){
-   processOcrFromDataUrl(dataURL);
-  }
- }catch(e){
-  alert('그림판 연결 오류: '+e.message);
- }
-}
-function clearDrawingPad(){
- var frame = document.getElementById('drawingPadFrame');
- if(!frame || !frame.contentWindow) return;
- try{
-  var cw = frame.contentWindow;
-  if(typeof cw.clearAllPages === 'function') cw.clearAllPages();
-  else if(typeof cw.newPage === 'function') cw.newPage();
-  else frame.src = frame.src;
- }catch(e){ frame.src = frame.src; }
-}
-
-</body>
-</html>
-                                                                                                                                                     
