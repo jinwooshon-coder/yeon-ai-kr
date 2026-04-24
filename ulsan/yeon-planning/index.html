@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연플래닝 · Yeon Planning — 행복한 공부</title>
+<meta name="description" content="스스로 올라갈 수 있는 힘. 연소사 이진우의 자기주도 학습 공부법 — 의식적 몰입·5.2.5.5 학습법·교과서 10회독·기억의 궁전.">
+<meta name="author" content="연소사 이진우">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-paper: #F8F6F2;
+  --bg-paper-alt: #F0EBE1;
+  --ink: #1D1D1B;
+  --ink-soft: #3C3C38;
+  --ink-faint: rgba(29,29,27,0.55);
+  --wood: #5D4037;
+  --thread: #B08E61;
+  --thread-strong: #8E6F48;
+  --thread-soft: rgba(176,142,97,0.15);
+  --border: rgba(29,29,27,0.1);
+  --border-strong: rgba(29,29,27,0.2);
+  --font-body: 'Noto Serif KR','Nanum Myeongjo',serif;
+  --font-title: 'Nanum Myeongjo',serif;
+  --font-accent: 'Playfair Display',serif;
+  --measure: 680px;
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  font-family:var(--font-body);
+  background:var(--bg-paper);
+  color:var(--ink);
+  line-height:1.8;
+  word-break:keep-all;
+  -webkit-font-smoothing:antialiased;
+  background-image:
+    radial-gradient(circle at 20% 20%,rgba(176,142,97,.04) 0,transparent 40%),
+    radial-gradient(circle at 80% 60%,rgba(93,64,55,.025) 0,transparent 50%);
+}
+a { color:inherit; text-decoration:none; }
+img,svg { max-width:100%; display:block; }
+ul { list-style:none; }
+
+/* ===== 플랫폼 바 ===== */
+.platform-bar {
+  background: var(--ink);
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  padding: 6px 5%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  letter-spacing: 0.3px;
+}
+.platform-bar a { color: rgba(255,255,255,0.7); transition: color 0.2s; }
+.platform-bar a:hover { color: #fff; }
+.platform-bar .sep { opacity: 0.35; }
+.platform-bar .current { color: var(--thread); font-weight: 700; }
+
+/* ===== 사이트 헤더 ===== */
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: rgba(248,246,242,0.94);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.site-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  position: relative;
+}
+.site-brand { display:flex; align-items:center; gap:14px; }
+.brand-mark {
+  width:38px; height:38px;
+  border:1px solid var(--ink);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--font-title); font-weight:800;
+  color:var(--ink); font-size:1.1rem;
+}
+.brand-text .ko {
+  font-family:var(--font-title); font-weight:800;
+  font-size:1.15rem; letter-spacing:0.05em; color:var(--ink); line-height:1;
+}
+.brand-text .en {
+  display:block; font-family:var(--font-accent);
+  font-style:italic; font-size:0.7rem;
+  color:var(--thread); letter-spacing:0.18em; margin-top:3px;
+}
+nav { display:flex; gap:24px; }
+nav a {
+  font-size:0.87rem; color:var(--ink-soft);
+  transition:color .22s; padding:6px 0; font-family:var(--font-body);
+}
+nav a:hover { color:var(--ink); }
+.nav-toggle {
+  display:none; width:44px; height:44px;
+  background:transparent; border:1px solid var(--border-strong);
+  cursor:pointer; font-family:var(--font-title);
+  font-size:1.4rem; font-weight:800; color:var(--ink);
+}
+@media (max-width:860px) {
+  nav {
+    display:none; position:absolute; top:100%; left:0; right:0;
+    background:var(--bg-paper);
+    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+    flex-direction:column; gap:0; padding:8px 5%;
+  }
+  nav.open { display:flex; }
+  nav a { padding:16px 0; border-bottom:1px solid var(--border); }
+  nav a:last-child { border-bottom:none; }
+  .nav-toggle { display:block; }
+}
+
+/* ===== 히어로 ===== */
+.hero {
+  padding: 100px 5% 90px;
+  border-bottom: 1px solid var(--border);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.hero-split {
+  display:grid; grid-template-columns:1.3fr 1fr; gap:60px; align-items:center;
+}
+.edition {
+  font-family:var(--font-accent); font-style:italic;
+  color:var(--thread); letter-spacing:0.25em;
+  text-transform:uppercase; font-size:0.8rem;
+  padding-bottom:16px; border-bottom:1px solid var(--border-strong);
+  margin-bottom:32px; display:flex; justify-content:space-between; align-items:center;
+}
+.edition .issue { font-family:var(--font-title); font-weight:700; color:var(--ink); font-size:0.88rem; letter-spacing:0.15em; }
+.hero-title {
+  font-family:var(--font-title); font-weight:800;
+  font-size:clamp(2.2rem,5vw,3.8rem); line-height:1.25;
+  color:var(--ink); letter-spacing:-0.015em; margin-bottom:28px;
+}
+.hero-title em { font-style:normal; color:var(--thread); position:relative; }
+.hero-sub { font-size:1rem; color:var(--ink-soft); max-width:520px; line-height:2; }
+.hero-cta { margin-top:40px; display:flex; gap:12px; flex-wrap:wrap; }
+.btn-main {
+  background:var(--wood); color:#fff; border:none;
+  padding:14px 28px; font-family:var(--font-body); font-size:0.9rem;
+  font-weight:700; cursor:pointer; transition:background .2s;
+}
+.btn-main:hover { background:#4a3028; }
+.btn-sub {
+  background:none; color:var(--wood);
+  border:1px solid var(--border-strong); padding:14px 28px;
+  font-family:var(--font-body); font-size:0.9rem; cursor:pointer; transition:all .2s;
+}
+.btn-sub:hover { border-color:var(--wood); }
+
+/* 緣 패널 */
+.kanji-panel {
+  border:1px solid var(--border-strong); padding:40px 28px;
+  min-height:400px;
+  background:
+    repeating-linear-gradient(0deg,transparent 0,transparent 22px,rgba(29,29,27,.03) 22px,rgba(29,29,27,.03) 23px),
+    var(--bg-paper-alt);
+  display:flex; flex-direction:column; justify-content:space-between;
+}
+.kanji-top {
+  font-family:var(--font-accent); font-style:italic;
+  color:var(--thread); font-size:0.75rem; letter-spacing:0.25em;
+  text-transform:uppercase; display:flex; justify-content:space-between;
+}
+.big-kanji {
+  font-family:var(--font-title); font-weight:800;
+  font-size:clamp(6rem,15vw,12rem); color:var(--ink);
+  line-height:1; text-align:center; margin:16px 0; position:relative;
+}
+.big-kanji::after {
+  content:"緣"; position:absolute; top:8px; left:52%;
+  font-size:clamp(6rem,15vw,12rem); color:var(--thread); opacity:.12; z-index:0;
+  pointer-events:none;
+}
+.kanji-reading {
+  text-align:center; font-family:var(--font-accent);
+  font-style:italic; color:var(--thread); letter-spacing:0.2em; font-size:0.88rem;
+}
+.kanji-reading .ko {
+  display:block; font-family:var(--font-title); font-style:normal;
+  color:var(--ink); font-size:0.95rem; letter-spacing:0.4em; margin-top:6px;
+}
+.kanji-bottom {
+  border-top:1px solid var(--border-strong); padding-top:16px;
+  display:flex; justify-content:space-between;
+  font-family:var(--font-body); font-size:0.72rem; color:var(--ink-faint);
+}
+
+@media (max-width:860px) {
+  .hero { padding:64px 5% 56px; }
+  .hero-split { grid-template-columns:1fr; gap:40px; }
+  .kanji-panel { min-height:280px; }
+}
+
+/* ===== 섹션 공통 ===== */
+.section { padding:80px 5%; border-top:1px solid var(--border); max-width:1280px; margin:0 auto; }
+.section-label {
+  font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--thread); font-weight:700; margin-bottom:8px;
+}
+.section-title {
+  font-family:var(--font-title); font-size:clamp(1.6rem,3vw,2.4rem);
+  font-weight:800; color:var(--ink); margin-bottom:8px;
+}
+.section-sub { font-size:0.95rem; color:var(--ink-faint); margin-bottom:40px; max-width:600px; }
+
+/* ===== 핵심 학습법 카드 ===== */
+.method-grid {
+  display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px;
+}
+.method-card {
+  border:1px solid var(--border); padding:28px 24px;
+  background:#fff; transition:box-shadow .2s, transform .2s;
+}
+.method-card:hover { box-shadow:0 6px 20px rgba(29,29,27,.08); transform:translateY(-2px); }
+.method-num {
+  font-family:var(--font-title); font-weight:800; font-size:2rem;
+  color:var(--thread); margin-bottom:10px; line-height:1;
+}
+.method-card h3 {
+  font-family:var(--font-title); font-size:1.1rem; font-weight:800;
+  color:var(--ink); margin-bottom:8px;
+}
+.method-card p { font-size:0.88rem; color:var(--ink-soft); line-height:1.8; }
+
+/* ===== 코스 ===== */
+.course-list { display:flex; flex-direction:column; gap:16px; }
+.course-item {
+  display:flex; align-items:center; gap:24px;
+  padding:24px; border:1px solid var(--border); background:#fff;
+  transition:box-shadow .2s; cursor:pointer;
+}
+.course-item:hover { box-shadow:0 4px 16px rgba(29,29,27,.08); }
+.course-num {
+  font-family:var(--font-title); font-weight:800; font-size:2rem;
+  color:var(--border-strong); min-width:48px; line-height:1;
+}
+.course-info { flex:1; }
+.course-info h3 { font-family:var(--font-title); font-size:1.05rem; font-weight:800; margin-bottom:4px; }
+.course-info p { font-size:0.85rem; color:var(--ink-faint); }
+.course-arrow { color:var(--thread); font-size:1.2rem; }
+
+/* ===== 연락처 ===== */
+.contact-band {
+  background:var(--ink); color:#fff;
+  padding:72px 5%; text-align:center;
+}
+.contact-band h2 {
+  font-family:var(--font-title); font-size:clamp(1.6rem,3vw,2.4rem);
+  font-weight:800; margin-bottom:12px; color:#fff;
+}
+.contact-band p { font-size:1rem; color:rgba(255,255,255,.7); margin-bottom:28px; }
+.btn-contact {
+  background:var(--thread); color:#fff; border:none;
+  padding:14px 32px; font-family:var(--font-body);
+  font-size:0.95rem; font-weight:700; cursor:pointer; transition:background .2s;
+}
+.btn-contact:hover { background:var(--thread-strong); }
+
+/* ===== 푸터 ===== */
+footer {
+  border-top:1px solid var(--border); padding:28px 5%;
+  max-width:1280px; margin:0 auto;
+  display:flex; justify-content:space-between; align-items:center;
+  flex-wrap:wrap; gap:12px;
+  font-size:12px; color:var(--ink-faint);
+}
+footer a { color:var(--thread); }
+.footer-breadcrumb { display:flex; gap:6px; align-items:center; }
+.footer-breadcrumb .sep { opacity:0.4; }
+</style>
+</head>
+<body>
+
+<!-- 플랫폼 바 (항상 최상단) -->
+<div class="platform-bar">
+  <a href="https://y-life.kr">y-life.kr</a>
+  <span class="sep">›</span>
+  <a href="../../">yeon.ai.kr</a>
+  <span class="sep">›</span>
+  <a href="../">울산</a>
+  <span class="sep">›</span>
+  <span class="current">연플래닝</span>
+</div>
+
+<!-- 사이트 헤더 -->
+<header class="site-header">
+  <div class="site-header-inner">
+    <a href="." class="site-brand">
+      <div class="brand-mark">연</div>
+      <div class="brand-text">
+        <div class="ko">연플래닝</div>
+        <span class="en">Yeon Planning</span>
+      </div>
+    </a>
+    <nav id="nav">
+      <a href="#method">학습법</a>
+      <a href="#courses">코스</a>
+      <a href="#immersion">몰입</a>
+      <a href="#contact">상담 신청</a>
+    </nav>
+    <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')">≡</button>
+  </div>
+</header>
+
+<!-- 히어로 -->
+<div class="hero">
+  <div class="hero-split">
+    <div class="hero-left">
+      <div class="edition">
+        <span>Yeon Planning · Ulsan</span>
+        <span class="issue">자기주도 학습</span>
+      </div>
+      <h1 class="hero-title">
+        스스로<br>올라갈 수 있는<br><em>힘</em>을 기릅니다
+      </h1>
+      <p class="hero-sub">
+        연소사 이진우의 자기주도 학습 공부법 — 의식적 몰입, 5.2.5.5 학습법으로 학생이 스스로 공부하는 힘을 키웁니다.
+      </p>
+      <div class="hero-cta">
+        <button class="btn-main" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">상담 신청하기</button>
+        <button class="btn-sub" onclick="document.getElementById('method').scrollIntoView({behavior:'smooth'})">학습법 알아보기</button>
+      </div>
+    </div>
+    <div class="kanji-panel">
+      <div class="kanji-top">
+        <span>Yeon Planning</span>
+        <span>울산</span>
+      </div>
+      <div class="big-kanji">연</div>
+      <div class="kanji-reading">
+        Yeon
+        <span class="ko">緣 · 연</span>
+      </div>
+      <div class="kanji-bottom">
+        <span>사람과 공부가 이어지는 곳</span>
+        <span>yeon.ai.kr/ulsan/yeon-planning/</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 핵심 학습법 -->
+<div class="section" id="method">
+  <div class="section-label">핵심 학습법</div>
+  <h2 class="section-title">연플래닝의 4가지 방법</h2>
+  <p class="section-sub">억지로 시키는 공부가 아닌, 학생 스스로가 주체가 되는 공부를 만듭니다.</p>
+  <div class="method-grid">
+    <div class="method-card">
+      <div class="method-num">01</div>
+      <h3>의식적 몰입</h3>
+      <p>단순히 오래 앉아있는 게 아닌, 의식적으로 집중하는 시간을 만드는 연습입니다.</p>
+    </div>
+    <div class="method-card">
+      <div class="method-num">02</div>
+      <h3>5.2.5.5 학습법</h3>
+      <p>수업 직후 5분, 학습 후 2분, 5시간 후, 5일 후 — 망각 곡선을 이기는 복습 주기입니다.</p>
+    </div>
+    <div class="method-card">
+      <div class="method-num">03</div>
+      <h3>교과서 10회독</h3>
+      <p>교과서를 열 번 읽으면 개념이 몸에 새겨집니다. 방법이 있습니다.</p>
+    </div>
+    <div class="method-card">
+      <div class="method-num">04</div>
+      <h3>기억의 궁전</h3>
+      <p>공간과 이미지로 기억을 연결하는 고전 기억술을 현대 학습에 맞게 적용합니다.</p>
+    </div>
+  </div>
+</div>
+
+<!-- 코스 -->
+<div class="section" id="courses">
+  <div class="section-label">코스</div>
+  <h2 class="section-title">어떤 코스가 있나요?</h2>
+  <p class="section-sub">학생의 상황에 맞게 선택할 수 있습니다.</p>
+  <div class="course-list">
+    <div class="course-item">
+      <div class="course-num">01</div>
+      <div class="course-info">
+        <h3>자기주도 학습 기초반</h3>
+        <p>공부 습관이 없는 학생을 위한 첫 걸음 — 플래너 작성과 몰입 루틴부터 시작합니다.</p>
+      </div>
+      <span class="course-arrow">→</span>
+    </div>
+    <div class="course-item">
+      <div class="course-num">02</div>
+      <div class="course-info">
+        <h3>5.2.5.5 집중반</h3>
+        <p>이미 공부하는 학생이 더 효율적으로 — 복습 주기를 정착시키는 집중 훈련입니다.</p>
+      </div>
+      <span class="course-arrow">→</span>
+    </div>
+    <div class="course-item">
+      <div class="course-num">03</div>
+      <div class="course-info">
+        <h3>의식적 몰입 심화반</h3>
+        <p>수능 준비생을 위한 고강도 몰입 훈련 — 기억의 궁전과 교과서 10회독을 병행합니다.</p>
+      </div>
+      <span class="course-arrow">→</span>
+    </div>
+  </div>
+</div>
+
+<!-- 상담 신청 -->
+<div class="contact-band" id="contact">
+  <h2>먼저 이야기를 나눠보세요</h2>
+  <p>어떤 학생인지, 어떤 고민이 있는지 — 상담 후에 맞는 코스를 안내해드립니다.</p>
+  <button class="btn-contact">카카오톡으로 상담 신청</button>
+</div>
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer-breadcrumb">
+    <a href="https://y-life.kr">y-life.kr</a>
+    <span class="sep">›</span>
+    <a href="../../">yeon.ai.kr</a>
+    <span class="sep">›</span>
+    <a href="../">울산</a>
+    <span class="sep">›</span>
+    <span>연플래닝</span>
+  </div>
+  <p>© 2026 연플래닝 · 연소사 이진우 · 울산</p>
+</footer>
+
+</body>
+</html>
