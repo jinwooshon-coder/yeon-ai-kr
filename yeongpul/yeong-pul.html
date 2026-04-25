@@ -4298,9 +4298,11 @@ function printShareCard(){
       '<p class="desc">'+SHARE_TEXT+'</p>'+
       '<div class="foot">영풀 · 연프로젝트 학습 도우미</div>'+
     '</div>'+
-    '</script>
-<script>setTimeout(function(){window.print();},500);<\/script>'+
-    '
+    '<\/div>'+
+    '<scr'+'ipt>setTimeout(function(){window.print();},500);<\/scr'+'ipt>'
+  );
+  win.document.close();
+}
 // ===== 업로드 영역 — 필기로 직접 그리기 =====
 // "틀린 문제를 올려 주세요" 안의 "필기로 그리기" 버튼에서 호출
 function openUploadDraw(){
@@ -8307,8 +8309,7 @@ function scanForAbuse(source, value){
   if (!value) return false;
   const s = String(value);
   const patterns = [
-    /</script>
-<script[\s>]/i,                         // 스크립트 주입
+    /<script[\s>]/i,                                    // 스크립트 주입
     /javascript:/i,                          // XSS 프로토콜
     /on(error|load|click)\s*=/i,             // 인라인 이벤트 주입
     /union\s+select|drop\s+table|--\s*$/i,  // SQL 주입
@@ -14243,29 +14244,28 @@ function _handleUploadFile(file){
     });
   }
 })();
-
 function openDrawingPadModal(){
-  var m = document.getElementById('drawingPadModal');
-  if(!m) return;
-  var frame = document.getElementById('drawingPadFrame');
-  if(frame && !frame.src) frame.src = './drawing-pad.html';
-  m.style.display = 'flex';
+  var m=document.getElementById('drawingPadModal');if(!m)return;
+  var f=document.getElementById('drawingPadFrame');
+  if(f&&!f.src)f.src='./drawing-pad.html';
+  m.style.display='flex';
 }
 function closeDrawingPadModal(){
-  var m = document.getElementById('drawingPadModal');
-  if(m) m.style.display = 'none';
+  var m=document.getElementById('drawingPadModal');
+  if(m)m.style.display='none';
 }
 function sendDrawingToAnalyze(){
-  var frame = document.getElementById('drawingPadFrame');
-  if(!frame || !frame.contentWindow) { closeDrawingPadModal(); return; }
-  try {
-    var FC = frame.contentWindow.FC;
-    if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 시도하세요.'); return; }
-    var dataURL = FC.toDataURL({format:'png', multiplier:2});
+  var f=document.getElementById('drawingPadFrame');
+  if(!f||!f.contentWindow){closeDrawingPadModal();return;}
+  try{
+    var FC=f.contentWindow.FC;
+    if(!FC){alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 시도하세요.');return;}
+    var d=FC.toDataURL({format:'png',multiplier:2});
     closeDrawingPadModal();
-    window._openImageEditor(dataURL, function(ed){ processOcrFromDataUrl(ed); });
-  } catch(e){ closeDrawingPadModal(); console.error('그림판 캡처 오류', e); }
+    window._openImageEditor(d,function(ed){processOcrFromDataUrl(ed);});
+  }catch(e){closeDrawingPadModal();console.error('그림판 캡처 오류',e);}
 }
+
 </script>
 </body>
 </html>
