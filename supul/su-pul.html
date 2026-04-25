@@ -649,7 +649,7 @@ input:invalid,input:user-invalid{box-shadow:none;outline:none;}
 .vocab-card{background:var(--color-surface);border-radius:16px;padding:32px 24px;text-align:center;cursor:pointer;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:transform .3s;user-select:none;position:relative;}
 .vocab-card:active{transform:scale(.97);}
 .vocab-card .vc-word{font-size:32px;font-weight:700;color:var(--color-text);margin-bottom:8px;}
-.vocab-card .vc-phonetic{display:none;}/* 수풀: 영어 수학용어명 숨김 */
+.vocab-card .vc-phonetic{font-size:16px;color:var(--color-text);opacity:.7;margin-bottom:12px;}
 .vocab-card .vc-meaning{font-size:22px;color:var(--color-primary);font-weight:600;display:none;}
 .vocab-card .vc-example{font-size:15px;color:var(--color-text);opacity:.75;margin-top:12px;line-height:1.6;display:none;}
 .vocab-card.flipped .vc-meaning,.vocab-card.flipped .vc-example{display:block;}
@@ -967,7 +967,7 @@ input::placeholder, textarea::placeholder {
     <button onclick="closeDrawingPadModal()" style="padding:8px 14px;border:1px solid #e8ddca;border-radius:10px;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;">닫기</button>
    </div>
   </div>
-  <iframe id="drawingPadFrame" src="" style="flex:1;width:100%;border:none;" allowfullscreen></iframe>
+  <iframe id="drawingPadFrame" src="./drawing-pad.html" style="flex:1;width:100%;border:none;" allowfullscreen></iframe>
  </div>
 </div>
 <!-- 로그인/회원가입 모달 -->
@@ -2861,8 +2861,8 @@ input::placeholder, textarea::placeholder {
  <strong style="font-size:14px;color:#E65100;">선생님 지정 단어</strong>
  <span id="vocabAssignCount" style="margin-left:auto;background:#E65100;color:#fff;padding:2px 10px;border-radius:10px;font-size:11px;font-weight:700;">0개</span>
  </div>
- <p style="font-size:12px;color:#BF360C;margin-bottom:8px;" id="vocabAssignDesc">선생님이 이번 주 필수 개념을 지정했습니다.</p>
- <button class="btn-primary" onclick="startTeacherAssigned()" style="padding:8px 20px;font-size:13px;width:auto;"> 지정 개념 학습 시작</button>
+ <p style="font-size:12px;color:#BF360C;margin-bottom:8px;" id="vocabAssignDesc">선생님이 이번 주 필수 단어를 지정했습니다.</p>
+ <button class="btn-primary" onclick="startTeacherAssigned()" style="padding:8px 20px;font-size:13px;width:auto;"> 지정 단어 학습 시작</button>
  </div>
 
  <!-- 수준 진단 배너 -->
@@ -2880,8 +2880,8 @@ input::placeholder, textarea::placeholder {
  <!-- 학습 모드 선택 -->
  <div id="vocabModeBar" style="display:flex;gap:6px;margin-bottom:10px;overflow-x:auto;padding-bottom:4px;">
  <button class="vocab-level active" onclick="switchVocabMode('normal',this)" style="font-size:11px;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>순서 학습</button>
- <button class="vocab-level" onclick="switchVocabMode('weak',this)" style="font-size:11px;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="2" y1="2" x2="22" y2="22"/></svg>약한 개념</button>
- <button class="vocab-level" onclick="switchVocabMode('skip',this)" style="font-size:11px;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>아는 개념 건너뛰기</button>
+ <button class="vocab-level" onclick="switchVocabMode('weak',this)" style="font-size:11px;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/><line x1="2" y1="2" x2="22" y2="22"/></svg>약한 단어</button>
+ <button class="vocab-level" onclick="switchVocabMode('skip',this)" style="font-size:11px;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>아는 단어 건너뛰기</button>
  <button class="vocab-level" onclick="switchVocabMode('random',this)" style="font-size:11px;white-space:nowrap;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>랜덤</button>
  </div>
 
@@ -2921,13 +2921,13 @@ input::placeholder, textarea::placeholder {
 
  <!-- 모드 선택 -->
  <div style="display:flex;gap:8px;margin-bottom:16px;">
- <button class="vocab-mode active" onclick="switchVocabMode('cards')">개념 카드</button>
+ <button class="vocab-mode active" onclick="switchVocabMode('cards')">단어 카드</button>
  <button class="vocab-mode" onclick="switchVocabMode('quiz')">퀴즈</button>
- <button class="vocab-mode" onclick="switchVocabMode('saved')">내 공식장</button>
+ <button class="vocab-mode" onclick="switchVocabMode('saved')">내 단어장</button>
  <button class="vocab-mode" onclick="switchVocabMode('auto')" style="position:relative;"> 자동감지<span id="autoWordBadge" class="auto-word-badge" style="position:absolute;top:-6px;right:-6px;display:none;">0</span></button>
  </div>
 
- <!-- 개념 카드 뷰 -->
+ <!-- 단어 카드 뷰 -->
  <div id="vocabCards" class="vocab-view">
  <div id="vocabCardArea"></div>
  <div style="display:flex;justify-content:center;gap:12px;margin-top:16px;">
@@ -2946,15 +2946,15 @@ input::placeholder, textarea::placeholder {
  <div id="vocabQuizArea"></div>
  </div>
 
- <!-- 내 공식장 뷰 -->
+ <!-- 내 단어장 뷰 -->
  <div id="vocabSaved" class="vocab-view" style="display:none;">
  <div id="vocabSavedArea"></div>
  </div>
 
- <!-- 자동감지 개념 뷰 -->
+ <!-- 자동감지 단어 뷰 -->
  <div id="vocabAuto" class="vocab-view" style="display:none;">
  <div style="background:var(--color-bg);border-radius:12px;padding:14px;margin-bottom:14px;">
- <div style="font-size:14px;font-weight:600;margin-bottom:4px;"> 수업 중 자동감지 개념</div>
+ <div style="font-size:14px;font-weight:600;margin-bottom:4px;"> 서버 자동감지 단어</div>
  <div style="font-size:13px;color:var(--color-text-light);line-height:1.5;">학습 중 자주 틀리거나, 반복 듣기/클릭한 단어를 자동으로 모아줍니다.<br>오답 횟수가 많을수록 상위에 표시됩니다.</div>
  </div>
  <div id="vocabAutoList"></div>
@@ -6534,7 +6534,7 @@ function renderTextLearnResult(){
  var sentListEl = _el('tlSentenceList');
  if(sentListEl) sentListEl.innerHTML = sentHtml;
 
- // 수학 용어 칩 — 호버 시 한글 뜻 + 내 공식장 담기
+ // 수학 용어 칩 — 호버 시 한글 뜻 + 내 단어장 담기
  const vocabHtml = tlCurrent.vocab.map(v=>{
  const meaning = WORD_DICT[v.word.toLowerCase()] || '';
  const safeW = v.word.replace(/'/g,"\\'");
@@ -6544,7 +6544,7 @@ function renderTextLearnResult(){
  `${v.word}${v.count>1?` <sup>${v.count}</sup>`:''}` +
  `<span class="vc-popup">` +
  `<span>${meaning||'—'}</span>` +
- `<button class="vc-save-btn${isSaved?' saved':''}" onclick="event.stopPropagation();addChipToVocab(this,'${safeW}','${safeM}')">${isSaved?' 저장됨':'+ 내 공식장'}</button>` +
+ `<button class="vc-save-btn${isSaved?' saved':''}" onclick="event.stopPropagation();addChipToVocab(this,'${safeW}','${safeM}')">${isSaved?' 저장됨':'+ 내 단어장'}</button>` +
  `</span></span>`;
  }).join('');
  var vocabGridEl = _el('tlVocabGrid');
@@ -7448,7 +7448,7 @@ function startExamPrepTest(){
  const time = parseInt(document.getElementById('examTimeLimit').value);
  // 범위 내 단어 수집
  const list = getExamRangeWords(lv, from, to);
- if(list.length < 4){ alert('범위 내 개념이 부족합니다. 범위를 넓혀주세요.'); return; }
+ if(list.length < 4){ alert('범위 내 단어가 부족합니다. 범위를 넓혀주세요.'); return; }
  // 문제 생성
  examPrepQuestions = generateExamQuestions(list, lv, count, selectedExamTypes);
  examPrepIdx = 0;
@@ -9190,8 +9190,7 @@ function scanForAbuse(source, value){
  if (!value) return false;
  const s = String(value);
  const patterns = [
- /</script>
-<script[\s>]/i, // 스크립트 주입
+ /<script[\s>]/i, // 스크립트 주입
  /javascript:/i, // XSS 프로토콜
  /on(error|load|click)\s*=/i, // 인라인 이벤트 주입
  /union\s+select|drop\s+table|--\s*$/i, // SQL 주입
@@ -10529,14 +10528,14 @@ function renderMistakes(){
  const el = document.getElementById('cwMistakeList');
  if(mistakeView==='words'){
  const words = typeof getAutoDetectedWords==='function' ? getAutoDetectedWords(20) : [];
- if(!words.length){ el.innerHTML='<p style="text-align:center;color:var(--color-text-light);padding:16px;">아직 틀린 개념이 없습니다. 테스트를 풀어보세요!</p>'; return; }
+ if(!words.length){ el.innerHTML='<p style="text-align:center;color:var(--color-text-light);padding:16px;">아직 틀린 단어가 없습니다. 테스트를 풀어보세요!</p>'; return; }
  el.innerHTML = words.map(w=>
  '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--color-bg);border-radius:8px;margin-bottom:6px;'+(w.wrong>=3?'border-left:3px solid #8F6B6B;':'')+'">'+
  '<div style="flex:1;">'+
  '<div style="font-weight:600;font-size:14px;">'+w.word+'</div>'+
  '<div style="font-size:12px;color:var(--color-text-light);">틀린 횟수: <strong style="color:#8F6B6B;">'+w.wrong+'</strong> | 듣기: '+w.listen+' | 클릭: '+w.click+'</div>'+
  '</div>'+
- '<button onclick="speakWord(\''+w.word+'\')" style="border:none;background:none;cursor:pointer;padding:4px;line-height:1;display:inline-flex;align-items:center;color:var(--color-primary);" title="읽어주기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>'+
+ '<button onclick="speakWord(\''+w.word+'\')" style="border:none;background:none;cursor:pointer;padding:4px;line-height:1;display:inline-flex;align-items:center;color:var(--color-primary);" title="발음 듣기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>'+
  '<button onclick="generateWordImage(\''+w.word+'\',\''+w.word+'\')" style="border:none;background:none;cursor:pointer;padding:4px;line-height:1;display:inline-flex;align-items:center;color:var(--color-text-light);" title="이미지 만들기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>'+
  '</div>'
  ).join('');
@@ -10816,7 +10815,7 @@ function checkTeacherAssigned(){
  panel.style.display='block';
  document.getElementById('vocabAssignCount').textContent = data.words.length+'개';
  document.getElementById('vocabAssignDesc').textContent =
- (data.teacher||'선생님')+'이 '+(data.dueDate||'이번 주')+' 까지 필수 개념을 지정했습니다.';
+ (data.teacher||'선생님')+'이 '+(data.dueDate||'이번 주')+' 까지 필수 단어를 지정했습니다.';
  } else {
  panel.style.display='none';
  }
@@ -11162,7 +11161,7 @@ function renderVocabUnits(){
  const curStart = currentUnit * UNIT_SIZE;
  const curEnd = Math.min(curStart + UNIT_SIZE, list.length);
  const nextUnit = currentUnit + 1 < totalUnits ? currentUnit + 1 : null;
- let infoText = '' + (currentUnit+1) + '단원: ' + (curEnd - curStart) + '개념 학습 중';
+ let infoText = '' + (currentUnit+1) + '단원: ' + (curEnd - curStart) + '단어 학습 중';
  if(nextUnit !== null){
  infoText += ' → 다음: ' + (nextUnit+1) + '단원';
  } else {
@@ -11222,7 +11221,7 @@ function renderVocabAuto(){
  if(!el) return;
  const words = getAutoDetectedWords(30);
  if(!words.length){
- el.innerHTML='<div style="text-align:center;padding:40px 16px;color:var(--color-text-light);"><div style="font-size:32px;margin-bottom:8px;"></div><p style="font-size:14px;">아직 학습 기록이 없어요</p><p style="font-size:13px;">개념을 보고, 퀴즈를 풀면<br>자주 접한 개념이 여기에 자동으로 모입니다!</p></div>';
+ el.innerHTML='<div style="text-align:center;padding:40px 16px;color:var(--color-text-light);"><div style="font-size:32px;margin-bottom:8px;"></div><p style="font-size:14px;">아직 학습 기록이 없어요</p><p style="font-size:13px;">단어를 듣고, 퀴즈를 풀고, 문장을 학습하면<br>자주 접한 단어가 여기에 자동으로 모입니다!</p></div>';
  return;
  }
 
@@ -11245,7 +11244,7 @@ function renderVocabAuto(){
  '<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px;">'+wrongBadge+listenBadge+'</div>'+
  '</div>'+
  '<div style="display:flex;gap:4px;flex-shrink:0;">'+
- '<button onclick="speakWord(\''+w.word+'\')" style="border:none;background:none;cursor:pointer;padding:4px;" title="읽어주기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg></button>'+
+ '<button onclick="speakWord(\''+w.word+'\')" style="border:none;background:none;cursor:pointer;padding:4px;" title="발음 듣기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg></button>'+
  '<button onclick="generateWordImage(\''+w.word+'\',\''+(meaning||w.word).replace(/'/g,"\\'")+'\')" style="border:none;background:none;cursor:pointer;padding:4px;" title="이미지 만들기"></button>'+
  '</div>'+
  '</div>';
@@ -11256,7 +11255,7 @@ function renderVocabAuto(){
 
 function renderVocabCards(){
  const list = getVocabList();
- if(!list.length){ document.getElementById('vocabCardArea').innerHTML='<p style="text-align:center;color:var(--color-text-light);">개념 데이터 준비 중</p>'; return; }
+ if(!list.length){ document.getElementById('vocabCardArea').innerHTML='<p style="text-align:center;color:var(--color-text-light);">단어 데이터 준비 중</p>'; return; }
  if(vocabIdx >= list.length) vocabIdx = 0;
  if(vocabIdx < 0) vocabIdx = list.length - 1;
  const w = list[vocabIdx];
@@ -11275,7 +11274,7 @@ function renderVocabCards(){
  '<div class="vc-word"'+(isElem?' style="font-size:38px;"':'')+'>'+w.word+'</div>' +
  (isElem?'<div style="font-size:13px;color:var(--color-primary);margin-bottom:4px;">카드를 눌러서 뜻을 숨기거나 보여줄 수 있어요!</div>':'') +
  '<div class="vc-phonetic">'+w.phonetic+'</div>' +
- '<button class="vc-speak" onclick="event.stopPropagation();speakWord(\''+safeWord+'\')" title="읽어주기"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>'+(isElem?' 읽어주기':'')+'</button>' +
+ '<button class="vc-speak" onclick="event.stopPropagation();speakWord(\''+safeWord+'\')" title="발음 듣기"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>'+(isElem?' 발음 듣기':'')+'</button>' +
  '<div class="vc-meaning"'+(isElem?' style="font-size:26px;"':'')+'>'+w.mean+'</div>' +
  '<div class="vc-example" style="position:relative;">' +
  '<span onclick="event.stopPropagation();speakSentence(\''+safeEx+'\')" style="cursor:pointer;margin-right:4px;color:var(--color-primary);" title="문장 듣기"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg></span> ' +
@@ -11339,7 +11338,7 @@ function renderVocabQuiz(){
  const wrongs = list.filter(w=>w.word!==q.word).sort(()=>Math.random()-.5).slice(0,3);
  const opts = [q,...wrongs].sort(()=>Math.random()-.5);
  html += '<div class="vocab-quiz-card" id="vqc'+i+'">' +
- '<div class="vq-word">'+q.word+'</div>' +
+ '<div class="vq-word">'+q.word+'</div><div class="vc-phonetic" style="text-align:center;margin-bottom:12px;color:var(--color-text-light);font-size:13px;">'+q.phonetic+'</div>' +
  '<div class="vocab-quiz-opts">';
  opts.forEach((o,j)=>{
  html += '<button class="vocab-quiz-opt" data-correct="'+(o.word===q.word?'1':'0')+'" onclick="checkVocabQuiz(this,'+i+')">'+o.mean+'</button>';
@@ -11386,7 +11385,7 @@ function renderVocabSaved(){
  const safeWord = w.word.replace(/'/g,"\\'");
  const safeMean = w.mean.replace(/'/g,"\\'");
  html += '<div style="display:flex;align-items:center;gap:12px;padding:12px;background:var(--color-surface);border-radius:10px;margin-bottom:8px;">' +
- '<button onclick="speakWord(\''+safeWord+'\')" style="border:none;background:none;cursor:pointer;flex-shrink:0;color:var(--color-primary);" title="읽어주기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg></button>' +
+ '<button onclick="speakWord(\''+safeWord+'\')" style="border:none;background:none;cursor:pointer;flex-shrink:0;color:var(--color-primary);" title="발음 듣기"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/></svg></button>' +
  '<div style="flex:1;"><strong style="font-size:16px;">'+w.word+'</strong> <span style="font-size:13px;color:var(--color-text-light);">'+w.mean+'</span>' +
  '<div style="font-size:13px;color:var(--color-muted);margin-top:2px;">'+w.ex+'</div></div>' +
  '<button onclick="showVocabReviewSchedule(\''+safeWord+'\',\''+safeMean+'\')" style="border:none;background:var(--color-primary);color:#fff;cursor:pointer;font-size:13px;padding:4px 8px;border-radius:6px;flex-shrink:0;">복습</button>' +
@@ -14559,6 +14558,28 @@ function dismissInstallBanner(){
  localStorage.setItem('supul_install_dismissed', '1');
 }
 
+function openDrawingPadModal(){
+  var m=document.getElementById('drawingPadModal');if(!m)return;
+  var f=document.getElementById('drawingPadFrame');
+  if(f&&!f.src)f.src='./drawing-pad.html';
+  m.style.display='flex';
+}
+function closeDrawingPadModal(){
+  var m=document.getElementById('drawingPadModal');
+  if(m)m.style.display='none';
+}
+function sendDrawingToAnalyze(){
+  var f=document.getElementById('drawingPadFrame');
+  if(!f||!f.contentWindow){closeDrawingPadModal();return;}
+  try{
+    var FC=f.contentWindow.FC;
+    if(!FC){alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 시도하세요.');return;}
+    var d=FC.toDataURL({format:'png',multiplier:2});
+    closeDrawingPadModal();
+    window._openImageEditor(d,function(ed){processOcrFromDataUrl(ed);});
+  }catch(e){closeDrawingPadModal();console.error('그림판 캡처 오류',e);}
+}
+</script>
 
 <!-- 공통 스킬: Yeon Focus Tracker (집중도 감지) -->
 <script src="yeon-focus-tracker.js"></script>
@@ -14582,7 +14603,7 @@ function dismissInstallBanner(){
   }
 })();
 </script>
-<script>
+
 // ===== QR 공유 모달 =====
 var _qrGenerated = false;
 function openQRModal(){
@@ -14623,29 +14644,3 @@ function copyAppLink(){
  });
 }
 
-function analyzeFromDrawingPad(){ sendDrawingToAnalyze(); }
-
-function openDrawingPadModal(){
-  var m = document.getElementById('drawingPadModal');
-  if(!m) return;
-  var frame = document.getElementById('drawingPadFrame');
-  if(frame && !frame.src) frame.src = './drawing-pad.html';
-  m.style.display = 'flex';
-}
-function closeDrawingPadModal(){
-  var m = document.getElementById('drawingPadModal');
-  if(m) m.style.display = 'none';
-}
-function sendDrawingToAnalyze(){
-  var frame = document.getElementById('drawingPadFrame');
-  if(!frame || !frame.contentWindow) { closeDrawingPadModal(); return; }
-  try {
-    var FC = frame.contentWindow.FC;
-    if(!FC){ alert('그림판이 아직 로딩 중입니다. 잠시 후 다시 시도하세요.'); return; }
-    var dataURL = FC.toDataURL({format:'png', multiplier:2});
-    closeDrawingPadModal();
-    window._openImageEditor(dataURL, function(ed){ processOcrFromDataUrl(ed); });
-  } catch(e){ closeDrawingPadModal(); console.error('그림판 캡처 오류', e); }
-}
-</script></body>
-</html>
