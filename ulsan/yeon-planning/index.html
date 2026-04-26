@@ -1,448 +1,812 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>연플래닝 · Yeon Planning — 행복한 공부</title>
-<meta name="description" content="스스로 올라갈 수 있는 힘. 연소사 이진우의 자기주도 학습 공부법 — 의식적 몰입·5.2.5.5 학습법·교과서 10회독·기억의 궁전.">
-<meta name="author" content="연소사 이진우">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg-paper: #F8F6F2;
-  --bg-paper-alt: #F0EBE1;
-  --ink: #1D1D1B;
-  --ink-soft: #3C3C38;
-  --ink-faint: rgba(29,29,27,0.55);
-  --wood: #5D4037;
-  --thread: #B08E61;
-  --thread-strong: #8E6F48;
-  --thread-soft: rgba(176,142,97,0.15);
-  --border: rgba(29,29,27,0.1);
-  --border-strong: rgba(29,29,27,0.2);
-  --font-body: 'Noto Serif KR','Nanum Myeongjo',serif;
-  --font-title: 'Nanum Myeongjo',serif;
-  --font-accent: 'Playfair Display',serif;
-  --measure: 680px;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연플래닝 · Yeon Planning — 행복한 공부</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-paper: #F8F6F2;
+      --bg-paper-alt: #F0EBE1;
+      --ink: #1D1D1B;
+      --ink-soft: #3C3C38;
+      --ink-faint: rgba(29,29,27,0.55);
+      --wood: #5D4037;
+      --thread: #B08E61;
+      --thread-strong: #8E6F48;
+      --thread-soft: rgba(176,142,97,0.15);
+      --border: rgba(29,29,27,0.1);
+      --border-strong: rgba(29,29,27,0.2);
+      --font-body: 'Noto Serif KR','Nanum Myeongjo',serif;
+      --font-title: 'Nanum Myeongjo',serif;
+      --font-accent: 'Playfair Display',serif;
+      --measure: 680px;
+    }
 
-*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
-html { scroll-behavior:smooth; }
-body {
-  font-family:var(--font-body);
-  background:var(--bg-paper);
-  color:var(--ink);
-  line-height:1.8;
-  word-break:keep-all;
-  -webkit-font-smoothing:antialiased;
-  background-image:
-    radial-gradient(circle at 20% 20%,rgba(176,142,97,.04) 0,transparent 40%),
-    radial-gradient(circle at 80% 60%,rgba(93,64,55,.025) 0,transparent 50%);
-}
-a { color:inherit; text-decoration:none; }
-img,svg { max-width:100%; display:block; }
-ul { list-style:none; }
+    *, ::before, ::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
-/* ===== 플랫폼 바 ===== */
-.platform-bar {
-  background: var(--ink);
-  color: rgba(255,255,255,0.7);
-  font-size: 12px;
-  padding: 6px 5%;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex-wrap: wrap;
-  letter-spacing: 0.3px;
-}
-.platform-bar a { color: rgba(255,255,255,0.7); transition: color 0.2s; }
-.platform-bar a:hover { color: #fff; }
-.platform-bar .sep { opacity: 0.35; }
-.platform-bar .current { color: var(--thread); font-weight: 700; }
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-paper);
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(176,142,97,0.04) 0, transparent 40%),
+        radial-gradient(circle at 80% 60%, rgba(93,64,55,0.03) 0, transparent 50%);
+      color: var(--ink);
+      line-height: 1.8;
+      word-break: keep-all;
+      -webkit-font-smoothing: antialiased;
+    }
 
-/* ===== 사이트 헤더 ===== */
-.site-header {
-  border-bottom: 1px solid var(--border);
-  background: rgba(248,246,242,0.94);
-  backdrop-filter: blur(8px);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-.site-header-inner {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  position: relative;
-}
-.site-brand { display:flex; align-items:center; gap:14px; }
-.brand-mark {
-  width:38px; height:38px;
-  border:1px solid var(--ink);
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--font-title); font-weight:800;
-  color:var(--ink); font-size:1.1rem;
-}
-.brand-text .ko {
-  font-family:var(--font-title); font-weight:800;
-  font-size:1.15rem; letter-spacing:0.05em; color:var(--ink); line-height:1;
-}
-.brand-text .en {
-  display:block; font-family:var(--font-accent);
-  font-style:italic; font-size:0.7rem;
-  color:var(--thread); letter-spacing:0.18em; margin-top:3px;
-}
-nav { display:flex; gap:24px; }
-nav a {
-  font-size:0.87rem; color:var(--ink-soft);
-  transition:color .22s; padding:6px 0; font-family:var(--font-body);
-}
-nav a:hover { color:var(--ink); }
-.nav-toggle {
-  display:none; width:44px; height:44px;
-  background:transparent; border:1px solid var(--border-strong);
-  cursor:pointer; font-family:var(--font-title);
-  font-size:1.4rem; font-weight:800; color:var(--ink);
-}
-@media (max-width:860px) {
-  nav {
-    display:none; position:absolute; top:100%; left:0; right:0;
-    background:var(--bg-paper);
-    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
-    flex-direction:column; gap:0; padding:8px 5%;
-  }
-  nav.open { display:flex; }
-  nav a { padding:16px 0; border-bottom:1px solid var(--border); }
-  nav a:last-child { border-bottom:none; }
-  .nav-toggle { display:block; }
-}
+    a { color: inherit; text-decoration: none; }
+    img, svg { max-width: 100%; display: block; }
+    ul { list-style: none; }
 
-/* ===== 히어로 ===== */
-.hero {
-  padding: 100px 5% 90px;
-  border-bottom: 1px solid var(--border);
-  max-width: 1280px;
-  margin: 0 auto;
-}
-.hero-split {
-  display:grid; grid-template-columns:1.3fr 1fr; gap:60px; align-items:center;
-}
-.edition {
-  font-family:var(--font-accent); font-style:italic;
-  color:var(--thread); letter-spacing:0.25em;
-  text-transform:uppercase; font-size:0.8rem;
-  padding-bottom:16px; border-bottom:1px solid var(--border-strong);
-  margin-bottom:32px; display:flex; justify-content:space-between; align-items:center;
-}
-.edition .issue { font-family:var(--font-title); font-weight:700; color:var(--ink); font-size:0.88rem; letter-spacing:0.15em; }
-.hero-title {
-  font-family:var(--font-title); font-weight:800;
-  font-size:clamp(2.2rem,5vw,3.8rem); line-height:1.25;
-  color:var(--ink); letter-spacing:-0.015em; margin-bottom:28px;
-}
-.hero-title em { font-style:normal; color:var(--thread); position:relative; }
-.hero-sub { font-size:1rem; color:var(--ink-soft); max-width:520px; line-height:2; }
-.hero-cta { margin-top:40px; display:flex; gap:12px; flex-wrap:wrap; }
-.btn-main {
-  background:var(--wood); color:#fff; border:none;
-  padding:14px 28px; font-family:var(--font-body); font-size:0.9rem;
-  font-weight:700; cursor:pointer; transition:background .2s;
-}
-.btn-main:hover { background:#4a3028; }
-.btn-sub {
-  background:none; color:var(--wood);
-  border:1px solid var(--border-strong); padding:14px 28px;
-  font-family:var(--font-body); font-size:0.9rem; cursor:pointer; transition:all .2s;
-}
-.btn-sub:hover { border-color:var(--wood); }
+    /* ── Platform Bar ── */
+    .platform-bar {
+      background: var(--ink);
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      padding: 6px 5%;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      letter-spacing: 0.3px;
+    }
+    .platform-bar a { color: rgba(255,255,255,0.7); transition: color 0.2s; }
+    .platform-bar a:hover { color: #fff; }
+    .platform-bar .sep { opacity: 0.4; }
+    .platform-bar .current { color: rgba(255,255,255,0.9); }
 
-/* 緣 패널 */
-.kanji-panel {
-  border:1px solid var(--border-strong); padding:40px 28px;
-  min-height:400px;
-  background:
-    repeating-linear-gradient(0deg,transparent 0,transparent 22px,rgba(29,29,27,.03) 22px,rgba(29,29,27,.03) 23px),
-    var(--bg-paper-alt);
-  display:flex; flex-direction:column; justify-content:space-between;
-}
-.kanji-top {
-  font-family:var(--font-accent); font-style:italic;
-  color:var(--thread); font-size:0.75rem; letter-spacing:0.25em;
-  text-transform:uppercase; display:flex; justify-content:space-between;
-}
-.big-kanji {
-  font-family:var(--font-title); font-weight:800;
-  font-size:clamp(6rem,15vw,12rem); color:var(--ink);
-  line-height:1; text-align:center; margin:16px 0; position:relative;
-}
-.big-kanji::after {
-  content:"緣"; position:absolute; top:8px; left:52%;
-  font-size:clamp(6rem,15vw,12rem); color:var(--thread); opacity:.12; z-index:0;
-  pointer-events:none;
-}
-.kanji-reading {
-  text-align:center; font-family:var(--font-accent);
-  font-style:italic; color:var(--thread); letter-spacing:0.2em; font-size:0.88rem;
-}
-.kanji-reading .ko {
-  display:block; font-family:var(--font-title); font-style:normal;
-  color:var(--ink); font-size:0.95rem; letter-spacing:0.4em; margin-top:6px;
-}
-.kanji-bottom {
-  border-top:1px solid var(--border-strong); padding-top:16px;
-  display:flex; justify-content:space-between;
-  font-family:var(--font-body); font-size:0.72rem; color:var(--ink-faint);
-}
+    /* ── Site Header ── */
+    .site-header {
+      background: var(--bg-paper);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .site-header-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 5%;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .site-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--ink);
+    }
+    .brand-mark {
+      font-family: var(--font-accent);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--thread);
+      line-height: 1;
+    }
+    .brand-text .ko {
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .brand-text .en {
+      font-size: 0.68rem;
+      color: var(--ink-faint);
+      letter-spacing: 0.05em;
+    }
+    #nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    #nav a {
+      padding: 6px 14px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--ink-soft);
+      border-radius: 2px;
+      transition: color 0.2s, background 0.2s;
+    }
+    #nav a:hover {
+      color: var(--wood);
+      background: var(--thread-soft);
+    }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--ink);
+      padding: 4px 8px;
+    }
 
-@media (max-width:860px) {
-  .hero { padding:64px 5% 56px; }
-  .hero-split { grid-template-columns:1fr; gap:40px; }
-  .kanji-panel { min-height:280px; }
-}
+    /* ── Hero ── */
+    .hero {
+      padding: 80px 5% 72px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .hero-split {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 60px;
+      align-items: center;
+    }
+    .edition {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-faint);
+    }
+    .edition .issue {
+      font-family: var(--font-title);
+      font-weight: 700;
+      color: var(--ink);
+      font-size: 0.88rem;
+      letter-spacing: 0.15em;
+    }
+    .hero-title {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.25;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      margin-bottom: 28px;
+    }
+    .hero-title em { font-style: normal; color: var(--thread); }
+    .hero-sub {
+      font-size: 1rem;
+      color: var(--ink-soft);
+      max-width: 520px;
+      line-height: 2;
+    }
+    .hero-cta {
+      margin-top: 40px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-main {
+      background: var(--wood);
+      color: #fff;
+      border: none;
+      padding: 14px 28px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .btn-main:hover { background: #4a3028; }
+    .btn-sub {
+      background: none;
+      color: var(--wood);
+      border: 1px solid var(--border-strong);
+      padding: 13px 24px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      display: inline-block;
+    }
+    .btn-sub:hover { background: var(--thread-soft); }
 
-/* ===== 섹션 공통 ===== */
-.section { padding:80px 5%; border-top:1px solid var(--border); max-width:1280px; margin:0 auto; }
-.section-label {
-  font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
-  color:var(--thread); font-weight:700; margin-bottom:8px;
-}
-.section-title {
-  font-family:var(--font-title); font-size:clamp(1.6rem,3vw,2.4rem);
-  font-weight:800; color:var(--ink); margin-bottom:8px;
-}
-.section-sub { font-size:0.95rem; color:var(--ink-faint); margin-bottom:40px; max-width:600px; }
+    /* 한자 패널 */
+    .kanji-panel {
+      background: var(--bg-paper-alt);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 320px;
+      gap: 12px;
+      padding: 40px 24px;
+    }
+    .kanji-char {
+      font-family: var(--font-accent);
+      font-size: 80px;
+      font-weight: 700;
+      color: var(--thread);
+      line-height: 1;
+    }
+    .kanji-meaning {
+      font-size: 0.78rem;
+      letter-spacing: 0.3em;
+      color: var(--ink-faint);
+      text-align: center;
+    }
 
-/* ===== 핵심 학습법 카드 ===== */
-.method-grid {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:20px;
-}
-.method-card {
-  border:1px solid var(--border); padding:28px 24px;
-  background:#fff; transition:box-shadow .2s, transform .2s;
-}
-.method-card:hover { box-shadow:0 6px 20px rgba(29,29,27,.08); transform:translateY(-2px); }
-.method-num {
-  font-family:var(--font-title); font-weight:800; font-size:2rem;
-  color:var(--thread); margin-bottom:10px; line-height:1;
-}
-.method-card h3 {
-  font-family:var(--font-title); font-size:1.1rem; font-weight:800;
-  color:var(--ink); margin-bottom:8px;
-}
-.method-card p { font-size:0.88rem; color:var(--ink-soft); line-height:1.8; }
+    /* ── Section Common ── */
+    .section {
+      padding: 80px 5%;
+      border-top: 1px solid var(--border);
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--thread);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: var(--font-title);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .section-sub {
+      font-size: 0.95rem;
+      color: var(--ink-faint);
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
 
-/* ===== 코스 ===== */
-.course-list { display:flex; flex-direction:column; gap:16px; }
-.course-item {
-  display:flex; align-items:center; gap:24px;
-  padding:24px; border:1px solid var(--border); background:#fff;
-  transition:box-shadow .2s; cursor:pointer;
-}
-.course-item:hover { box-shadow:0 4px 16px rgba(29,29,27,.08); }
-.course-num {
-  font-family:var(--font-title); font-weight:800; font-size:2rem;
-  color:var(--border-strong); min-width:48px; line-height:1;
-}
-.course-info { flex:1; }
-.course-info h3 { font-family:var(--font-title); font-size:1.05rem; font-weight:800; margin-bottom:4px; }
-.course-info p { font-size:0.85rem; color:var(--ink-faint); }
-.course-arrow { color:var(--thread); font-size:1.2rem; }
+    /* ── 지점 안내 ── */
+    .branch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .branch-card {
+      border: 1px solid var(--border);
+      padding: 32px 24px;
+      background: #fff;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      text-align: center;
+    }
+    .branch-card:hover {
+      box-shadow: 0 8px 28px rgba(29,29,27,0.1);
+      transform: translateY(-3px);
+      border-color: var(--thread);
+    }
+    .branch-num {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 2.2rem;
+      color: var(--thread);
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+    .branch-card h3 {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .branch-card p {
+      font-size: 0.83rem;
+      color: var(--ink-faint);
+      line-height: 1.7;
+    }
+    .branch-card .branch-tag {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 3px 10px;
+      background: var(--thread-soft);
+      color: var(--thread-strong);
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 2px;
+    }
 
-/* ===== 학습 도구 ===== */
-.tools-grid {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:24px;
-}
-.tool-card {
-  border:1px solid var(--border); background:#fff;
-  transition:box-shadow .2s, transform .2s; overflow:hidden;
-  display:flex; flex-direction:column;
-}
-.tool-card:hover { box-shadow:0 8px 28px rgba(29,29,27,.10); transform:translateY(-3px); }
-.tool-card-top {
-  padding:32px 28px 24px;
-  flex:1;
-}
-.tool-badge {
-  display:inline-block;
-  font-size:10px; letter-spacing:1.5px; font-weight:700; text-transform:uppercase;
-  background:var(--thread-soft); color:var(--thread-strong);
-  padding:4px 10px; margin-bottom:16px;
-}
-.tool-icon {
-  width:48px; height:48px; margin-bottom:16px;
-}
-.tool-card h3 {
-  font-family:var(--font-title); font-size:1.25rem; font-weight:800;
-  color:var(--ink); margin-bottom:6px;
-}
-.tool-card p { font-size:0.87rem; color:var(--ink-soft); line-height:1.8; }
-.tool-card-foot {
-  border-top:1px solid var(--border);
-  padding:16px 28px;
-  display:flex; align-items:center; justify-content:space-between;
-}
-.tool-chips { display:flex; gap:8px; flex-wrap:wrap; }
-.tool-chip {
-  font-size:11px; padding:3px 10px;
-  border:1px solid var(--border); color:var(--ink-faint);
-}
-.tool-link {
-  display:inline-flex; align-items:center; gap:6px;
-  font-size:0.85rem; font-weight:700; color:var(--thread);
-  text-decoration:none; transition:color .2s;
-}
-.tool-link:hover { color:var(--thread-strong); }
+    /* ── 학습법 ── */
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .method-card {
+      border: 1px solid var(--border);
+      padding: 28px 24px;
+      background: #fff;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .method-card:hover {
+      box-shadow: 0 6px 20px rgba(29,29,27,0.08);
+      transform: translateY(-2px);
+    }
+    .method-num {
+      font-family: var(--font-title);
+      font-weight: 800;
+      font-size: 2rem;
+      color: var(--thread);
+      margin-bottom: 10px;
+      line-height: 1;
+    }
+    .method-card h3 {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .method-card p {
+      font-size: 0.88rem;
+      color: var(--ink-soft);
+      line-height: 1.8;
+    }
 
-/* ===== 연락처 ===== */
-.contact-band {
-  background:var(--ink); color:#fff;
-  padding:72px 5%; text-align:center;
-}
-.contact-band h2 {
-  font-family:var(--font-title); font-size:clamp(1.6rem,3vw,2.4rem);
-  font-weight:800; margin-bottom:12px; color:#fff;
-}
-.contact-band p { font-size:1rem; color:rgba(255,255,255,.7); margin-bottom:28px; }
-.btn-contact {
-  background:var(--thread); color:#fff; border:none;
-  padding:14px 32px; font-family:var(--font-body);
-  font-size:0.95rem; font-weight:700; cursor:pointer; transition:background .2s;
-}
-.btn-contact:hover { background:var(--thread-strong); }
+    /* ── 코스 ── */
+    .course-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .course-item {
+      display: grid;
+      grid-template-columns: 80px 1fr auto;
+      gap: 24px;
+      align-items: center;
+      border: 1px solid var(--border);
+      padding: 24px 28px;
+      background: #fff;
+      transition: box-shadow 0.2s, border-color 0.2s;
+    }
+    .course-item:hover {
+      box-shadow: 0 4px 14px rgba(29,29,27,0.07);
+      border-color: var(--thread);
+    }
+    .course-num {
+      font-family: var(--font-accent);
+      font-size: 2.4rem;
+      color: var(--thread-soft);
+      font-weight: 700;
+      line-height: 1;
+      border-right: 1px solid var(--border);
+      padding-right: 24px;
+      text-align: center;
+    }
+    .course-info h3 {
+      font-family: var(--font-title);
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .course-info p {
+      font-size: 0.85rem;
+      color: var(--ink-faint);
+      line-height: 1.6;
+    }
+    .course-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .course-tag.primary { background: var(--wood); color: #fff; }
+    .course-tag.secondary { background: var(--thread-soft); color: var(--thread-strong); }
 
-/* ===== 지점 선택 ===== */
-.branch-grid {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:20px;
-}
-.branch-card {
-  border:1px solid var(--border); padding:32px 24px;
-  background:#fff; cursor:pointer;
-  transition:box-shadow .2s, transform .2s, border-color .2s;
-  text-align:center;
-}
-.branch-card:hover { box-shadow:0 8px 28px rgba(29,29,27,.10); transform:translateY(-3px); border-color:var(--thread); }
-.branch-num {
-  font-family:var(--font-title); font-weight:800; font-size:2.2rem;
-  color:var(--thread); margin-bottom:12px; line-height:1;
-}
-.branch-card h3 {
-  font-family:var(--font-title); font-size:1.3rem; font-weight:800;
-  color:var(--ink); margin-bottom:6px;
-}
-.branch-card p { font-size:0.85rem; color:var(--ink-faint); margin-bottom:20px; }
-.branch-cta {
-  display:inline-block; font-size:0.82rem; font-weight:700;
-  color:var(--thread); border-bottom:1px solid var(--thread-soft);
-  padding-bottom:2px;
-}
+    /* ── 학습 도구 ── */
+    .tools-categories { display: flex; flex-direction: column; gap: 48px; }
+    .tools-cat-title {
+      font-family: var(--font-title);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--thread-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tools-cat-title span { color: var(--thread); }
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .tool-card {
+      border: 1px solid var(--border);
+      padding: 24px 20px;
+      background: #fff;
+      text-align: center;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .tool-card:hover {
+      box-shadow: 0 6px 20px rgba(29,29,27,0.08);
+      transform: translateY(-2px);
+      border-color: var(--thread);
+    }
+    .tool-icon { font-size: 36px; line-height: 1; }
+    .tool-card h4 {
+      font-family: var(--font-title);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .tool-card p {
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+      line-height: 1.6;
+    }
+    .tool-link {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--thread);
+      text-decoration: none;
+      transition: color 0.2s;
+      margin-top: auto;
+    }
+    .tool-link:hover { color: var(--thread-strong); }
+    .tool-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      background: var(--thread-soft);
+      color: var(--thread-strong);
+      border-radius: 2px;
+    }
 
-/* ===== 연락처 모달 ===== */
-.contact-modal-bg {
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,0.5); z-index:200;
-  align-items:center; justify-content:center;
-}
-.contact-modal-bg.open { display:flex; }
-.contact-modal {
-  background:var(--bg-paper); padding:40px 36px;
-  max-width:420px; width:90%; position:relative;
-}
-.contact-modal h3 {
-  font-family:var(--font-title); font-size:1.4rem; font-weight:800;
-  color:var(--ink); margin-bottom:8px;
-}
-.contact-modal .branch-tag {
-  font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
-  color:var(--thread); font-weight:700; margin-bottom:24px; display:block;
-}
-.contact-row {
-  display:flex; align-items:center; gap:14px;
-  padding:16px 0; border-bottom:1px solid var(--border);
-}
-.contact-row:last-of-type { border-bottom:none; }
-.contact-row svg { color:var(--thread); flex-shrink:0; }
-.contact-row-text { font-size:0.9rem; color:var(--ink-soft); }
-.contact-row-text strong { display:block; font-size:0.78rem; color:var(--ink-faint); font-weight:400; margin-bottom:2px; }
-.btn-kakao {
-  display:block; width:100%; margin-top:24px;
-  background:#FEE500; color:#1A1A1A;
-  padding:14px; font-family:var(--font-body);
-  font-size:0.95rem; font-weight:700; cursor:pointer;
-  border:none; text-align:center; transition:opacity .2s;
-}
-.btn-kakao:hover { opacity:0.88; }
-.modal-close {
-  position:absolute; top:16px; right:20px;
-  background:none; border:none; font-size:1.4rem;
-  color:var(--ink-faint); cursor:pointer;
-}
+    /* ── 상담 신청 ── */
+    .contact-band {
+      background: var(--ink);
+      color: #fff;
+      padding: 72px 5%;
+      text-align: center;
+    }
+    .contact-band h2 {
+      font-family: var(--font-title);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .contact-band p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 28px;
+    }
+    .btn-contact {
+      background: var(--thread);
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+    .btn-contact:hover { background: var(--thread-strong); }
+    .contact-info {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .contact-item { text-align: center; }
+    .contact-item .ci-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.4);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .contact-item .ci-val {
+      font-family: var(--font-title);
+      font-size: 1rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.85);
+    }
 
-/* ===== 푸터 ===== */
-footer {
-  border-top:1px solid var(--border); padding:28px 5%;
-  max-width:1280px; margin:0 auto;
-  display:flex; justify-content:space-between; align-items:center;
-  flex-wrap:wrap; gap:12px;
-  font-size:12px; color:var(--ink-faint);
-}
-footer a { color:var(--thread); }
-.footer-breadcrumb { display:flex; gap:6px; align-items:center; }
-.footer-breadcrumb .sep { opacity:0.4; }
-</style>
+    /* ── Footer ── */
+    .site-footer {
+      background: var(--bg-paper-alt);
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+    }
+    .site-footer a { color: var(--thread); }
+
+    /* ── Responsive ── */
+    @media (max-width: 860px) {
+      .hero { padding: 64px 5% 56px; }
+      .hero-split { grid-template-columns: 1fr; gap: 40px; }
+      .kanji-panel { min-height: 200px; }
+      .course-item { grid-template-columns: 60px 1fr; }
+      .course-item .course-tag { display: none; }
+    }
+    @media (max-width: 600px) {
+      #nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 64px;
+        left: 0; right: 0;
+        background: var(--bg-paper);
+        border-bottom: 1px solid var(--border);
+        padding: 12px 5% 20px;
+        gap: 4px;
+        z-index: 99;
+      }
+      #nav.open { display: flex; }
+      .nav-toggle { display: block; }
+      .course-item { grid-template-columns: 1fr; gap: 8px; }
+      .course-num { border-right: none; border-bottom: 1px solid var(--border); padding: 0 0 12px; }
+    }
+  </style>
 </head>
 <body>
 
-<!-- 플랫폼 바 (항상 최상단) -->
-<div class="platform-bar">
-  <a href="https://y-life.kr">y-life.kr</a>
-  <span class="sep">›</span>
-  <a href="../../">yeon.ai.kr</a>
-  <span class="sep">›</span>
-  <a href="../">울산</a>
-  <span class="sep">›</span>
-  <span class="current">연플래닝</span>
-</div>
-
-<!-- 사이트 헤더 -->
-<header class="site-header">
-  <div class="site-header-inner">
-    <a href="." class="site-brand">
-      <div class="brand-mark">연</div>
-      <div class="brand-text">
-        <div class="ko">연플래닝</div>
-        <span class="en">Yeon Planning</span>
-      </div>
-    </a>
-    <nav id="nav">
-      <a href="#branches">지점 안내</a>
-      <a href="#method">학습법</a>
-      <a href="#courses">코스</a>
-      <a href="#tools">학습 도구</a>
-      <a href="#contact">상담 신청</a>
-    </nav>
-    <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')">≡</button>
+  <!-- ── 플랫폼 바 ── -->
+  <div class="platform-bar">
+    <a href="https://y-life.kr">y-life.kr</a>
+    <span class="sep">›</span>
+    <a href="../../">yeon.ai.kr</a>
+    <span class="sep">›</span>
+    <a href="../">울산</a>
+    <span class="sep">›</span>
+    <span class="current">연플래닝</span>
   </div>
-</header>
 
-<!-- 히어로 -->
-<div class="hero">
-  <div class="hero-split">
-    <div class="hero-left">
-      <div class="edition">
-        <span>Yeon Planning · Ulsan</span>
-        <span class="issue">자기주도 학습</span>
+  <!-- ── 헤더 ── -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="." class="site-brand">
+        <div class="brand-mark">연</div>
+        <div class="brand-text">
+          <div class="ko">연플래닝</div>
+          <span class="en">Yeon Planning</span>
+        </div>
+      </a>
+      <nav id="nav">
+        <a href="#branches">지점 안내</a>
+        <a href="#method">학습법</a>
+        <a href="#courses">코스</a>
+        <a href="#tools">학습 도구</a>
+        <a href="#contact">상담 신청</a>
+      </nav>
+      <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')">≡</button>
+    </div>
+  </header>
+
+  <!-- ── 히어로 ── -->
+  <div class="hero">
+    <div class="hero-split">
+      <div class="hero-left">
+        <div class="edition">
+          <span>Yeon Planning · Ulsan</span>
+          <span class="issue">자기주도 학습</span>
+        </div>
+        <h1 class="hero-title">
+          스스로<br>올라갈 수 있는<br><em>힘</em>을 기릅니다
+        </h1>
+        <p class="hero-sub">
+          연소사 이진우의 자기주도 학습 공부법 — 의식적 몰입, 5.2.5.5 학습법으로 학생이 스스로 공부하는 힘을 키웁니다.
+        </p>
+        <div class="hero-cta">
+          <a href="#contact" class="btn-main">상담 신청하기</a>
+          <a href="#method" class="btn-sub">학습법 알아보기</a>
+        </div>
       </div>
-      <h1 class="hero-title">
-        스스로<br>올라갈 수 있는<br><em>힘</em>을 기릅니다
-      </h1>
-      <p class="hero-sub">
-        연소사 이진우의 자기주도 학습 공부법 — 의식적 몰입, 5.2.5.5 학습법으로 학생이 스스로 공부하는 힘을 키웁니다.
-      </p>
-      <div class="hero-cta">
-        <button class="btn-main" onclick="document.getElementById('cont
+      <div class="kanji-panel">
+        <div class="kanji-char">緣</div>
+        <div class="kanji-meaning">인연 · 이어짐 · 성장의 고리</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 지점 안내 ── -->
+  <section id="branches" class="section">
+    <div class="section-label">Branch Guide</div>
+    <h2 class="section-title">지점 안내</h2>
+    <p class="section-sub">울산 지역 연플래닝 두 곳. 가까운 지점에서 시작하세요.</p>
+    <div class="branch-grid">
+      <div class="branch-card">
+        <div class="branch-num">01</div>
+        <h3>삼산점</h3>
+        <p>울산 남구 삼산동<br>삼산로 ○○○</p>
+        <span class="branch-tag">개원 중</span>
+      </div>
+      <div class="branch-card">
+        <div class="branch-num">02</div>
+        <h3>강동점</h3>
+        <p>울산 북구 강동<br>강동로 ○○○</p>
+        <span class="branch-tag">개원 중</span>
+      </div>
+      <div class="branch-card" style="border:1px dashed var(--border); background:var(--bg-paper-alt);">
+        <div class="branch-num" style="color:var(--border-strong);">+</div>
+        <h3 style="color:var(--ink-faint);">지점 확장 예정</h3>
+        <p>관심 있으신 분은<br>아래 상담 신청으로</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 학습법 ── -->
+  <section id="method" class="section">
+    <div class="section-label">Learning Method</div>
+    <h2 class="section-title">연플래닝 학습법</h2>
+    <p class="section-sub">공부는 'z�e:��으로 맒드는 것'이 아니라 '��슬 하게 티식적 몰입을 훈련합니다.</p>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-num">5</div>
+        <h3>5분 워밍업</h3>
+        <p>학습 전 뇌를 깨우는 준비 단계. 오늘 무엇을, 왜 공부할지 스스로 선언합니다.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">2</div>
+        <h3>2분 목표 설정</h3>
+        <p>구체적이고 측정 가능한 목표를 2분 안에 한 문장으로 씁니� 가능한 목표를 2분 안에 한 문장으로 씁니다. 모호함을 없앱니다.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">5</div>
+        <h3>5단계 심화</h3>
+        <p>이해 → 요약 → 설명 → 응용 → 가르치기. 단순 암기를 넘어 깊이 있는 이해로.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">5</div>
+        <h3>5분 점검</h3>
+        <p>학습 후 스스로 채점하고 빈틈을 기록합니다. 다음 세션의 시작점이 됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 코스 ── -->
+  <section id="courses" class="section">
+    <div class="section-label">Courses</div>
+    <h2 class="section-title">코스 안내</h2>
+    <p class="section-sub">학생의 현재 위치와 목표에 맞게 설계된 플래닝 프로그램입니다.</p>
+    <div class="course-list">
+      <div class="course-item">
+        <div class="course-num">Ⅰ</div>
+        <div class="course-info">
+          <h3>플래닝 입문 코스</h3>
+          <p>공부 습관이 없는 학생을 위한 기초 과정. 하루 1시간 자기주도 학습 루틴 만들기.</p>
+        </div>
+        <span class="course-tag secondary">초·중등</span>
+      </div>
+      <div class="course-item">
+        <div class="course-num">Ⅱ</div>
+        <div class="course-info">
+          <h3>의식적 몰입 코스</h3>
+          <p>집중력이 부족한 학생을 위한 심화 과정. 포모도로 + 5.2.5.5 학습법 완전 적용.</p>
+        </div>
+        <span class="course-tag secondary">중·고등</span>
+      </div>
+      <div class="course-item">
+        <div class="course-num">Ⅲ</div>
+        <div class="course-info">
+          <h3>수능·내신 플래닝 코스</h3>
+          <p>시험 목표가 뚜렷한 고등학생을 위한 전략 과정. 과목별 로드맵 설계부터 실전 플래닝까지.</p>
+        </div>
+        <span class="course-tag primary">고등 전용</span>
+      </div>
+      <div class="course-item">
+        <div class="course-num">Ⅳ</div>
+        <div class="course-info">
+          <h3>영풀 영어 완전학습</h3>
+          <p>OCR·AI를 활용한 영어 집중 프로그램. 영단어·독해·듣기를 한 사이클로 완성.</p>
+        </div>
+        <span class="course-tag primary">전 학년</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 학습 도구 ── -->
+  <section id="tools" class="section">
+    <div class="section-label">Learning Tools</div>
+    <h2 class="section-title">학습 도구</h2>
+    <p class="section-sub">연플래닝이 직접 만든 디지털 학습 도구들. 추가될 때마다 이곳에 정리됩니다.</p>
+
+    <div class="tools-categories">
+
+      <!-- 영어 학습 -->
+      <div class="tools-category">
+        <div class="tools-cat-title">
+          <span>🌊</span> 영어 학습
+        </div>
+        <div class="tool-grid">
+          <div class="tool-card">
+            <div class="tool-icon">🌊</div>
+            <h4>영풀</h4>
+            <p>영어 완전학습 PWA. OCR 단어 추출, 드로잉 패드, 집중 트래커.</p>
+            <span class="tool-badge">PWA · 오프라인</span>
+            <a href="../../yeong-pul.html" class="tool-link">앱 열기 →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 플래닝 도구 -->
+      <div class="tools-category">
+        <div class="tools-cat-title">
+          <span>📋</span> 플래닝 도구
+        </div>
+        <div class="tool-grid">
+          <div class="tool-card" style="opacity:0.5; pointer-events:none;">
+            <div class="tool-icon">📅</div>
+            <h4>연플래너</h4>
+            <p>자기주도 학습 플래너. 목표 설정부터 점검까지.</p>
+            <span class="tool-badge">준비 중</span>
+          </div>
+          <div class="tool-card" style="opacity:0.5; pointer-events:none;">
+            <div class="tool-icon">⏱️</div>
+            <h4>5.2.5.5 타이머</h4>
+            <p>의식적 몰입 4단계 학습 타이머.</p>
+            <span class="tool-badge">준비 중</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 상담 도구 -->
+      <div class="tools-category">
+        <div class="tools-cat-title">
+          <span>🌲</span> 상담 도구
+        </div>
+        <div class="tool-grid">
+          <div class="tool-card" style="opacity:0.5; pointer-events:none;">
+            <div class="tool-icon">🌲</div>
+            <h4>수풀AI</h4>
+            <p>스무고개 방식 학습 상담 AI.</p>
+            <span class="tool-badge">준비 중</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── 상담 신청 ── -->
+  <section id="contact">
+    <div class="contact-band">
+      <h2>지금 시작하세요</h2>
+      <p>상담은 부담 없이, 변화는 확실하게 — 첫 상담은 무료입니다.</p>
+      <a href="mailto:yeon@y-life.com" class="btn-contact">무료 상담 신청</a>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="ci-label">Email</div>
+          <div class="ci-val">yeon@y-life.com</div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">삼산점</div>
+          <div class="ci-val">울산 남구 삼산동</div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">강동점</div>
+          <div class="ci-val">울산 북구 강동</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 푸터 ── -->
+  <footer class="site-footer">
+    <p>연플래닝 울산 &nbsp;·&nbsp; <a href="https://yeon.ai.kr">yeon.ai.kr</a> &nbsp;·&nbsp; <a href="https://y-life.kr">y-life.kr</a></p>
+    <p style="margin-top:6px;">© 2024 연플래닝. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
