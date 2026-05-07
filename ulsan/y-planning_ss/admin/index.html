@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연 AI 학습코칭 아카데미 — 관리자</title>
+<meta name="theme-color" content="#1f2a2a">
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --deep:#2f5d62;--pine:#427a71;--ink:#1f2a2a;
+  --accent:#c38d56;--accent2:#e8a96e;
+  --mist:#f4f1eb;--sand:#e7d9bf;--sage:#dfe8de;--card:#fffdf8;--peach:#f3e7dd;
+  --line:#d7d1c5;
+  --t1:#1f2a2a;--t2:#536060;--t3:#6a7676;
+  --rust:#b05830;--rust2:#d4693f;
+  --white:#ffffff;
+  --green:#48a374;--orange:#e08856;--red:#d65a5a;--blue:#5a8bd6;
+  --sidebar-w:240px;--header-h:60px;
+}
+html,body{height:100%}
+body{background:var(--mist);color:var(--t1);font-family:'Noto Sans KR',sans-serif;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+a{text-decoration:none;color:inherit}
+
+/* 인증 게이트 (로딩) */
+.gate{position:fixed;inset:0;background:var(--ink);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;gap:18px}
+.gate.hidden{display:none}
+.gate-mark{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:30px;font-weight:700}
+.gate-text{font-size:14px;color:rgba(255,255,255,0.7)}
+.gate-spinner{width:24px;height:24px;border:3px solid rgba(255,255,255,0.18);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.8s linear infinite}
+.gate-error{background:rgba(176,80,48,0.18);border:1px solid rgba(176,80,48,0.4);color:#ffb8a0;padding:14px 22px;border-radius:12px;font-size:13px;max-width:380px;text-align:center;line-height:1.7}
+.gate-error a{color:var(--accent2);font-weight:700;text-decoration:underline}
+
+/* 레이아웃 */
+.layout{display:flex;min-height:100vh}
+
+/* 사이드바 */
+.sidebar{width:var(--sidebar-w);background:var(--ink);color:white;display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:200;transition:transform 0.3s}
+.sidebar-header{padding:18px 22px;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:10px}
+.sidebar-mark{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700}
+.sidebar-title{font-weight:800;font-size:13px;line-height:1.4}
+.sidebar-title small{display:block;font-size:10px;font-weight:500;color:rgba(255,255,255,0.5);margin-top:2px}
+.sidebar-branch{margin:14px 16px;padding:10px 12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:10px;display:flex;align-items:center;gap:8px;font-size:12px;color:rgba(255,255,255,0.7)}
+.branch-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(72,163,116,0.18)}
+.branch-text{flex:1}
+.branch-text b{display:block;color:white;font-size:13px;font-weight:600;margin-bottom:1px}
+.branch-text span{font-size:10px;color:rgba(255,255,255,0.45)}
+.sidebar-menu{flex:1;padding:8px 12px;overflow-y:auto}
+.menu-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;color:rgba(255,255,255,0.7);font-size:13.5px;font-weight:500;margin-bottom:3px;cursor:pointer;transition:background 0.18s,color 0.18s;width:100%;text-align:left}
+.menu-item:hover{background:rgba(255,255,255,0.06);color:white}
+.menu-item.active{background:rgba(195,141,86,0.18);color:var(--accent2);font-weight:700}
+.menu-item.active .menu-icon{color:var(--accent2)}
+.menu-icon{width:18px;flex-shrink:0;color:rgba(255,255,255,0.55);font-size:15px}
+.menu-badge{margin-left:auto;background:var(--rust);color:white;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;min-width:18px;text-align:center}
+.menu-badge.green{background:var(--green)}
+.sidebar-foot{padding:14px 16px;border-top:1px solid rgba(255,255,255,0.08);font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6}
+.sidebar-foot b{color:rgba(255,255,255,0.65);font-weight:600}
+.logout-btn{margin:0 16px 14px;padding:10px;background:rgba(176,80,48,0.18);border:1px solid rgba(176,80,48,0.35);color:#ffb8a0;border-radius:10px;font-size:12px;font-weight:600;width:calc(100% - 32px);transition:all 0.2s}
+.logout-btn:hover{background:rgba(176,80,48,0.3);color:white}
+
+/* 메인 */
+.main{flex:1;margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+.header{height:var(--header-h);background:white;border-bottom:1px solid var(--line);padding:0 22px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:100}
+.header-toggle{display:none;width:36px;height:36px;border-radius:8px;background:var(--mist);align-items:center;justify-content:center;color:var(--t1)}
+.header-search{flex:1;max-width:380px;position:relative}
+.header-search input{width:100%;padding:9px 14px 9px 38px;background:var(--mist);border:1px solid transparent;border-radius:10px;font-size:13px;color:var(--t1);font-family:inherit;transition:border-color 0.2s,background 0.2s}
+.header-search input:focus{outline:none;background:white;border-color:var(--accent)}
+.header-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--t3);font-size:14px}
+.header-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.h-btn{width:36px;height:36px;border-radius:10px;background:var(--mist);display:flex;align-items:center;justify-content:center;color:var(--t1);position:relative;transition:background 0.18s;font-size:15px}
+.h-btn:hover{background:var(--sage)}
+.h-btn.refresh.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.h-dot{position:absolute;top:6px;right:7px;width:7px;height:7px;background:var(--rust);border-radius:50%;border:2px solid var(--mist)}
+.h-user{display:flex;align-items:center;gap:9px;padding:5px 12px 5px 5px;background:var(--mist);border-radius:999px}
+.h-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:700}
+.h-user-name{font-size:12.5px;font-weight:600}
+.h-user-name small{display:block;font-size:10px;color:var(--t3);font-weight:500;margin-top:1px}
+
+/* 컨텐츠 */
+.content{flex:1;padding:24px}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}
+.page-title{font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:var(--ink)}
+.page-sub{font-size:12.5px;color:var(--t3);margin-top:3px}
+.page-actions{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;border:1px solid transparent;transition:all 0.18s}
+.btn-primary{background:var(--deep);color:white}
+.btn-primary:hover{background:var(--pine)}
+.btn-warm{background:var(--accent);color:white}
+.btn-warm:hover{background:var(--accent2)}
+.btn-ghost{background:white;color:var(--t1);border-color:var(--line)}
+.btn-ghost:hover{background:var(--mist)}
+.btn-rust{background:var(--rust);color:white}
+.btn-rust:hover{background:var(--rust2)}
+
+/* KPI 카드 */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:24px}
+.kpi-card{background:white;border:1px solid var(--line);border-radius:14px;padding:18px}
+.kpi-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.kpi-label{font-size:12px;color:var(--t3);font-weight:600}
+.kpi-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;color:white;font-size:15px}
+.kpi-icon.teal{background:var(--deep)}
+.kpi-icon.warm{background:var(--accent)}
+.kpi-icon.green{background:var(--green)}
+.kpi-icon.orange{background:var(--orange)}
+.kpi-icon.blue{background:var(--blue)}
+.kpi-icon.rust{background:var(--rust)}
+.kpi-value{font-family:'Noto Serif KR',serif;font-size:28px;font-weight:700;color:var(--ink);line-height:1}
+.kpi-value .unit{font-size:14px;color:var(--t3);font-weight:500;margin-left:4px}
+.kpi-meta{font-size:11.5px;color:var(--t3);margin-top:8px}
+.kpi-meta b{font-weight:700}
+
+/* 본문 그리드 */
+.grid-2{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}
+@media(max-width:980px){.grid-2{grid-template-columns:1fr}}
+.card{background:white;border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.card-title{font-family:'Noto Serif KR',serif;font-size:15px;font-weight:700;color:var(--ink)}
+.card-title .count{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:white;font-family:'Noto Sans KR',sans-serif;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;margin-left:8px;min-width:22px}
+.card-link{font-size:11.5px;color:var(--accent);font-weight:600;cursor:pointer}
+.card-link:hover{color:var(--accent2)}
+
+/* 빈 상태 */
+.empty{padding:36px 18px;text-align:center;color:var(--t3)}
+.empty-icon{width:48px;height:48px;border-radius:14px;background:var(--mist);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px}
+.empty-title{font-size:13.5px;color:var(--t1);font-weight:600;margin-bottom:5px}
+.empty-text{font-size:12px;line-height:1.6}
+
+/* 페이지 스위치 */
+.page{display:none}
+.page.active{display:block;animation:fadein 0.25s}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 빠른 실행 */
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.quick-btn{padding:14px;background:var(--mist);border:1px solid transparent;border-radius:11px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 0.2s;text-align:left}
+.quick-btn:hover{background:white;border-color:var(--accent);transform:translateY(-2px)}
+.quick-icon{width:32px;height:32px;border-radius:9px;background:white;display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:16px}
+.quick-label{font-size:12.5px;font-weight:600}
+.quick-label small{display:block;font-size:10px;color:var(--t3);font-weight:500;margin-top:1px}
+
+/* 신청 명단 테이블 */
+.signup-list{display:flex;flex-direction:column;gap:10px}
+.signup-row{display:grid;grid-template-columns:90px 1fr 130px 110px auto;gap:14px;align-items:center;padding:14px 16px;background:var(--mist);border:1px solid var(--line);border-radius:12px;transition:border-color 0.18s}
+.signup-row:hover{border-color:var(--accent)}
+.signup-row.completed{opacity:0.55}
+.signup-date{font-family:'Noto Serif KR',serif;font-size:14px;font-weight:700;color:var(--deep)}
+.signup-date small{display:block;font-family:'Noto Sans KR',sans-serif;font-weight:500;color:var(--t3);font-size:10.5px;margin-top:2px}
+.signup-info{font-size:13px;line-height:1.55}
+.signup-info b{font-size:14px;color:var(--ink);font-weight:700}
+.signup-info .child{color:var(--t2);font-size:12px;margin-top:2px;display:block}
+.signup-info .msg{color:var(--t2);font-size:11.5px;margin-top:4px;font-style:italic;background:white;padding:6px 10px;border-radius:8px;border-left:3px solid var(--accent)}
+.signup-phone{font-family:'Noto Sans KR',sans-serif;font-size:13px;color:var(--t1);font-weight:600}
+.signup-phone a{color:var(--deep);text-decoration:none}
+.signup-phone a:hover{text-decoration:underline}
+.signup-phone small{display:block;font-size:10.5px;color:var(--t3);margin-top:2px;font-weight:500}
+.signup-status{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;cursor:pointer;transition:filter 0.15s;border:none;font-family:inherit}
+.signup-status:hover{filter:brightness(1.06)}
+.signup-status.pending{background:rgba(176,80,48,0.12);color:var(--rust)}
+.signup-status.confirmed{background:rgba(72,163,116,0.12);color:var(--green)}
+.signup-status.attended{background:rgba(47,93,98,0.12);color:var(--deep)}
+.signup-status.cancelled{background:var(--mist);color:var(--t3);text-decoration:line-through}
+.signup-actions{display:flex;gap:5px}
+.signup-actions button{width:28px;height:28px;border-radius:7px;background:white;border:1px solid var(--line);font-size:12px;color:var(--t2);cursor:pointer;transition:all 0.15s}
+.signup-actions button:hover{background:var(--accent);border-color:var(--accent);color:white}
+
+/* 필터 칩 */
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.filter-chip{padding:6px 14px;background:white;border:1px solid var(--line);border-radius:999px;font-size:12px;font-weight:600;color:var(--t2);cursor:pointer;transition:all 0.15s}
+.filter-chip:hover{border-color:var(--accent)}
+.filter-chip.active{background:var(--deep);border-color:var(--deep);color:white}
+
+/* 토스트 */
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,40px);background:var(--ink);color:white;padding:12px 20px;border-radius:12px;font-size:13px;box-shadow:0 12px 28px rgba(0,0,0,0.22);opacity:0;pointer-events:none;transition:all 0.25s;z-index:1000}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.toast.error{background:var(--rust)}
+.toast.success{background:var(--green)}
+
+/* 백드롭 */
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150}
+.backdrop.open{display:block}
+
+/* 반응형 */
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:none;box-shadow:0 0 50px rgba(0,0,0,0.3)}
+  .main{margin-left:0}
+  .header-toggle{display:flex}
+  .signup-row{grid-template-columns:1fr;gap:6px;padding:14px}
+}
+@media(max-width:600px){
+  .header-search{display:none}
+  .h-user-name{display:none}
+  .content{padding:16px}
+  .page-title{font-size:18px}
+}
+</style>
+
+<!-- ─────────────── Firebase SDK (모듈) ─────────────── -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc, getDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // ⚠️ 셋업 가이드 7단계: 여기에 firebaseConfig 붙여넣기
+  const firebaseConfig = {
+    apiKey: "AIzaSyBZpM3niLp4wCdmD8U4HIC1k42AnCfRJEs",
+    authDomain: "yeon-samsan.firebaseapp.com",
+    projectId: "yeon-samsan",
+    storageBucket: "yeon-samsan.firebasestorage.app",
+    messagingSenderId: "234777837772",
+    appId: "1:234777837772:web:b997733871987b94690269",
+    measurementId: "G-30NDGZJ6WE"
+  };
+
+  const ACADEMY_ID = "samsan";
+
+  // 셋업 미완료 처리
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey === "REPLACE_ME") {
+    document.getElementById('gate').innerHTML = `
+      <div class="gate-mark">연</div>
+      <div class="gate-error">
+        Firebase가 아직 셋업되지 않았습니다.<br>
+        <strong>Firebase_셋업_가이드.md</strong>의 7단계를 완료한 뒤 firebaseConfig를 이 페이지의 &lt;script type="module"&gt; 안에 붙여넣어 주세요.<br><br>
+        <a href="../">← 홈페이지로 돌아가기</a>
+      </div>`;
+    throw new Error("Firebase 미설정");
+  }
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // 인증 가드
+  let currentUser = null;
+  let currentUserDoc = null;
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) {
+      // 미로그인 → 홈페이지로
+      location.replace("../");
+      return;
+    }
+    currentUser = user;
+    // users/{uid} 문서 검증 (셋업 가이드 5단계에서 만든 것)
+    try {
+      const userSnap = await getDoc(doc(db, "users", user.uid));
+      if (!userSnap.exists()) {
+        document.getElementById('gate').innerHTML = `
+          <div class="gate-mark">⚠️</div>
+          <div class="gate-error">
+            로그인은 되었지만 <b>관리자 권한 문서가 없습니다</b>.<br>
+            셋업 가이드 5단계(users 컬렉션에 admin UID 문서 추가)를 완료해 주세요.<br><br>
+            UID: <code style="background:rgba(0,0,0,0.3);padding:3px 6px;border-radius:4px">${user.uid}</code><br><br>
+            <a href="#" onclick="window.__signOut();return false">로그아웃</a>
+          </div>`;
+        return;
+      }
+      currentUserDoc = userSnap.data();
+      // 학원 접근 권한 확인
+      const hasAccess = currentUserDoc.role === 'main_admin' ||
+                        (Array.isArray(currentUserDoc.academyIds) && currentUserDoc.academyIds.includes(ACADEMY_ID));
+      if (!hasAccess) {
+        document.getElementById('gate').innerHTML = `
+          <div class="gate-mark">⛔</div>
+          <div class="gate-error">
+            이 학원(<b>${ACADEMY_ID}</b>)에 접근 권한이 없습니다.<br>
+            본점 원장에게 문의하세요.<br><br>
+            <a href="#" onclick="window.__signOut();return false">로그아웃</a>
+          </div>`;
+        return;
+      }
+
+      // 인증 통과 → admin 화면 표시
+      document.getElementById('gate').classList.add('hidden');
+      document.getElementById('userName').textContent = currentUserDoc.name || user.email.split('@')[0];
+      document.getElementById('userRole').textContent =
+        currentUserDoc.role === 'main_admin' ? '본점 원장' : '삼산점 관리자';
+      document.getElementById('userAvatar').textContent = (currentUserDoc.name || 'A').charAt(0);
+
+      // 신청 명단 실시간 구독 시작
+      startSignupListener();
+    } catch (err) {
+      console.error("권한 확인 실패:", err);
+      document.getElementById('gate').innerHTML = `
+        <div class="gate-mark">⚠️</div>
+        <div class="gate-error">
+          권한 확인 중 오류가 발생했습니다:<br>
+          <code style="background:rgba(0,0,0,0.3);padding:3px 6px;border-radius:4px;font-size:11px">${err.message}</code><br><br>
+          Firestore 보안 규칙(firestore.rules)이 게시되었는지 확인해 주세요.<br><br>
+          <a href="#" onclick="window.__signOut();return false">로그아웃</a>
+        </div>`;
+    }
+  });
+
+  // 신청 명단 실시간 구독
+  let unsubscribeSignups = null;
+  let allSignups = [];
+  function startSignupListener() {
+    if (unsubscribeSignups) unsubscribeSignups();
+    const q = query(
+      collection(db, "academies", ACADEMY_ID, "signups"),
+      orderBy("createdAt", "desc")
+    );
+    unsubscribeSignups = onSnapshot(q,
+      (snap) => {
+        allSignups = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        window.__renderSignups(allSignups);
+      },
+      (err) => {
+        console.error("[signups 구독 실패]", err);
+        window.__showToast("명단 불러오기 실패: " + err.message, 'error');
+      }
+    );
+  }
+
+  // 신청 상태 변경
+  async function updateSignupStatus(id, newStatus) {
+    try {
+      await updateDoc(doc(db, "academies", ACADEMY_ID, "signups", id), {
+        status: newStatus,
+        statusUpdatedAt: serverTimestamp(),
+        statusUpdatedBy: currentUser.uid
+      });
+      window.__showToast("상태 변경 완료", 'success');
+    } catch (err) {
+      window.__showToast("변경 실패: " + err.message, 'error');
+    }
+  }
+
+  // 신청 삭제
+  async function deleteSignup(id) {
+    if (!confirm("이 신청을 정말 삭제할까요? (되돌릴 수 없습니다)")) return;
+    try {
+      await deleteDoc(doc(db, "academies", ACADEMY_ID, "signups", id));
+      window.__showToast("삭제 완료", 'success');
+    } catch (err) {
+      window.__showToast("삭제 실패: " + err.message, 'error');
+    }
+  }
+
+  window.__updateSignupStatus = updateSignupStatus;
+  window.__deleteSignup = deleteSignup;
+  window.__signOut = async () => {
+    if (unsubscribeSignups) unsubscribeSignups();
+    await signOut(auth);
+    location.replace("../");
+  };
+  window.__refresh = () => {
+    // onSnapshot은 자동이지만 사용자에게 시각적 피드백 제공
+    const btn = document.getElementById('refreshBtn');
+    btn.classList.add('spin');
+    setTimeout(() => btn.classList.remove('spin'), 800);
+    window.__showToast("최신 데이터로 갱신했습니다", 'success');
+  };
+</script>
+</head>
+<body>
+
+<!-- 인증 게이트 (인증 완료 시 hidden) -->
+<div class="gate" id="gate">
+  <div class="gate-mark">연</div>
+  <div class="gate-spinner"></div>
+  <div class="gate-text">관리자 권한 확인 중...</div>
+</div>
+
+<div class="layout">
+
+  <!-- ─────── 사이드바 ─────── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-mark">연</div>
+      <div class="sidebar-title">
+        연 AI 학습코칭
+        <small>학원 관리자</small>
+      </div>
+    </div>
+
+    <div class="sidebar-branch">
+      <div class="branch-dot"></div>
+      <div class="branch-text">
+        <b>삼산점</b>
+        <span>본점 동기화 대기</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-menu">
+      <button class="menu-item active" onclick="goto('dashboard',this)">
+        <span class="menu-icon">📊</span>대시보드
+      </button>
+      <button class="menu-item" onclick="goto('signups',this)">
+        <span class="menu-icon">📩</span>간담회 신청
+        <span class="menu-badge" id="signupBadge" style="display:none">0</span>
+      </button>
+      <button class="menu-item" onclick="goto('students',this)">
+        <span class="menu-icon">👥</span>학생 관리
+      </button>
+      <button class="menu-item" onclick="goto('tuition',this)">
+        <span class="menu-icon">💰</span>회비 관리
+      </button>
+      <button class="menu-item" onclick="goto('counseling',this)">
+        <span class="menu-icon">📞</span>상담
+      </button>
+      <button class="menu-item" onclick="goto('messages',this)">
+        <span class="menu-icon">💬</span>메시지
+      </button>
+      <button class="menu-item" onclick="goto('promo',this)">
+        <span class="menu-icon">📢</span>SNS 홍보
+      </button>
+      <button class="menu-item" onclick="goto('ai',this)">
+        <span class="menu-icon">🤖</span>AI 도구
+      </button>
+      <button class="menu-item" onclick="goto('settings',this)">
+        <span class="menu-icon">⚙️</span>설정
+      </button>
+    </nav>
+
+    <button class="logout-btn" onclick="window.__signOut()">↩ 로그아웃</button>
+
+    <div class="sidebar-foot">
+      <b>연플래닝 패밀리</b><br>
+      v1.0 · 2026.05
+    </div>
+  </aside>
+
+  <!-- ─────── 메인 ─────── -->
+  <main class="main">
+
+    <header class="header">
+      <button class="header-toggle" onclick="toggleSidebar()">☰</button>
+      <div class="header-search">
+        <span class="header-search-icon">🔍</span>
+        <input type="text" placeholder="학생/학부모 검색 (준비 중)">
+      </div>
+      <div class="header-right">
+        <button class="h-btn refresh" id="refreshBtn" onclick="window.__refresh()" title="새로고침">↻</button>
+        <button class="h-btn" title="알림">🔔<span class="h-dot" id="notifDot" style="display:none"></span></button>
+        <div class="h-user">
+          <div class="h-avatar" id="userAvatar">?</div>
+          <div class="h-user-name">
+            <span id="userName">로그인 중...</span>
+            <small id="userRole">권한 확인 중</small>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ─────── 페이지: 대시보드 ─────── -->
+      <section class="page active" id="page-dashboard">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">오늘의 학원 현황</h1>
+            <p class="page-sub" id="todayDate"></p>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-warm" onclick="goto('signups',document.querySelectorAll('.menu-item')[1])">📩 간담회 신청 보기</button>
+          </div>
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span class="kpi-label">간담회 신청 (총)</span>
+              <div class="kpi-icon warm">📩</div>
+            </div>
+            <div class="kpi-value" id="kpiSignupTotal">0<span class="unit">건</span></div>
+            <div class="kpi-meta"><b id="kpiSignupPending" class="up">0건</b> 새 신청 · 확인 대기</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span class="kpi-label">5월 20일 (화)</span>
+              <div class="kpi-icon teal">📅</div>
+            </div>
+            <div class="kpi-value" id="kpiSession1">0<span class="unit">명</span></div>
+            <div class="kpi-meta">참석 예정 / 19시 ~ 21시</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span class="kpi-label">5월 27일 (화)</span>
+              <div class="kpi-icon teal">📅</div>
+            </div>
+            <div class="kpi-value" id="kpiSession2">0<span class="unit">명</span></div>
+            <div class="kpi-meta">참석 예정 / 19시 ~ 21시</div>
+          </div>
+
+          <div class="kpi-card">
+            <div class="kpi-head">
+              <span class="kpi-label">전체 원생</span>
+              <div class="kpi-icon green">👥</div>
+            </div>
+            <div class="kpi-value">0<span class="unit">명</span></div>
+            <div class="kpi-meta">학생 관리 모듈 (다음 단계)</div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <!-- 최근 신청 -->
+            <div class="card">
+              <div class="card-head">
+                <h3 class="card-title">최근 간담회 신청 <span class="count" id="recentSignupCount">0</span></h3>
+                <span class="card-link" onclick="goto('signups',document.querySelectorAll('.menu-item')[1])">전체 보기 →</span>
+              </div>
+              <div id="recentSignupList">
+                <div class="empty">
+                  <div class="empty-icon">📩</div>
+                  <div class="empty-title">아직 신청이 없습니다</div>
+                  <div class="empty-text">홈페이지에서 학부모님이 신청하시면 여기에 실시간으로 표시됩니다</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 빠른 실행 -->
+            <div class="card">
+              <div class="card-head">
+                <h3 class="card-title">빠른 실행</h3>
+              </div>
+              <div class="quick-grid">
+                <button class="quick-btn" onclick="goto('signups',document.querySelectorAll('.menu-item')[1])">
+                  <div class="quick-icon">📩</div>
+                  <div class="quick-label">신청 명단 관리<small>확인·확정·취소</small></div>
+                </button>
+                <button class="quick-btn" onclick="window.open('../','_blank')">
+                  <div class="quick-icon">🏠</div>
+                  <div class="quick-label">홈페이지 열기<small>새 탭</small></div>
+                </button>
+                <button class="quick-btn" onclick="alert('학생 관리는 다음 단계에서 만듭니다.')">
+                  <div class="quick-icon">👤</div>
+                  <div class="quick-label">신입생 등록<small>준비 중</small></div>
+                </button>
+                <button class="quick-btn" onclick="alert('단체 카톡은 다음 단계에서 만듭니다.')">
+                  <div class="quick-icon">💬</div>
+                  <div class="quick-label">단체 카톡<small>준비 중</small></div>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <!-- 시스템 상태 -->
+            <div class="card">
+              <div class="card-head">
+                <h3 class="card-title">시스템 상태</h3>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:11px;background:rgba(72,163,116,0.08);border:1px solid rgba(72,163,116,0.25);border-radius:11px;margin-bottom:10px">
+                <span style="width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 4px rgba(72,163,116,0.18)"></span>
+                <div style="flex:1;font-size:12.5px"><b>Firebase 연결 정상</b><br><span style="color:var(--t3);font-size:11px">실시간 동기화 작동 중</span></div>
+              </div>
+              <div style="font-size:11.5px;color:var(--t2);line-height:1.7">
+                홈페이지에서 학부모님이 간담회 신청을 하시면 즉시 이 화면에 표시됩니다. 이후 단계에서 학생 관리·회비 관리·SNS 홍보 등 본격 기능이 추가됩니다.
+              </div>
+            </div>
+
+            <!-- 다음 단계 안내 -->
+            <div class="card">
+              <div class="card-head">
+                <h3 class="card-title">다음 단계 (Coming Soon)</h3>
+              </div>
+              <ul style="font-size:12px;color:var(--t2);line-height:1.9;padding-left:18px">
+                <li>홈페이지 콘텐츠 편집 (수업 소개, 연의 생각)</li>
+                <li>학생 관리 (등록·조회·진도)</li>
+                <li>수업료 관리 (월별 청구·납입)</li>
+                <li>학부모 카톡 메시지 발송</li>
+                <li>SNS 홍보 자동 생성 (AI)</li>
+                <li>본점 자동 동기화</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────── 페이지: 간담회 신청 ─────── -->
+      <section class="page" id="page-signups">
+        <div class="page-head">
+          <div>
+            <h1 class="page-title">간담회 신청 명단</h1>
+            <p class="page-sub">5월 20일·27일 학부모 간담회 / 실시간 동기화 중</p>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-ghost" onclick="exportSignupsCSV()">📥 CSV 내보내기</button>
+            <button class="btn btn-primary" onclick="window.__refresh()">↻ 새로고침</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="filter-row">
+            <button class="filter-chip active" onclick="setFilter(this,'all')">전체 <span id="cAll">0</span></button>
+            <button class="filter-chip" onclick="setFilter(this,'pending')">⏳ 확인 대기 <span id="cPending">0</span></button>
+            <button class="filter-chip" onclick="setFilter(this,'confirmed')">✅ 확정 <span id="cConfirmed">0</span></button>
+            <button class="filter-chip" onclick="setFilter(this,'attended')">🎓 참석 완료 <span id="cAttended">0</span></button>
+            <button class="filter-chip" onclick="setFilter(this,'cancelled')">❌ 취소 <span id="cCancelled">0</span></button>
+            <span style="margin-left:auto"></span>
+            <button class="filter-chip" onclick="setDateFilter(this,'all')" id="dateAll" style="background:var(--mist)">📅 모든 날짜</button>
+            <button class="filter-chip" onclick="setDateFilter(this,'2026-05-20')" style="background:var(--mist)">5/20</button>
+            <button class="filter-chip" onclick="setDateFilter(this,'2026-05-27')" style="background:var(--mist)">5/27</button>
+          </div>
+
+          <div id="signupList">
+            <div class="empty">
+              <div class="empty-icon">📩</div>
+              <div class="empty-title">아직 신청이 없습니다</div>
+              <div class="empty-text">홈페이지의 "간담회 신청하기" 버튼을 통해 신청이 들어오면 여기에 실시간으로 표시됩니다.<br>홈페이지: <a href="../" target="_blank" style="color:var(--accent);font-weight:600">yeon.ai.kr/ulsan/y-planning_ss</a></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ─────── 다음 단계 페이지들 (placeholder) ─────── -->
+      <section class="page" id="page-students">
+        <div class="page-head"><div><h1 class="page-title">학생 관리</h1><p class="page-sub">신입생 등록 · 학습 진도 · 출결 · 본점 자동 업로드</p></div></div>
+        <div class="card"><div class="empty"><div class="empty-icon">👥</div><div class="empty-title">학생 관리 모듈 (다음 단계)</div><div class="empty-text">학생 명단 · 학습 진도 · 출결 · 학부모 정보 · 본점 자동 업로드<br>다음 작업에서 만들 모듈입니다</div></div></div>
+      </section>
+
+      <section class="page" id="page-tuition">
+        <div class="page-head"><div><h1 class="page-title">회비 관리</h1><p class="page-sub">월별 청구 · 납입 · 미납 자동 알림 · 영수증</p></div></div>
+        <div class="card"><div class="empty"><div class="empty-icon">💰</div><div class="empty-title">회비 관리 모듈 (다음 단계)</div><div class="empty-text">학생별 월별 청구 · 납입 확인 · 미납 자동 카톡 알림 · 영수증 발급<br>다음 작업에서 만들 모듈입니다</div></div></div>
+      </section>
+
+      <section class="page" id="page-counseling">
+        <div class="page-head"><div><h1 class="page-title">상담</h1><p class="page-sub">정기·긴급 상담 · 카드 요약 · AI 인사이트</p></div></div>
+        <div class="card"><div class="empty"><div class="empty-icon">📞</div><div class="empty-title">상담 모듈 (다음 단계)</div><div class="empty-text">상담 일정 · 기록 · AI 자동 요약 · 다음 액션 추적<br>다음 작업에서 만들 모듈입니다</div></div></div>
+      </section>
+
+      <section class="page" id="page-messages">
+        <div class="page-head"><div><h1 class="page-title">메시지 센터</h1><p class="page-sub">학부모 카톡 · SMS · 단체 발송 · 발송 이력</p></div></div>
+        <div class="card"><div class="empty"><div class="empty-icon">💬</div><div class="empty-title">메시지 모듈 (다음 단계)</div><div class="empty-text">카톡 알림톡 · SMS · 단체 발송 · 학부모 응답 추적<br>다음 작업에서 만들 모듈입니다</div></div></div>
+      </section>
+
+      <section class="page" id="page-promo">
+        <div class="page-head"><div><h1 class="page-title">SNS 홍보</h1><p class="page-sub">AI 자동 글 작성 · 인스타·블로그·카톡채널 게시</p></div></div>
+        <div class="card"><div class="empty"><div class="empty-icon">📢</div><div class="empty-title">SNS 홍보 모듈 (다음 단계)</div><div class="empty-text">AI가 5개 안 자동 생성 → 한 번에 인스타·블로그·카톡채널 게시<br>다음 작업에서 만들 모듈입니다</div></div></div>
+      </section>
+
+      <section class="page" id="page-ai">
+        <div class="page-head"><div><h1 class="page-title">AI 도구</h1><p class="page-sub">선생님 전용 Gemini 비서 · 학원 전체 토큰 풀 공유</p></div></div>
+        <div class="card"><div class="empty"><div class="empty-icon">🤖</div><div class="empty-title">AI 도구 (다음 단계)</div><div class="empty-text">자유 채팅 · 학부모 메시지 초안 · 상담 카드 요약 · SNS 글 5개 안 자동 생성</div></div></div>
+      </section>
+
+      <section class="page" id="page-settings">
+        <div class="page-head"><div><h1 class="page-title">설정</h1><p class="page-sub">학원 정보 · 백업 · 권한</p></div></div>
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">현재 로그인 정보</h3></div>
+          <div style="font-size:13px;line-height:2;color:var(--t1)">
+            <div><b>이메일:</b> <span id="settingsEmail" style="color:var(--t2)">-</span></div>
+            <div><b>이름:</b> <span id="settingsName" style="color:var(--t2)">-</span></div>
+            <div><b>권한:</b> <span id="settingsRole" style="color:var(--t2)">-</span></div>
+            <div><b>접근 가능 학원:</b> <span id="settingsAcademies" style="color:var(--t2)">-</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3 class="card-title">시스템</h3></div>
+          <ul style="font-size:12.5px;color:var(--t2);line-height:1.95;padding-left:18px">
+            <li>Firestore 컬렉션: <code style="background:var(--mist);padding:1px 6px;border-radius:4px">academies/samsan/signups</code></li>
+            <li>실시간 구독 활성: 신청 변동 즉시 반영</li>
+            <li>백업 / 본점 동기화 / Drive 연결: 다음 단계</li>
+          </ul>
+        </div>
+      </section>
+
+    </div>
+  </main>
+</div>
+
+<div class="backdrop" id="backdrop" onclick="closeSidebar()"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ─── 페이지 스위치 ─── */
+function goto(name, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const pg = document.getElementById('page-' + name);
+  if (pg) pg.classList.add('active');
+  document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  closeSidebar();
+  window.scrollTo({top:0,behavior:'smooth'});
+
+  // 설정 페이지로 갔으면 정보 채우기
+  if (name === 'settings') fillSettingsInfo();
+}
+
+/* ─── 사이드바 ─── */
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('backdrop').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('open');
+}
+
+/* ─── 필터 상태 ─── */
+let statusFilter = 'all';
+let dateFilter = 'all';
+
+function setFilter(btn, val) {
+  document.querySelectorAll('.filter-chip').forEach((c,i)=>{
+    if (i < 5) c.classList.remove('active');
+  });
+  btn.classList.add('active');
+  statusFilter = val;
+  if (window.__lastSignups) window.__renderSignups(window.__lastSignups);
+}
+function setDateFilter(btn, val) {
+  document.querySelectorAll('.filter-chip').forEach((c,i)=>{
+    if (i >= 5) c.style.background = 'var(--mist)';
+  });
+  btn.style.background = 'var(--deep)';
+  btn.style.color = 'white';
+  dateFilter = val;
+  if (window.__lastSignups) window.__renderSignups(window.__lastSignups);
+}
+
+/* ─── 명단 렌더링 ─── */
+window.__renderSignups = function(signups) {
+  window.__lastSignups = signups;
+
+  // 카운트 갱신
+  const total = signups.length;
+  const pending = signups.filter(s => (s.status || 'pending') === 'pending').length;
+  const confirmed = signups.filter(s => s.status === 'confirmed').length;
+  const attended = signups.filter(s => s.status === 'attended').length;
+  const cancelled = signups.filter(s => s.status === 'cancelled').length;
+  const sess1 = signups.filter(s => s.sessionDate === '2026-05-20' && s.status !== 'cancelled').reduce((a,s) => a + (s.count || 1), 0);
+  const sess2 = signups.filter(s => s.sessionDate === '2026-05-27' && s.status !== 'cancelled').reduce((a,s) => a + (s.count || 1), 0);
+
+  // KPI
+  document.getElementById('kpiSignupTotal').innerHTML = total + '<span class="unit">건</span>';
+  document.getElementById('kpiSignupPending').textContent = pending + '건';
+  document.getElementById('kpiSession1').innerHTML = sess1 + '<span class="unit">명</span>';
+  document.getElementById('kpiSession2').innerHTML = sess2 + '<span class="unit">명</span>';
+
+  // 사이드바 배지 (확인 대기만)
+  const badge = document.getElementById('signupBadge');
+  if (pending > 0) {
+    badge.textContent = pending;
+    badge.style.display = '';
+  } else {
+    badge.style.display = 'none';
+  }
+
+  // 필터 카운트
+  document.getElementById('cAll').textContent = total;
+  document.getElementById('cPending').textContent = pending;
+  document.getElementById('cConfirmed').textContent = confirmed;
+  document.getElementById('cAttended').textContent = attended;
+  document.getElementById('cCancelled').textContent = cancelled;
+
+  // 필터 적용
+  let filtered = signups;
+  if (statusFilter !== 'all') {
+    filtered = filtered.filter(s => (s.status || 'pending') === statusFilter);
+  }
+  if (dateFilter !== 'all') {
+    filtered = filtered.filter(s => s.sessionDate === dateFilter);
+  }
+
+  // 리스트 렌더링
+  renderList(document.getElementById('signupList'), filtered);
+  // 대시보드: 최근 5건
+  renderList(document.getElementById('recentSignupList'), signups.slice(0, 5));
+  document.getElementById('recentSignupCount').textContent = signups.length;
+
+  // 알림 dot (새 pending 있으면)
+  document.getElementById('notifDot').style.display = pending > 0 ? '' : 'none';
+};
+
+function renderList(container, items) {
+  if (!items || items.length === 0) {
+    container.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">📩</div>
+        <div class="empty-title">표시할 신청이 없습니다</div>
+        <div class="empty-text">필터를 바꾸거나 새 신청을 기다려주세요</div>
+      </div>`;
+    return;
+  }
+  container.innerHTML = '<div class="signup-list">' + items.map(s => {
+    const status = s.status || 'pending';
+    const dateLabel = s.sessionDate === '2026-05-20' ? '5월 20일' : s.sessionDate === '2026-05-27' ? '5월 27일' : (s.sessionDate || '날짜 미정');
+    const dayName = s.sessionDate === '2026-05-20' ? '화 19시' : s.sessionDate === '2026-05-27' ? '화 19시' : '';
+    const phoneClean = (s.phone || '').replace(/[^0-9]/g, '');
+    const created = formatTime(s.createdAt);
+    return `
+      <div class="signup-row ${status === 'attended' || status === 'cancelled' ? 'completed' : ''}">
+        <div class="signup-date">${dateLabel}<small>${dayName}</small></div>
+        <div class="signup-info">
+          <b>${escapeHtml(s.name || '이름 없음')}</b> · ${s.count || 1}명 참석
+          ${s.child ? `<span class="child">👤 ${escapeHtml(s.child)}</span>` : ''}
+          ${s.message ? `<div class="msg">"${escapeHtml(s.message)}"</div>` : ''}
+          <div style="font-size:10.5px;color:var(--t3);margin-top:5px">신청 ${created}</div>
+        </div>
+        <div class="signup-phone">
+          <a href="tel:${phoneClean}">${escapeHtml(s.phone || '-')}</a>
+          <small>탭하여 전화</small>
+        </div>
+        <button class="signup-status ${status}" onclick="cycleStatus('${s.id}','${status}')" title="클릭하여 상태 변경">
+          ${statusLabel(status)}
+        </button>
+        <div class="signup-actions">
+          <button title="삭제" onclick="window.__deleteSignup('${s.id}')">🗑</button>
+        </div>
+      </div>`;
+  }).join('') + '</div>';
+}
+
+function statusLabel(s) {
+  return s === 'pending' ? '⏳ 확인 대기'
+       : s === 'confirmed' ? '✅ 확정'
+       : s === 'attended' ? '🎓 참석 완료'
+       : s === 'cancelled' ? '❌ 취소'
+       : s;
+}
+
+function cycleStatus(id, current) {
+  const order = ['pending', 'confirmed', 'attended', 'cancelled'];
+  const idx = order.indexOf(current);
+  const next = order[(idx + 1) % order.length];
+  window.__updateSignupStatus(id, next);
+}
+
+function formatTime(ts) {
+  if (!ts) return '방금';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  const now = new Date();
+  const diff = (now - d) / 1000;
+  if (diff < 60) return '방금';
+  if (diff < 3600) return Math.floor(diff/60) + '분 전';
+  if (diff < 86400) return Math.floor(diff/3600) + '시간 전';
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ─── CSV 내보내기 ─── */
+function exportSignupsCSV() {
+  if (!window.__lastSignups || window.__lastSignups.length === 0) {
+    window.__showToast('내보낼 데이터가 없습니다', 'error');
+    return;
+  }
+  const header = ['신청일시','참석일자','이름','연락처','학생정보','참석인원','메시지','상태'];
+  const rows = window.__lastSignups.map(s => [
+    s.createdAt && s.createdAt.toDate ? s.createdAt.toDate().toISOString().slice(0,16).replace('T',' ') : '',
+    s.sessionDate || '',
+    s.name || '',
+    s.phone || '',
+    s.child || '',
+    s.count || 1,
+    (s.message || '').replace(/[\r\n]+/g, ' '),
+    statusLabel(s.status || 'pending').replace(/[^\w가-힣 ]/g,'').trim()
+  ]);
+  const csv = [header, ...rows].map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `간담회신청_${new Date().toISOString().slice(0,10)}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  window.__showToast('CSV 다운로드 완료', 'success');
+}
+
+/* ─── 토스트 ─── */
+window.__showToast = function(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '') + ' show';
+  setTimeout(() => t.classList.remove('show'), 2400);
+};
+
+/* ─── 설정 페이지 ─── */
+function fillSettingsInfo() {
+  // currentUser, currentUserDoc은 모듈 안에서만 보이므로 globalThis에 노출되어 있지 않음.
+  // 헤더에서 보이는 값을 그대로 쓰면 됨.
+  document.getElementById('settingsEmail').textContent = '(콘솔에서 확인)';
+  document.getElementById('settingsName').textContent = document.getElementById('userName').textContent;
+  document.getElementById('settingsRole').textContent = document.getElementById('userRole').textContent;
+  document.getElementById('settingsAcademies').textContent = 'samsan (이 페이지가 본 학원)';
+}
+
+/* ─── 오늘 날짜 ─── */
+(function(){
+  const d = new Date();
+  const days = ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+  const el = document.getElementById('todayDate');
+  if (el) el.textContent = `${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 ${days[d.getDay()]}`;
+})();
+
+/* ─── ESC로 사이드바 닫기 ─── */
+docume
