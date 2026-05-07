@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>연플래닝 학원 | 2026 학부모 간담회</title>
+
+  <!-- 카카오톡 링크 미리보기 -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="📩 연플래닝 학원 학부모 간담회 초대">
+  <meta property="og:description" content="AI 시대, 이제 공부방법이 바뀌어야 합니다 | 5월 20일·27일 저녁 7시">
+  <meta property="og:image" content="https://yeon-life.github.io/invite/og-cover.png">
+  <meta name="theme-color" content="#1e3a34">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=Noto+Serif+KR:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── 공식 컬러 시스템 (Warm Earth + Deep Teal 혼합) ── */
+    :root {
+      --teal-deep:    #1e3a34;
+      --teal-mid:     #2e4a42;
+      --teal-primary: #6eb5a6;
+      --teal-light:   #b0cfc8;
+      --mint-white:   #e9f5f2;
+      --cream:        #f5efe4;
+      --warm-beige:   #d4cdc1;
+      --rust:         #b05830;
+      --rust-dark:    #8a3e1e;
+      --text-main:    #2a2e2c;
+      --text-sub:     #697870;
+      --text-light:   #959e9c;
+      --gold:         #c49a3c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, sans-serif;
+      background: var(--cream);
+      color: var(--text-main);
+      overflow-x: hidden;
+    }
+
+    /* ═══════════════════════════════
+       봉투 오픈 인트로
+    ═══════════════════════════════ */
+    #envelope-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--teal-deep);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+      transition: opacity 0.6s ease, visibility 0.6s;
+    }
+    #envelope-screen.gone {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .envelope-wrap {
+      position: relative;
+      width: min(320px, 80vw);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    /* 봉투 본체 */
+    .env-body {
+      background: var(--cream);
+      border-radius: 4px 4px 12px 12px;
+      height: 200px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      overflow: hidden;
+    }
+    .env-body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--warm-beige) 50%, var(--cream) 50%);
+    }
+    .env-body::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 50%;
+      background: linear-gradient(to top, rgba(180,150,110,0.15), transparent);
+    }
+
+    /* 봉투 플랩 (위 덮개) */
+    .env-flap {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 110px;
+      transform-origin: top center;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 2;
+    }
+    .env-flap-inner {
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      background: linear-gradient(160deg, var(--teal-primary) 0%, var(--teal-light) 100%);
+    }
+    .env-flap.open {
+      transform: rotateX(-175deg);
+    }
+
+    /* 봉투 안에서 나오는 카드 */
+    .env-card {
+      position: absolute;
+      bottom: 20px; left: 12px; right: 12px;
+      background: white;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      transform: translateY(0);
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .env-card.rising {
+      transform: translateY(-140px);
+    }
+    .env-card-text {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 13px;
+      color: var(--teal-deep);
+      line-height: 1.8;
+    }
+    .env-card-text strong {
+      display: block;
+      font-size: 15px;
+      color: var(--rust);
+      margin-bottom: 4px;
+    }
+
+    /* 봉투 하단 삼각 */
+    .env-bottom-left,
+    .env-bottom-right {
+      position: absolute;
+      bottom: 0;
+      width: 50%;
+      height: 90px;
+      background: var(--warm-beige);
+    }
+    .env-bottom-left { left: 0; clip-path: polygon(0 100%, 100% 100%, 0 0); }
+    .env-bottom-right { right: 0; clip-path: polygon(0 100%, 100% 100%, 100% 0); }
+
+    /* 씰 도장 */
+    .env-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 48px;
+      height: 48px;
+      background: var(--rust);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 16px;
+      color: white;
+      font-weight: 700;
+      z-index: 3;
+      box-shadow: 0 2px 8px rgba(176,88,48,0.5);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .env-seal.broken {
+      transform: translate(-50%, -50%) scale(0) rotate(45deg);
+      opacity: 0;
+    }
+
+    .env-hint {
+      margin-top: 32px;
+      color: var(--teal-light);
+      font-size: 13px;
+      text-align: center;
+      animation: pulse-hint 2s ease-in-out infinite;
+    }
+    @keyframes pulse-hint {
+      0%, 100% { opacity: 0.5; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    .env-stars {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .star {
+      position: absolute;
+      width: 2px; height: 2px;
+      background: rgba(110, 181, 166, 0.5);
+      border-radius: 50%;
+      animation: twinkle 3s ease-in-out infinite;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.8); }
+    }
+
+
+    /* ═══════════════════════════════
+       메인 콘텐츠
+    ═══════════════════════════════ */
+    #main-content {
+      opacity: 0;
+      transition: opacity 0.8s ease 0.2s;
+    }
+    #main-content.visible { opacity: 1; }
+
+    /* 스크롤 진입 애니메이션 */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── 헤더 ── */
+    .hero {
+      background: linear-gradient(160deg, var(--teal-deep) 0%, var(--teal-mid) 60%, #3d5550 100%);
+      padding: 48px 24px 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(110,181,166,0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(110,181,166,0.08) 0%, transparent 50%);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(110,181,166,0.2);
+      border: 1px solid rgba(110,181,166,0.4);
+      color: var(--teal-light);
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+    }
+    .hero-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(22px, 6vw, 28px);
+      color: white;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .hero-sub {
+      font-size: 14px;
+      color: var(--teal-light);
+      line-height: 1.7;
+      margin-bottom: 28px;
+    }
+    .hero-branches {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .branch-chip {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      padding: 4px 12px;
+      border-radius: 16px;
+    }
+
+    /* ── 일정 배너 ── */
+    .schedule-banner {
+      background: var(--rust);
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .schedule-label {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 8px;
+    }
+    .schedule-dates {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .date-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 10px;
+      padding: 10px 20px;
+      color: white;
+    }
+    .date-badge .date-day { font-size: 20px; font-weight: 700; }
+    .date-badge .date-info { font-size: 12px; opacity: 0.85; margin-top: 2px; }
+    .schedule-place {
+      margin-top: 12px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+    }
+
+    /* ── 섹션 공통 ── */
+    .section {
+      padding: 40px 20px;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .section-tag {
+      display: inline-block;
+      background: var(--mint-white);
+      color: var(--teal-primary);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 20px;
+      color: var(--teal-deep);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .section-text {
+      font-size: 14px;
+      color: var(--text-sub);
+      line-height: 1.8;
+    }
+    .divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--warm-beige), transparent);
+      margin: 0 20px;
+    }
+
+    /* ── 카드 그리드 ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .info-card .card-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+    }
+    .info-card .card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--teal-deep);
+      margin-bottom: 4px;
+    }
+    .info-card .card-desc {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    /* ── AI 시대 섹션 ── */
+    .ai-era-box {
+      background: linear-gradient(135deg, var(--teal-deep) 0%, var(--teal-mid) 100%);
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-top: 20px;
+      color: white;
+    }
+    .ai-era-box .quote {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 17px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .ai-era-box .quote em {
+      color: var(--teal-primary);
+      font-style: normal;
+      font-weight: 600;
+    }
+    .ai-era-box .author {
+      font-size: 12px;
+      color: var(--teal-light);
+    }
+
+    /* ── AI 도구 ── */
+    .tools-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .tool-item {
+      background: white;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+    .tool-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--mint-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+    .tool-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--teal-deep);
+      margin-bottom: 2px;
+    }
+    .tool-desc {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    /* ── 핵심 문장 배너 ── */
+    .key-quote {
+      background: var(--cream);
+      border-left: 4px solid var(--rust);
+      padding: 20px 20px 20px 24px;
+      margin: 24px 0;
+      border-radius: 0 12px 12px 0;
+    }
+    .key-quote p {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 16px;
+      line-height: 1.8;
+      color: var(--teal-deep);
+    }
+    .key-quote .kq-sub {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 6px;
+      font-family: 'Noto Sans KR', sans-serif;
+    }
+
+    /* ── 예약 섹션 ── */
+    .reserve-section {
+      background: white;
+      padding: 36px 20px;
+      text-align: center;
+    }
+    .reserve-section .section-title {
+      margin-bottom: 8px;
+    }
+    .reserve-sub {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    /* 날짜 선택 */
+    .date-select-wrap {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .date-select-btn {
+      flex: 1;
+      max-width: 160px;
+      background: white;
+      border: 2px solid var(--warm-beige);
+      border-radius: 12px;
+      padding: 14px 10px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+    .date-select-btn .ds-month { font-size: 11px; color: var(--text-light); margin-bottom: 4px; }
+    .date-select-btn .ds-day { font-size: 22px; font-weight: 700; color: var(--teal-deep); }
+    .date-select-btn .ds-dow { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+    .date-select-btn.selected {
+      background: var(--rust);
+      border-color: var(--rust);
+    }
+    .date-select-btn.selected .ds-month,
+    .date-select-btn.selected .ds-day,
+    .date-select-btn.selected .ds-dow { color: white; }
+
+    /* 액션 버튼 */
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-width: 320px;
+      margin: 0 auto;
+    }
+    .btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      font-family: 'Noto Sans KR', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.2s ease;
+    }
+    .btn-primary {
+      background: var(--rust);
+      color: white;
+    }
+    .btn-primary:hover { filter: brightness(0.9); }
+    .btn-primary:disabled,
+    .btn-primary[data-disabled="true"] {
+      background: var(--warm-beige);
+      color: var(--text-light);
+      cursor: not-allowed;
+      filter: none;
+    }
+    .btn-outline-teal {
+      background: white;
+      color: var(--teal-deep);
+      border: 2px solid var(--teal-light);
+    }
+    .btn-outline-teal:hover { background: var(--mint-white); }
+    .btn-outline-rust {
+      background: white;
+      color: var(--rust);
+      border: 2px solid rgba(176,88,48,0.3);
+    }
+    .btn-outline-rust:hover { background: rgba(176,88,48,0.05); }
+
+    .btn-hint {
+      font-size: 11px;
+      color: var(--text-light);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    /* ── 오시는 길 ── */
+    .map-section {
+      padding: 32px 20px;
+      background: var(--mint-white);
+      text-align: center;
+    }
+    .map-placeholder {
+      background: var(--warm-beige);
+      border-radius: 12px;
+      padding: 32px 20px;
+      margin: 16px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .map-placeholder::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255,255,255,0.3) 10px,
+        rgba(255,255,255,0.3) 20px
+      );
+    }
+    .map-addr {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--teal-deep);
+      margin-bottom: 6px;
+      position: relative;
+    }
+    .map-addr-sub {
+      font-size: 13px;
+      color: var(--text-sub);
+      position: relative;
+    }
+    .map-btn-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 16px;
+    }
+    .map-btn {
+      flex: 1;
+      max-width: 180px;
+    }
+
+    /* ── 연락처 ── */
+    .contact-section {
+      padding: 28px 20px;
+      background: white;
+      text-align: center;
+    }
+    .contact-num {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--teal-deep);
+      letter-spacing: 1px;
+      margin: 12px 0 4px;
+    }
+    .contact-label {
+      font-size: 12px;
+      color: var(--text-sub);
+      margin-bottom: 16px;
+    }
+
+    /* ── 푸터 ── */
+    footer {
+      background: var(--teal-deep);
+      padding: 28px 20px;
+      text-align: center;
+      color: rgba(255,255,255,0.6);
+      font-size: 12px;
+      line-height: 1.8;
+    }
+    footer strong { color: rgba(255,255,255,0.9); }
+
+    /* ── 플로팅 액션 버튼 ── */
+    .fab {
+      position: fixed;
+      bottom: 24px;
+      right: 20px;
+      width: 52px; height: 52px;
+      background: var(--rust);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 16px rgba(176,88,48,0.4);
+      cursor: pointer;
+      z-index: 100;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .fab:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(176,88,48,0.5); }
+    .fab svg { stroke: white; }
+
+    /* ── 완료 토스트 ── */
+    #toast {
+      position: fixed;
+      bottom: 90px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--teal-deep);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      pointer-events: none;
+      z-index: 200;
+    }
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (min-width: 540px) {
+      .card-grid { grid-template-columns: repeat(3, 1fr); }
+      .hero { padding: 64px 32px 52px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     봉투 오픈 인트로
+══════════════════════════════════════ -->
+<div id="envelope-screen" onclick="openEnvelope()">
+  <div class="env-stars" id="stars"></div>
+
+  <div class="envelope-wrap">
+    <!-- 나오는 카드 -->
+    <div class="env-card" id="env-card">
+      <div class="env-card-text">
+        <strong>연플래닝 학원</strong>
+        학부모 간담회<br>초대합니다
+      </div>
+    </div>
+
+    <!-- 봉투 본체 -->
+    <div class="env-body">
+      <!-- 플랩 -->
+      <div class="env-flap" id="env-flap">
+        <div class="env-flap-inner"></div>
+      </div>
+      <!-- 씰 -->
+      <div class="env-seal" id="env-seal">연</div>
+      <!-- 하단 삼각 -->
+      <div class="env-bottom-left"></div>
+      <div class="env-bottom-right"></div>
+    </div>
+  </div>
+
+  <p class="env-hint">✉ 탭하여 초대장 열기</p>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     메인 콘텐츠
+══════════════════════════════════════ -->
+<div id="main-content">
+
+  <!-- 히어로 헤더 -->
+  <header class="hero">
+    <div class="hero-badge reveal">2026 학부모 간담회</div>
+    <h1 class="hero-title reveal reveal-delay-1">
+      AI 시대,<br>이제 공부방법이<br>바뀌어야 합니다
+    </h1>
+    <p class="hero-sub reveal reveal-delay-2">
+      연플래닝 학원이 학부모님께 직접 보여드립니다
+    </p>
+    <div class="hero-branches reveal reveal-delay-3">
+      <span class="branch-chip">시청점</span>
+      <span class="branch-chip">삼산점</span>
+      <span class="branch-chip">강동점</span>
+    </div>
+  </header>
+
+  <!-- 일정 배너 -->
+  <div class="schedule-banner">
+    <p class="schedule-label reveal">📅 간담회 일정 (택 1)</p>
+    <div class="schedule-dates reveal reveal-delay-1">
+      <div class="date-badge">
+        <div class="date-day">5월 20일</div>
+        <div class="date-info">수요일 · 저녁 7시</div>
+      </div>
+      <div class="date-badge">
+        <div class="date-day">5월 27일</div>
+        <div class="date-info">수요일 · 저녁 7시</div>
+      </div>
+    </div>
+    <p class="schedule-place reveal reveal-delay-2">📍 남구 월평로 232 1층 · 연플래닝 학원</p>
+  </div>
+
+  <div class="divider" style="margin-top: 0;"></div>
+
+  <!-- 연플래닝이 해온 것 -->
+  <section class="section">
+    <span class="section-tag reveal">연플래닝 학원</span>
+    <h2 class="section-title reveal reveal-delay-1">
+      지금까지 함께해온<br>자기주도 학습의 길
+    </h2>
+    <p class="section-text reveal reveal-delay-2">
+      연플래닝 학원은 단순 성적 향상이 아니라,<br>
+      스스로 공부하는 힘을 기르는 것에 집중해왔습니다.
+    </p>
+    <div class="card-grid">
+      <div class="info-card reveal reveal-delay-1">
+        <div class="card-icon">📋</div>
+        <div class="card-title">자기주도 플래닝</div>
+        <div class="card-desc">스스로 계획하고 실행하는 습관</div>
+      </div>
+      <div class="info-card reveal reveal-delay-2">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">맞춤 목표 설정</div>
+        <div class="card-desc">학생 개인별 성장 목표</div>
+      </div>
+      <div class="info-card reveal reveal-delay-3">
+        <div class="card-icon">📖</div>
+        <div class="card-title">독서·사고력</div>
+        <div class="card-desc">논리적 사고와 글쓰기 역량</div>
+      </div>
+      <div class="info-card reveal reveal-delay-4">
+        <div class="card-icon">🤝</div>
+        <div class="card-title">학부모 소통</div>
+        <div class="card-desc">정기적인 성장 피드백</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- AI 시대 섹션 -->
+  <section class="section">
+    <span class="section-tag reveal">세상이 바뀌었습니다</span>
+    <h2 class="section-title reveal reveal-delay-1">
+      AI가 등장한 지금,<br>무엇이 달라졌나요?
+    </h2>
+    <div class="ai-era-box reveal reveal-delay-2">
+      <p class="quote">
+        같은 질문이라도<br>
+        <em>어떻게 묻느냐</em>에 따라<br>
+        답이 완전히 달라집니다.
+      </p>
+      <p class="author">— 간담회에서 직접 시연으로 보여드립니다</p>
+    </div>
+    <div class="key-quote reveal reveal-delay-3">
+      <p>"질문을 잘하는 아이가<br>AI 시대의 주인공입니다."</p>
+      <p class="kq-sub">연플래닝 학원 교육 철학</p>
+    </div>
+    <p class="section-text reveal reveal-delay-4">
+      수학·영어·과학·국어 4개 과목에서<br>
+      같은 주제의 좋은 질문과 나쁜 질문이<br>
+      얼마나 다른 결과를 만드는지 직접 보여드립니다.
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- AI 도구 소개 -->
+  <section class="section">
+    <span class="section-tag reveal">연플래닝의 준비</span>
+    <h2 class="section-title reveal reveal-delay-1">
+      과목별 AI 선생님<br>이미 완비했습니다
+    </h2>
+    <p class="section-text reveal reveal-delay-2">
+      초등 4학년부터 고등 2학년까지,<br>
+      각 과목 전용 AI 학습 도구가 준비되어 있습니다.
+    </p>
+    <div class="tools-list">
+      <div class="tool-item reveal reveal-delay-1">
+        <div class="tool-icon">📘</div>
+        <div>
+          <div class="tool-name">영풀</div>
+          <div class="tool-desc">영어 전용 AI 선생님 · 독해·문법·어휘</div>
+        </div>
+      </div>
+      <div class="tool-item reveal reveal-delay-2">
+        <div class="tool-icon">🌿</div>
+        <div>
+          <div class="tool-name">수풀</div>
+          <div class="tool-desc">수학 전용 AI 선생님 · 개념·풀이·오답</div>
+        </div>
+      </div>
+      <div class="tool-item reveal reveal-delay-3">
+        <div class="tool-icon">🔬</div>
+        <div>
+          <div class="tool-name">과풀</div>
+          <div class="tool-desc">과학 전용 AI 선생님 · 개념·탐구·정리</div>
+        </div>
+      </div>
+      <div class="tool-item reveal reveal-delay-4">
+        <div class="tool-icon">📝</div>
+        <div>
+          <div class="tool-name">논풀</div>
+          <div class="tool-desc">국어·논술 AI 선생님 · 독서·사고·글쓰기</div>
+        </div>
+      </div>
+      <div class="tool-item reveal reveal-delay-4">
+        <div class="tool-icon">📅</div>
+        <div>
+          <div class="tool-name">연플래너</div>
+          <div class="tool-desc">AI 학습 플래너 · 스스로 계획하는 습관</div>
+        </div>
+      </div>
+    </div>
+    <p class="section-text reveal" style="margin-top: 16px; font-size: 13px;">
+      대상: <strong style="color: var(--teal-deep);">초등 4학년 ~ 고등 2학년</strong>
+    </p>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- 예약 섹션 -->
+  <section class="reserve-section" id="reserve">
+    <span class="section-tag reveal">참석 예약</span>
+    <h2 class="section-title reveal reveal-delay-1">날짜를 선택해주세요</h2>
+    <p class="reserve-sub reveal reveal-delay-2">참석 가능한 날짜를 선택하시면<br>예약 문자가 바로 전송됩니다</p>
+
+    <div class="date-select-wrap reveal reveal-delay-2">
+      <button class="date-select-btn" id="btn-520" onclick="selectDate('520')">
+        <div class="ds-month">5월</div>
+        <div class="ds-day">20일</div>
+        <div class="ds-dow">수요일</div>
+      </button>
+      <button class="date-select-btn" id="btn-527" onclick="selectDate('527')">
+        <div class="ds-month">5월</div>
+        <div class="ds-day">27일</div>
+        <div class="ds-dow">수요일</div>
+      </button>
+    </div>
+
+    <div class="action-buttons reveal reveal-delay-3">
+      <a id="sms-btn" class="btn btn-primary" data-disabled="true" href="#" onclick="sendReservation(event)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        날짜 선택 후 예약 문자 보내기
+      </a>
+      <p class="btn-hint" id="sms-hint">위에서 참석 날짜를 먼저 선택해주세요</p>
+    </div>
+  </section>
+
+  <!-- 오시는 길 -->
+  <section class="map-section">
+    <span class="section-tag reveal">오시는 길</span>
+    <div class="map-placeholder reveal reveal-delay-1">
+      <div class="map-addr">남구 월평로 232 1층</div>
+      <div class="map-addr-sub">연플래닝 학원 (삼산점)</div>
+    </div>
+    <div class="map-btn-row reveal reveal-delay-2">
+      <a href="https://map.kakao.com/?q=울산+남구+월평로+232" target="_blank" class="btn btn-outline-teal map-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        카카오맵
+      </a>
+      <a href="https://map.naver.com/v5/search/울산+남구+월평로+232" target="_blank" class="btn btn-outline-teal map-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        네이버맵
+      </a>
+    </div>
+  </section>
+
+  <!-- 연락처 -->
+  <section class="contact-section">
+    <span class="section-tag reveal">문의</span>
+    <p class="section-text reveal reveal-delay-1" style="font-size: 13px; color: var(--text-sub);">삼산점 원장 직통</p>
+    <div class="contact-num reveal reveal-delay-2">010-4136-5608</div>
+    <p class="contact-label reveal reveal-delay-2">평일 오전 10시 ~ 오후 9시</p>
+    <a href="tel:01041365608" class="btn btn-outline-rust reveal reveal-delay-3" style="max-width: 240px; margin: 0 auto;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.74a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+      전화 연결
+    </a>
+  </section>
+
+  <!-- 푸터 -->
+  <footer>
+    <strong>연플래닝 학원</strong><br>
+    시청점 · 삼산점 · 강동점<br>
+    초등 4학년 ~ 고등 2학년<br>
+    <br>
+    <span style="font-size: 11px; opacity: 0.5;">AI 시대, 이제 공부방법이 바뀌어야 합니다</span>
+  </footer>
+
+</div><!-- /main-content -->
+
+<!-- 전화 플로팅 버튼 -->
+<a class="fab" href="tel:01041365608" title="전화 연결">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.74a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+</a>
+
+<!-- 토스트 -->
+<div id="toast">✓ 문자 앱이 열립니다</div>
+
+
+<script>
+  /* ── 별 생성 ── */
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 100}%;
+      animation-delay: ${Math.random() * 3}s;
+      width: ${Math.random() > 0.7 ? 3 : 2}px;
+      height: ${Math.random() > 0.7 ? 3 : 2}px;
+    `;
+    starsEl.appendChild(s);
+  }
+
+  /* ── 봉투 오픈 ── */
+  let envelopeOpened = false;
+  function openEnvelope() {
+    if (envelopeOpened) return;
+    envelopeOpened = true;
+
+    // 씰 제거
+    document.getElementById('env-seal').classList.add('broken');
+
+    setTimeout(() => {
+      // 플랩 열기
+      document.getElementById('env-flap').classList.add('open');
+    }, 200);
+
+    setTimeout(() => {
+      // 카드 올라오기
+      document.getElementById('env-card').classList.add('rising');
+    }, 700);
+
+    setTimeout(() => {
+      // 화면 전환
+      document.getElementById('envelope-screen').classList.add('gone');
+      const main = document.getElementById('main-content');
+      main.classList.add('visible');
+
+      // 스크롤 애니메이션 초기화
+      initReveal();
+    }, 1600);
+  }
+
+  /* ── 스크롤 애니메이션 ── */
+  function initReveal() {
+    const items = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    items.forEach(el => observer.observe(el));
+  }
+
+  /* ── 날짜 선택 ── */
+  let selectedDate = null;
+  function selectDate(d) {
+    selectedDate = d;
+    document.getElementById('btn-520').classList.toggle('selected', d === '520');
+    document.getElementById('btn-527').classList.toggle('selected', d === '527');
+
+    const label = d === '520' ? '5월 20일(수)' : '5월 27일(수)';
+    const smsBtn = document.getElementById('sms-btn');
+    smsBtn.removeAttribute('data-disabled');
+    smsBtn.style.pointerEvents = '';
+    smsBtn.innerHTML = `
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      ${label} 참석 예약 문자 보내기
+    `;
+    document.getElementById('sms-hint').textContent = '버튼을 누르면 문자 앱이 열립니다';
+  }
+
+  /* ── 예약 문자 전송 ── */
+  function sendReservation(e) {
+    e.preventDefault();
+    if (!selectedDate) return;
+    const label = selectedDate === '520' ? '5월 20일(수)' : '5월 27일(수)';
+    const msg = encodeURIComponent(`[연플래닝 학원] 학부모 간담회 ${label} 저녁 7시 참석 예약합니다.`);
+    window.location.href = `sms:01041365608?body=${msg}`;
+    showToast();
+  }
+
+  function showToast() {
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+  }
+</script>
+
+</body>
+</html>
