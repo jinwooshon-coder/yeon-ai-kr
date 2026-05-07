@@ -677,6 +677,99 @@
       .card-grid { grid-template-columns: repeat(3, 1fr); }
       .hero { padding: 64px 32px 52px; }
     }
+
+    /* ── AI 하이라이트 섹션 ── */
+    .ai-highlight-section {
+      background: linear-gradient(160deg, #f0faf8 0%, #e6f5f2 100%);
+      border: 1px solid rgba(45,144,128,0.15);
+      border-radius: 20px;
+      margin: 0 -4px;
+    }
+    .ai-stats {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .ai-stat {
+      flex: 1;
+      background: white;
+      border-radius: 12px;
+      padding: 14px 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      border: 1px solid rgba(45,144,128,0.12);
+    }
+    .ai-stat-num {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--teal-deep);
+    }
+    .ai-stat-label {
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-top: 4px;
+    }
+
+    /* ── AI 모달 (iframe) ── */
+    .ai-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 1000;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .ai-modal-overlay.open {
+      display: flex;
+    }
+    .ai-modal-iframe-box {
+      background: white;
+      width: 100%;
+      max-width: 540px;
+      height: 90vh;
+      border-radius: 24px 24px 0 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      animation: slideUp .3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+    .ai-modal-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid #eee;
+      flex-shrink: 0;
+      background: white;
+    }
+    .ai-modal-topbar-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--teal-deep);
+    }
+    .ai-modal-close {
+      background: #f0f0f0;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ai-modal-iframe {
+      width: 100%;
+      flex: 1;
+      border: none;
+    }
   </style>
 </head>
 <body>
@@ -816,6 +909,41 @@
 
   <div class="divider"></div>
 
+  <!-- AI 학습 특강 섹션 -->
+  <section class="section ai-highlight-section" id="ai-class">
+    <span class="section-tag reveal" style="background: linear-gradient(135deg, #1a6b5e, #2d9080); color: white;">🚀 2025 신설</span>
+    <h2 class="section-title reveal reveal-delay-1">
+      AI 학습 특강<br>
+      <span style="font-size: 0.72em; color: var(--teal-primary);">미래 사회 대비 · 전체 학생</span>
+    </h2>
+    <p class="section-text reveal reveal-delay-2" style="font-size: 15px;">
+      AI를 <strong>올바르게 쓸 줄 아는 아이</strong>와 그렇지 않은 아이의 차이는<br>
+      이미 학습 결과에서 나타나고 있습니다.
+    </p>
+
+    <div class="ai-stats reveal reveal-delay-2">
+      <div class="ai-stat">
+        <div class="ai-stat-num">4과목</div>
+        <div class="ai-stat-label">수학·영어·과학·국어</div>
+      </div>
+      <div class="ai-stat">
+        <div class="ai-stat-num">전학생</div>
+        <div class="ai-stat-label">학년 구분 없이</div>
+      </div>
+      <div class="ai-stat">
+        <div class="ai-stat-num">필수</div>
+        <div class="ai-stat-label">선택 아닌 기본 역량</div>
+      </div>
+    </div>
+
+    <button class="btn btn-primary reveal reveal-delay-3" onclick="openAIModal()" style="margin-top: 20px; max-width: 280px; display: flex; align-items: center; gap: 8px; justify-content: center; margin-left: auto; margin-right: auto;">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      왜 AI 수업이 필수인지 보기
+    </button>
+  </section>
+
+  <div class="divider"></div>
+
   <!-- AI 도구 소개 -->
   <section class="section">
     <span class="section-tag reveal">연플래닝의 준비</span>
@@ -865,33 +993,6 @@
     </div>
     <p class="section-text reveal" style="margin-top: 16px; font-size: 14px;">
       대상: <strong style="color: var(--teal-deep);">초등 4학년 ~ 고등 2학년</strong>
-    </p>
-  </section>
-
-  <div class="divider"></div>
-
-  <section class="section">
-    <span class="section-tag reveal">✨ 새롭게 추가됩니다</span>
-    <h2 class="section-title reveal reveal-delay-1">
-      AI 학습 특강<br><span style="font-size: 0.75em; color: var(--teal-primary);">미래 사회 대비</span>
-    </h2>
-    <p class="section-text reveal reveal-delay-2">
-      빠르게 변화하는 AI 시대,<br>
-      우리 아이들이 <strong>도구를 다루는 사람</strong>으로 성장할 수 있도록<br>
-      전체 학생 대상 AI 학습 특강을 새롭게 시작합니다.
-    </p>
-    <div class="tools-list">
-      <div class="tool-item reveal reveal-delay-1">
-        <div class="tool-icon">🤖</div>
-        <div>
-          <div class="tool-name">AI 학습 특강</div>
-          <div class="tool-desc">전체 학생 대상 · 미래 사회 대비 AI 활용 교육</div>
-        </div>
-      </div>
-    </div>
-    <p class="section-text reveal reveal-delay-3" style="margin-top: 20px; padding: 16px; background: var(--mint-white); border-radius: 12px; border-left: 4px solid var(--teal-primary);">
-      📢 자세한 내용은 <strong>간담회에서 직접 발표</strong>드립니다.<br>
-      <span style="font-size: 14px; color: var(--text-sub);">5월 20일 · 27일 저녁 7시</span>
     </p>
   </section>
 
@@ -968,6 +1069,24 @@
 </div><!-- /main-content -->
 
 <!-- 전화 플로팅 버튼 -->
+
+  <!-- AI 수업 상세 모달 (iframe) -->
+  <div id="ai-modal" class="ai-modal-overlay" onclick="closeAIModalOutside(event)">
+    <div class="ai-modal-box ai-modal-iframe-box">
+      <div class="ai-modal-topbar">
+        <span class="ai-modal-topbar-title">AI 수업 안내</span>
+        <button class="ai-modal-close" onclick="closeAIModal()">✕</button>
+      </div>
+      <iframe
+        id="ai-modal-iframe"
+        src=""
+        class="ai-modal-iframe"
+        frameborder="0"
+        loading="lazy"
+        title="AI 수업 안내"
+      ></iframe>
+    </div>
+  </div>
 <a class="fab" href="tel:01041365608" title="전화 연결">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.74a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
 </a>
@@ -1041,4 +1160,41 @@
   let selectedDate = null;
   function selectDate(d) {
     selectedDate = d;
-    document.getElementById('btn-520').classList.toggle('selected', d === '                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+    document.getElementById('btn-520').classList.toggle('selected', d === '520');
+    document.getElementById('btn-527').classList.toggle('selected', d === '527');
+    const btn = document.getElementById('sms-btn');
+    btn.removeAttribute('data-disabled');
+    document.getElementById('sms-hint').textContent = d === '520' ? '✓ 5월 20일(수) 선택됨' : '✓ 5월 27일(수) 선택됨';
+  }
+
+  function sendReservation(e) {
+    e.preventDefault();
+    const btn = document.getElementById('sms-btn');
+    if (btn.getAttribute('data-disabled') === 'true') return;
+    const dateText = selectedDate === '520' ? '5월 20일(수)' : '5월 27일(수)';
+    const msg = '[연플래닝 간담회] ' + dateText + ' 참석 예약합니다.';
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+    window.location.href = 'sms:01041365608?body=' + encodeURIComponent(msg);
+  }
+
+  /* ── AI 모달 ── */
+  function openAIModal() {
+    const iframe = document.getElementById('ai-modal-iframe');
+    if (!iframe.src || iframe.src === window.location.href) {
+      iframe.src = 'ai-info.html';
+    }
+    document.getElementById('ai-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeAIModal() {
+    document.getElementById('ai-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function closeAIModalOutside(e) {
+    if (e.target === document.getElementById('ai-modal')) closeAIModal();
+  }
+</script>
+</body>
+</html>
