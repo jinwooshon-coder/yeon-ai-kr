@@ -1010,7 +1010,7 @@
 
   /* ── 봉투 오픈 ── */
   let envelopeOpened = false;
-  function openEnvelope() {
+  window.openEnvelope = function openEnvelope() {
     if (envelopeOpened) return;
     envelopeOpened = true;
 
