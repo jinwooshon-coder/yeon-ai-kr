@@ -28,33 +28,24 @@ body{background:var(--mist);color:var(--t1);font-family:'Noto Sans KR',sans-seri
 /* ─────────────── NAV ─────────────── */
 nav{position:fixed;top:0;left:0;right:0;z-index:300;padding:0 28px;height:62px;display:flex;align-items:center;justify-content:space-between;transition:background 0.4s,box-shadow 0.4s;gap:16px}
 nav.scrolled{background:rgba(20,33,33,0.97);backdrop-filter:blur(14px);box-shadow:0 4px 28px rgba(0,0,0,0.22)}
-
-/* 로고 */
 .nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:13px;letter-spacing:.5px;color:white;text-decoration:none;white-space:nowrap;flex-shrink:0}
 .nav-logo-mark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:16px;font-weight:700;color:white}
-
-/* 탭 메뉴 */
 .nav-tabs{display:flex;align-items:center;gap:2px;flex:1;justify-content:center}
 .nav-tab{position:relative;color:rgba(255,255,255,0.55);text-decoration:none;font-size:13px;font-weight:500;padding:8px 16px;border-radius:8px;transition:color 0.2s,background 0.2s;white-space:nowrap;cursor:pointer;background:none;border:none;font-family:'Noto Sans KR',sans-serif}
 .nav-tab:hover{color:white;background:rgba(255,255,255,0.07)}
 .nav-tab.active{color:var(--accent2);font-weight:700}
 .nav-tab.active::after{content:'';position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--accent2);border-radius:2px}
-
-/* 우측 액션 */
 .nav-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .nav-login{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:rgba(255,255,255,0.75);font-size:12px;font-weight:600;padding:7px 14px;border-radius:999px;cursor:pointer;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
 .nav-login:hover{background:rgba(195,141,86,0.18);border-color:rgba(195,141,86,0.45);color:var(--accent2)}
 .nav-options{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;position:relative}
 .nav-options:hover{background:rgba(255,255,255,0.12)}
 .nav-options svg{color:rgba(255,255,255,0.6)}
-
-/* 옵션 드롭다운 */
 .options-menu{position:absolute;top:calc(100% + 8px);right:0;background:rgba(25,38,38,0.97);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,0.12);border-radius:14px;padding:8px;min-width:160px;opacity:0;pointer-events:none;transform:translateY(-6px);transition:opacity 0.2s,transform 0.2s;z-index:400}
 .options-menu.open{opacity:1;pointer-events:all;transform:none}
 .opt-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;color:rgba(255,255,255,0.7);cursor:pointer;transition:background 0.15s;text-decoration:none}
 .opt-item:hover{background:rgba(255,255,255,0.08);color:white}
 .opt-sep{height:1px;background:rgba(255,255,255,0.08);margin:4px 0}
-
 @media(max-width:768px){.nav-tabs{display:none}}
 
 /* ─────────────── 페이드인 ─────────────── */
@@ -143,8 +134,6 @@ section{padding:88px 0}
 .class-tab-btn{background:white;border:1.5px solid var(--line);color:var(--t2);font-size:13px;font-weight:600;padding:9px 20px;border-radius:999px;cursor:pointer;transition:all 0.2s;font-family:'Noto Sans KR',sans-serif}
 .class-tab-btn.active{background:var(--deep);border-color:var(--deep);color:white}
 .class-pane{display:none}.class-pane.active{display:block}
-
-/* 자기주도 수업 */
 .self-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 @media(max-width:768px){.self-grid{grid-template-columns:1fr}}
 .self-card{background:white;border-radius:20px;padding:28px;border:1.5px solid var(--line);transition:box-shadow 0.2s,transform 0.2s}
@@ -157,8 +146,6 @@ section{padding:88px 0}
 .self-desc{font-size:13px;color:var(--t2);line-height:1.8}
 .self-detail{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .self-chip{background:var(--mist);color:var(--t2);font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px}
-
-/* AI 수업 */
 .ai-hero-card{background:linear-gradient(135deg,#1a2e2e 0%,#2b3b32 60%,#2f5d62 100%);border-radius:28px;padding:48px 40px;text-align:center;position:relative;overflow:hidden;margin-bottom:32px}
 .ai-hero-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(195,141,86,0.15),transparent 55%)}
 .ai-hero-tag{display:inline-block;background:rgba(176,80,48,0.8);color:white;font-size:11px;font-weight:700;letter-spacing:1.5px;padding:5px 14px;border-radius:999px;margin-bottom:16px}
@@ -171,8 +158,6 @@ section{padding:88px 0}
 .ai-tool-icon{font-size:26px;margin-bottom:8px}
 .ai-tool-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:3px}
 .ai-tool-sub{font-size:11px;color:var(--t3)}
-
-/* 연플래너 수업 */
 .planner-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
 @media(max-width:768px){.planner-wrap{grid-template-columns:1fr}}
 .planner-screen{background:linear-gradient(160deg,var(--ink),#2a3f3f);border-radius:24px;padding:28px;aspect-ratio:4/3;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden}
@@ -207,13 +192,11 @@ section{padding:88px 0}
 .info-row:last-of-type{border-bottom:none;padding-bottom:0}
 .info-row-label{color:var(--t3);min-width:60px;flex-shrink:0;font-weight:500;padding-top:1px}
 .info-row-value{color:var(--t1);line-height:1.65;font-weight:500}
-/* 간담회 카드 */
 .event-card{background:linear-gradient(135deg,var(--deep),var(--pine));border-radius:20px;padding:28px;color:white;grid-column:1/-1}
 .event-date-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .event-date-box{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:12px;padding:12px 20px;text-align:center;flex:1;min-width:120px}
 .event-date-box strong{display:block;font-family:'Noto Serif KR',serif;font-size:18px;font-weight:700;margin-bottom:2px}
 .event-date-box span{font-size:12px;color:rgba(255,255,255,0.6)}
-/* FAQ */
 .faq-item{border-bottom:1px solid var(--line);padding:16px 0}
 .faq-item:last-child{border-bottom:none;padding-bottom:0}
 .faq-q{font-size:14px;font-weight:700;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px}
@@ -238,32 +221,107 @@ footer strong{color:rgba(255,255,255,0.65)}
 .fab{position:fixed;bottom:24px;right:20px;width:52px;height:52px;background:var(--rust);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(176,80,48,0.45);z-index:100;text-decoration:none;transition:transform 0.2s}
 .fab:hover{transform:scale(1.08)}
 
-/* ─────────────── 관리자 로그인 모달 ─────────────── */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s}
+/* ─────────────── 모달 (관리자 로그인 + 간담회 신청 공통) ─────────────── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);z-index:500;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s;padding:16px}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{background:#ffffff;border-radius:24px;padding:40px 36px;width:100%;max-width:380px;margin:16px;transform:scale(0.94) translateY(12px);transition:transform 0.25s cubic-bezier(.22,1,.36,1);box-shadow:0 32px 80px rgba(0,0,0,0.3)}
+.modal{background:#ffffff;border-radius:24px;padding:40px 36px;width:100%;max-width:380px;transform:scale(0.94) translateY(12px);transition:transform 0.25s cubic-bezier(.22,1,.36,1);box-shadow:0 32px 80px rgba(0,0,0,0.3);position:relative;max-height:90vh;overflow-y:auto}
 .modal-overlay.open .modal{transform:none}
 .modal-logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-family:'Noto Serif KR',serif;font-size:22px;font-weight:700;color:white;margin:0 auto 20px}
 .modal h3{font-family:'Noto Serif KR',serif;font-size:20px;font-weight:700;color:var(--ink);text-align:center;margin-bottom:4px}
 .modal-sub{font-size:13px;color:var(--t3);text-align:center;margin-bottom:28px}
 .modal-field{margin-bottom:16px}
 .modal-label{font-size:12px;font-weight:700;color:var(--t2);margin-bottom:6px;display:block;letter-spacing:.3px}
+.modal-label .req{color:var(--rust);margin-left:2px}
 .modal-input{width:100%;padding:12px 16px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;color:var(--ink);font-family:'Noto Sans KR',sans-serif;outline:none;transition:border-color 0.2s}
 .modal-input:focus{border-color:var(--deep)}
 .modal-btn{width:100%;padding:14px;background:var(--deep);color:white;border:none;border-radius:12px;font-size:15px;font-weight:700;font-family:'Noto Sans KR',sans-serif;cursor:pointer;transition:background 0.2s;margin-top:4px}
 .modal-btn:hover{background:var(--pine)}
-.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;background:var(--mist);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--t2);transition:background 0.2s}
+.modal-btn:disabled{opacity:0.6;cursor:not-allowed}
+.modal-btn.warm{background:var(--accent)}
+.modal-btn.warm:hover{background:var(--accent2)}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border-radius:8px;background:var(--mist);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--t2);transition:background 0.2s;z-index:1}
 .modal-close:hover{background:var(--line)}
-.modal{position:relative}
 .modal-note{font-size:12px;color:var(--t3);text-align:center;margin-top:16px;line-height:1.6}
+.modal-error{background:rgba(176,80,48,0.08);border:1px solid rgba(176,80,48,0.25);color:var(--rust);font-size:12.5px;padding:10px 12px;border-radius:10px;margin-bottom:14px;display:none;line-height:1.5}
+.modal-error.show{display:block}
+.modal-success{background:rgba(72,163,116,0.08);border:1px solid rgba(72,163,116,0.25);color:#3d7a5c;font-size:13px;padding:14px;border-radius:10px;margin-bottom:14px;display:none;line-height:1.65;text-align:center}
+.modal-success.show{display:block}
+
+/* ─────────── 간담회 신청 모달 추가 스타일 ─────────── */
+.signup-modal{max-width:440px}
+.signup-radio-group{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.signup-radio{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;border:1.5px solid var(--line);border-radius:12px;cursor:pointer;transition:all 0.18s;text-align:center;background:var(--white)}
+.signup-radio:hover{border-color:var(--accent)}
+.signup-radio.selected{border-color:var(--deep);background:rgba(47,93,98,0.05)}
+.signup-radio strong{font-family:'Noto Serif KR',serif;font-size:15px;color:var(--ink);margin-bottom:2px}
+.signup-radio span{font-size:11.5px;color:var(--t3)}
+.signup-radio input{display:none}
+.signup-modal textarea{min-height:70px;resize:vertical;font-family:'Noto Sans KR',sans-serif;width:100%;padding:12px 16px;border:1.5px solid var(--line);border-radius:12px;font-size:14px;color:var(--ink);outline:none;transition:border-color 0.2s}
+.signup-modal textarea:focus{border-color:var(--deep)}
+.signup-loading{display:none;align-items:center;justify-content:center;gap:8px}
+.signup-loading.show{display:inline-flex}
+.signup-spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,0.35);border-top-color:white;border-radius:50%;animation:spin 0.7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
 
 @media(max-width:680px){
   .hero-stats{grid-template-columns:repeat(3,1fr)}
   .ai-hero-card{padding:32px 20px}
   nav{padding:0 16px}
   .nav-login span{display:none}
+  .signup-radio-group{grid-template-columns:1fr}
+  .modal{padding:32px 22px}
 }
 </style>
+
+<!-- ─────────────── Firebase SDK (모듈) ─────────────── -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+  // 연소사님이 Firebase 콘솔에서 받은 firebaseConfig를 아래에 붙여넣어야 작동합니다.
+  // 가이드: Firebase_셋업_가이드.md 2단계
+  const firebaseConfig = {
+    apiKey: "AIzaSyBZpM3niLp4wCdmD8U4HIC1k42AnCfRJEs",
+    authDomain: "yeon-samsan.firebaseapp.com",
+    projectId: "yeon-samsan",
+    storageBucket: "yeon-samsan.firebasestorage.app",
+    messagingSenderId: "234777837772",
+    appId: "1:234777837772:web:b997733871987b94690269",
+    measurementId: "G-30NDGZJ6WE"
+  };
+
+  const ACADEMY_ID = "samsan"; // 분점 식별자 (Firestore academies/{이값}/...)
+
+  let firebaseReady = false;
+  let auth = null;
+  let db = null;
+  if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "REPLACE_ME") {
+    try {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      firebaseReady = true;
+    } catch (err) {
+      console.error("[Firebase] 초기화 실패:", err);
+    }
+  } else {
+    console.warn("[Firebase] config 미설정 — 셋업 가이드 7단계 참고");
+  }
+
+  window.__firebase = {
+    ready: () => firebaseReady,
+    signIn: async (email, password) => {
+      if (!firebaseReady) throw new Error("아직 셋업이 완료되지 않았습니다. Firebase_셋업_가이드를 먼저 진행해 주세요.");
+      return await signInWithEmailAndPassword(auth, email, password);
+    },
+    submitSignup: async (data) => {
+      if (!firebaseReady) throw new Error("아직 셋업이 완료되지 않았습니다. Firebase_셋업_가이드를 먼저 진행해 주세요.");
+      const ref = collection(db, "academies", ACADEMY_ID, "signups");
+      return await addDoc(ref, { ...data, createdAt: serverTimestamp() });
+    }
+  };
+</script>
 </head>
 <body>
 
@@ -289,7 +347,7 @@ footer strong{color:rgba(255,255,255,0.65)}
     <div class="nav-options" onclick="toggleOptions()" id="optBtn">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 1.47 14.26M3.46 19.07A10 10 0 0 1 4.93 4.93"/><path d="M12 2v2M12 20v2M2 12H4M20 12h2"/></svg>
       <div class="options-menu" id="optMenu">
-        <a class="opt-item" href="https://jinwooshon-coder.github.io/yeon-ai-kr/invite/" target="_blank">📩 간담회 초대장</a>
+        <a class="opt-item" onclick="openSignup();toggleOptions()">📩 간담회 신청</a>
         <a class="opt-item" href="https://jinwooshon-coder.github.io/yeon-ai-kr/" target="_blank">🏠 메인 사이트</a>
         <div class="opt-sep"></div>
         <a class="opt-item" href="tel:01041365608">📞 원장 직통 전화</a>
@@ -487,7 +545,6 @@ footer strong{color:rgba(255,255,255,0.65)}
       <button class="class-tab-btn" onclick="switchClass('planner')">📱 연플래너 활용</button>
     </div>
 
-    <!-- 자기주도 플래닝 -->
     <div class="class-pane active" id="pane-self">
       <div class="self-grid">
         <div class="self-card fi d1">
@@ -523,7 +580,6 @@ footer strong{color:rgba(255,255,255,0.65)}
       </div>
     </div>
 
-    <!-- AI 교육방향 특강 -->
     <div class="class-pane" id="pane-ai">
       <div class="ai-hero-card fi d1">
         <div class="ai-hero-tag">NEW CLASS · 2026. 5월 신설 · 초·중·고 전 학년</div>
@@ -560,7 +616,6 @@ footer strong{color:rgba(255,255,255,0.65)}
       </div>
     </div>
 
-    <!-- 연플래너 활용 -->
     <div class="class-pane" id="pane-planner">
       <div class="planner-wrap">
         <div>
@@ -643,7 +698,7 @@ footer strong{color:rgba(255,255,255,0.65)}
             <span>화요일 저녁 7시</span>
           </div>
         </div>
-        <a class="btn btn-warm btn-sm" href="https://jinwooshon-coder.github.io/yeon-ai-kr/invite/" target="_blank" style="margin-top:16px;">초대장 및 신청 →</a>
+        <button class="btn btn-warm btn-sm" onclick="openSignup()" style="margin-top:16px;border:none;cursor:pointer;">📩 간담회 신청하기 →</button>
       </div>
 
       <!-- 위치 안내 -->
@@ -740,7 +795,7 @@ footer strong{color:rgba(255,255,255,0.65)}
       학부모 간담회에서 AI 수업을 직접 시연합니다.
     </p>
     <div class="cta-btns fi d2">
-      <a class="btn btn-warm" href="https://jinwooshon-coder.github.io/yeon-ai-kr/invite/" target="_blank">📩 간담회 초대장 열기</a>
+      <button class="btn btn-warm" onclick="openSignup()" style="border:none;cursor:pointer;">📩 간담회 신청하기</button>
       <a class="btn btn-ghost" href="tel:01041365608">📞 원장 직통 전화</a>
     </div>
     <div class="contact-row fi d3">
@@ -758,7 +813,6 @@ footer strong{color:rgba(255,255,255,0.65)}
   <span style="opacity:.4;">© 2026 연플래닝 · 이진우, 박미향 원장 드림</span>
 </footer>
 
-<!-- 플로팅 전화 -->
 <a class="fab" href="tel:01041365608" title="전화 연결">
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.4 2 2 0 0 1 3.6 1.21h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.74a16 16 0 0 0 6 6l.94-.94a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/>
@@ -772,16 +826,86 @@ footer strong{color:rgba(255,255,255,0.65)}
     <div class="modal-logo">연</div>
     <h3>관리자 로그인</h3>
     <p class="modal-sub">연플래닝 삼산점 관리자 페이지</p>
+    <div class="modal-error" id="loginError"></div>
     <div class="modal-field">
-      <label class="modal-label">아이디</label>
-      <input class="modal-input" type="text" placeholder="관리자 아이디를 입력하세요" id="adminId">
+      <label class="modal-label">이메일</label>
+      <input class="modal-input" type="email" placeholder="admin@yeon-samsan.com" id="adminEmail" autocomplete="username">
     </div>
     <div class="modal-field">
       <label class="modal-label">비밀번호</label>
-      <input class="modal-input" type="password" placeholder="비밀번호를 입력하세요" id="adminPw" onkeydown="if(event.key==='Enter')doLogin()">
+      <input class="modal-input" type="password" placeholder="비밀번호를 입력하세요" id="adminPw" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
-    <button class="modal-btn" onclick="doLogin()">로그인</button>
+    <button class="modal-btn" onclick="doLogin()" id="loginBtn">
+      <span id="loginBtnText">로그인</span>
+      <span class="signup-loading" id="loginBtnLoading"><span class="signup-spinner"></span>로그인 중...</span>
+    </button>
     <p class="modal-note">관리자 계정이 없으시면 이진우 원장에게 문의하세요.<br><a href="tel:01041365608" style="color:var(--deep);">010-4136-5608</a></p>
+  </div>
+</div>
+
+<!-- ─────────────── 간담회 신청 모달 ─────────────── -->
+<div class="modal-overlay" id="signupModal" onclick="closeSignupIfOutside(event)">
+  <div class="modal signup-modal">
+    <button class="modal-close" onclick="closeSignup()">✕</button>
+    <div class="modal-logo">연</div>
+    <h3>학부모 간담회 신청</h3>
+    <p class="modal-sub">5월 20일 · 27일 화요일 저녁 7시 · 연플래닝 삼산점</p>
+
+    <div class="modal-success" id="signupSuccess">
+      ✅ <strong>신청이 완료되었습니다.</strong><br>
+      박미향 원장님께서 곧 확인 후 카톡으로 안내 드립니다.<br>
+      간담회에서 뵙겠습니다.
+    </div>
+    <div class="modal-error" id="signupError"></div>
+
+    <form id="signupForm" onsubmit="event.preventDefault();submitSignup()">
+      <div class="modal-field">
+        <label class="modal-label">참석 일자<span class="req">*</span></label>
+        <div class="signup-radio-group">
+          <label class="signup-radio selected" onclick="selectDate(this,'2026-05-20')">
+            <input type="radio" name="sessionDate" value="2026-05-20" checked>
+            <strong>5월 20일</strong>
+            <span>화요일 저녁 7시</span>
+          </label>
+          <label class="signup-radio" onclick="selectDate(this,'2026-05-27')">
+            <input type="radio" name="sessionDate" value="2026-05-27">
+            <strong>5월 27일</strong>
+            <span>화요일 저녁 7시</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-label" for="signupName">학부모 성함<span class="req">*</span></label>
+        <input class="modal-input" type="text" id="signupName" placeholder="예: 김미영" required maxlength="20">
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-label" for="signupPhone">연락처 (카톡 가능 번호)<span class="req">*</span></label>
+        <input class="modal-input" type="tel" id="signupPhone" placeholder="010-1234-5678" required maxlength="20">
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-label" for="signupChild">학생 정보 <span style="color:var(--t3);font-weight:500;">(선택)</span></label>
+        <input class="modal-input" type="text" id="signupChild" placeholder="예: 김도윤 / 초등 5학년 / 삼산초" maxlength="60">
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-label" for="signupCount">참석 인원 <span style="color:var(--t3);font-weight:500;">(선택)</span></label>
+        <input class="modal-input" type="number" id="signupCount" placeholder="1" min="1" max="10" value="1">
+      </div>
+
+      <div class="modal-field">
+        <label class="modal-label" for="signupMessage">미리 궁금하신 점 <span style="color:var(--t3);font-weight:500;">(선택)</span></label>
+        <textarea id="signupMessage" placeholder="간담회에서 다뤄주셨으면 하는 내용이 있으시면 적어주세요." maxlength="500"></textarea>
+      </div>
+
+      <button class="modal-btn warm" type="submit" id="signupBtn">
+        <span id="signupBtnText">📩 신청 보내기</span>
+        <span class="signup-loading" id="signupBtnLoading"><span class="signup-spinner"></span>전송 중...</span>
+      </button>
+      <p class="modal-note">신청 후 박미향 원장님께서 카톡으로 직접 안내 드립니다.<br>문의: <a href="tel:01041365608" style="color:var(--deep);">010-4136-5608</a></p>
+    </form>
   </div>
 </div>
 
@@ -822,11 +946,8 @@ function switchClass(type) {
   document.querySelectorAll('.class-tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('pane-' + type).classList.add('active');
   event.target.classList.add('active');
-  // 새로 보이는 요소 fade-in 트리거
   setTimeout(() => {
-    document.querySelectorAll('#pane-' + type + ' .fi').forEach(el => {
-      observer.observe(el);
-    });
+    document.querySelectorAll('#pane-' + type + ' .fi').forEach(el => observer.observe(el));
   }, 50);
 }
 
@@ -843,7 +964,8 @@ document.addEventListener('click', e => {
 /* ── 관리자 로그인 모달 ── */
 function openLogin() {
   document.getElementById('loginModal').classList.add('open');
-  setTimeout(() => document.getElementById('adminId').focus(), 300);
+  document.getElementById('loginError').classList.remove('show');
+  setTimeout(() => document.getElementById('adminEmail').focus(), 300);
 }
 function closeLogin() {
   document.getElementById('loginModal').classList.remove('open');
@@ -851,14 +973,143 @@ function closeLogin() {
 function closeLoginIfOutside(e) {
   if (e.target === document.getElementById('loginModal')) closeLogin();
 }
-function doLogin() {
-  const id = document.getElementById('adminId').value;
+async function doLogin() {
+  const email = document.getElementById('adminEmail').value.trim();
   const pw = document.getElementById('adminPw').value;
-  if (!id || !pw) { alert('아이디와 비밀번호를 입력해 주세요.'); return; }
-  alert('관리자 시스템이 준비 중입니다.\n문의: 010-4136-5608');
+  const errBox = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+  const btnText = document.getElementById('loginBtnText');
+  const btnLoading = document.getElementById('loginBtnLoading');
+
+  errBox.classList.remove('show');
+
+  if (!email || !pw) {
+    errBox.textContent = '이메일과 비밀번호를 모두 입력해 주세요.';
+    errBox.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  btnLoading.classList.add('show');
+
+  try {
+    if (!window.__firebase || !window.__firebase.ready()) {
+      throw new Error('관리자 시스템이 아직 셋업되지 않았습니다. 이진우 원장에게 문의하세요. (010-4136-5608)');
+    }
+    await window.__firebase.signIn(email, pw);
+    // 로그인 성공 → 관리자 페이지로 이동 (현재 페이지 기준 상대경로)
+    location.href = './admin/';
+  } catch (err) {
+    let msg = err.message || '로그인 실패';
+    // Firebase 에러 코드 한글화
+    if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+      msg = '이메일 또는 비밀번호가 일치하지 않습니다.';
+    } else if (err.code === 'auth/invalid-email') {
+      msg = '이메일 형식이 올바르지 않습니다.';
+    } else if (err.code === 'auth/too-many-requests') {
+      msg = '시도 횟수가 많아 일시적으로 차단되었습니다. 잠시 후 다시 시도해 주세요.';
+    } else if (err.code === 'auth/network-request-failed') {
+      msg = '네트워크 연결을 확인해 주세요.';
+    }
+    errBox.textContent = msg;
+    errBox.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btnText.style.display = '';
+    btnLoading.classList.remove('show');
+  }
 }
+
+/* ── 간담회 신청 모달 ── */
+function openSignup() {
+  const modal = document.getElementById('signupModal');
+  modal.classList.add('open');
+  document.getElementById('signupError').classList.remove('show');
+  document.getElementById('signupSuccess').classList.remove('show');
+  document.getElementById('signupForm').style.display = '';
+  setTimeout(() => document.getElementById('signupName').focus(), 300);
+}
+function closeSignup() {
+  document.getElementById('signupModal').classList.remove('open');
+}
+function closeSignupIfOutside(e) {
+  if (e.target === document.getElementById('signupModal')) closeSignup();
+}
+function selectDate(el, val) {
+  document.querySelectorAll('.signup-radio').forEach(r => r.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+}
+
+async function submitSignup() {
+  const errBox = document.getElementById('signupError');
+  const okBox = document.getElementById('signupSuccess');
+  const btn = document.getElementById('signupBtn');
+  const btnText = document.getElementById('signupBtnText');
+  const btnLoading = document.getElementById('signupBtnLoading');
+  const form = document.getElementById('signupForm');
+
+  errBox.classList.remove('show');
+
+  const name = document.getElementById('signupName').value.trim();
+  const phone = document.getElementById('signupPhone').value.trim();
+  const sessionDate = document.querySelector('input[name="sessionDate"]:checked').value;
+  const child = document.getElementById('signupChild').value.trim();
+  const count = parseInt(document.getElementById('signupCount').value || '1', 10);
+  const message = document.getElementById('signupMessage').value.trim();
+
+  if (!name || name.length < 2) {
+    errBox.textContent = '학부모 성함을 입력해 주세요.';
+    errBox.classList.add('show');
+    return;
+  }
+  if (!phone || phone.length < 9) {
+    errBox.textContent = '연락처를 입력해 주세요. (예: 010-1234-5678)';
+    errBox.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true;
+  btnText.style.display = 'none';
+  btnLoading.classList.add('show');
+
+  try {
+    if (!window.__firebase || !window.__firebase.ready()) {
+      throw new Error('아직 신청 시스템이 준비 중입니다. 010-4136-5608로 직접 연락 주세요.');
+    }
+
+    await window.__firebase.submitSignup({
+      name,
+      phone,
+      sessionDate,
+      child: child || null,
+      count: isNaN(count) ? 1 : count,
+      message: message || null,
+      status: 'pending', // pending → confirmed → attended
+      source: 'samsan_homepage'
+    });
+
+    // 폼 숨기고 성공 메시지
+    form.style.display = 'none';
+    okBox.classList.add('show');
+    // 4초 뒤 자동으로 닫기
+    setTimeout(() => closeSignup(), 4500);
+  } catch (err) {
+    errBox.textContent = err.message || '신청 중 문제가 발생했습니다. 잠시 후 다시 시도하거나 010-4136-5608로 연락 주세요.';
+    errBox.classList.add('show');
+  } finally {
+    btn.disabled = false;
+    btnText.style.display = '';
+    btnLoading.classList.remove('show');
+  }
+}
+
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeLogin();
+  if (e.key === 'Escape') {
+    closeLogin();
+    closeSignup();
+  }
 });
 
 /* ── FAQ 토글 ── */
@@ -871,8 +1122,4 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach(e => {
     if (e.isIntersecting) { e.target.classList.add('on'); observer.unobserve(e.target); }
   });
-}, { threshold: 0.08 });
-document.querySelectorAll('.fi').forEach(el => observer.observe(el));
-</script>
-</body>
-</html>
+}, { threshold: 
