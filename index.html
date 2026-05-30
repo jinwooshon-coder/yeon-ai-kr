@@ -3,70 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>yeon.ai.kr — 연 마을</title>
-<meta name="description" content="yeon.ai.kr — 사람과 사람이 이어지는 연 마을. 지역별 사이트와 업체를 찾아보세요.">
+<title>yeon.ai.kr — 연아카데미 통합 AI 포털</title>
+<meta name="description" content="사람과 배움이 깊은 연(緣)으로 이어지는 연아카데미 AI 학습 포털. 수학AI, 영어AI, 연플래너와 함께 자기주도 성장 생태계를 만납니다.">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
 :root {
-  --bg-paper: #F8F6F2;
-  --bg-paper-alt: #F0EBE1;
-  --ink: #1D1D1B;
-  --ink-soft: #3C3C38;
-  --ink-faint: rgba(29,29,27,0.5);
-  --wood: #5D4037;
-  --thread: #B08E61;
-  --thread-soft: rgba(176,142,97,0.15);
-  --border: rgba(29,29,27,0.1);
-  --border-strong: rgba(29,29,27,0.2);
-  --font-body: 'Noto Serif KR', 'Nanum Myeongjo', serif;
-  --font-title: 'Nanum Myeongjo', serif;
+  --bg-main: #07080d;
+  --bg-sidebar: #0d0f16;
+  --bg-card: rgba(20, 24, 38, 0.6);
+  --border-color: rgba(255, 255, 255, 0.08);
+  
+  --accent-gold: #E8A200;
+  --accent-gold-hover: #ffb81c;
+  --accent-gold-glow: rgba(232, 162, 0, 0.15);
+  
+  /* App glows & colors */
+  --color-math: #6366f1;
+  --color-planner: #E8A200;
+  --color-english: #06b6d4;
+  --color-survey: #10b981;
+  --color-market: #c38d56;
+  
+  --math-glow: rgba(99, 102, 241, 0.12);
+  --planner-glow: rgba(232, 162, 0, 0.12);
+  --english-glow: rgba(6, 182, 212, 0.12);
+  --survey-glow: rgba(16, 185, 129, 0.12);
+  --market-glow: rgba(195, 141, 86, 0.12);
+  
+  /* System state colors */
+  --cat-caution: #a85a4a;
+  --cat-good: #427a71;
+  --cat-must: #2f5d62;
+  --cat-market: #c38d56;
+  
+  --text-main: #f3f4f6;
+  --text-muted: #9ca3af;
+  --font-body: 'Outfit', 'Noto Sans KR', sans-serif;
+  --font-title: 'Outfit', 'Noto Sans KR', sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-body);
-  background: var(--bg-paper);
-  color: var(--ink);
+  background: var(--bg-main);
+  color: var(--text-main);
   line-height: 1.8;
   word-break: keep-all;
   -webkit-font-smoothing: antialiased;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(176,142,97,0.04) 0, transparent 40%),
-    radial-gradient(circle at 80% 60%, rgba(93,64,55,0.025) 0, transparent 50%);
+  position: relative;
+  overflow-x: hidden;
 }
+
+/* Ambient dynamic background */
+.ambient-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle at 15% 25%, rgba(99, 102, 241, 0.04) 0%, transparent 45%),
+    radial-gradient(circle at 85% 75%, rgba(232, 162, 0, 0.035) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.02) 0%, transparent 40%);
+}
+
+.ambient-grid {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+  background-position: center;
+  mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, black, transparent 80%);
+}
+
 a { color: inherit; text-decoration: none; }
+
+/* ===== PWA Toast ===== */
+#pwaToast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(14, 16, 23, 0.9);
+  border: 1px solid var(--accent-gold);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-gold-glow);
+  z-index: 99999;
+  font-size: 13.5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  backdrop-filter: blur(10px);
+}
+#pwaToast.show {
+  transform: translateY(0);
+  opacity: 1;
+}
 
 /* ===== 플랫폼 바 ===== */
 .platform-bar {
-  background: var(--ink);
-  color: rgba(255,255,255,0.75);
-  font-family: var(--font-body);
+  background: var(--bg-sidebar);
+  color: var(--text-muted);
+  font-family: var(--font-title);
   font-size: 12px;
-  padding: 6px 5%;
+  padding: 10px 5%;
   display: flex;
   align-items: center;
-  gap: 6px;
-  letter-spacing: 0.3px;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  letter-spacing: 0.5px;
+  z-index: 10;
+}
+.platform-bar-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 .platform-bar a {
-  color: rgba(255,255,255,0.75);
-  transition: color 0.2s;
+  color: var(--text-muted);
+  transition: color 0.25s;
 }
 .platform-bar a:hover { color: #fff; }
 .platform-bar .sep { opacity: 0.4; }
-.platform-bar .current { color: var(--thread); font-weight: 700; }
+.platform-bar .current { color: var(--accent-gold); font-weight: 700; }
+.system-live-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+}
+.live-indicator {
+  width: 6px;
+  height: 6px;
+  background-color: #2ecc71;
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 8px #2ecc71, 0 0 12px rgba(46, 204, 113, 0.4);
+  animation: pulseLive 1.8s infinite;
+}
+@keyframes pulseLive {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
 
 /* ===== 헤더 ===== */
 .site-header {
-  padding: 48px 5% 40px;
-  border-bottom: 1px solid var(--border);
+  padding: 24px 5% 20px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
 }
 .site-header .brand {
   display: flex;
@@ -75,188 +185,912 @@ a { color: inherit; text-decoration: none; }
 }
 .site-header .brand-name {
   font-family: var(--font-title);
-  font-size: clamp(28px, 5vw, 44px);
+  font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
-  color: var(--ink);
+  color: var(--text-main);
   letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-.site-header .brand-name span { color: var(--thread); }
+.site-header .brand-name span { color: var(--accent-gold); }
+.beta-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--accent-gold-glow);
+  color: var(--accent-gold);
+  border: 1px solid rgba(232, 162, 0, 0.3);
+  padding: 1px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
 .site-header .brand-sub {
-  font-size: 14px;
-  color: var(--ink-faint);
+  font-size: 13px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
 }
 .site-header .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
-.btn-register {
-  background: var(--wood);
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-family: var(--font-body);
-  font-size: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.btn-register:hover { background: #4a3028; }
-
-/* ===== 안내 메시지 ===== */
-.intro-band {
-  background: var(--thread-soft);
-  border-top: 1px solid rgba(176,142,97,0.25);
-  border-bottom: 1px solid rgba(176,142,97,0.25);
-  padding: 20px 5%;
-  text-align: center;
-  font-size: 15px;
-  color: var(--ink-soft);
-}
-.intro-band strong { color: var(--wood); }
-
-/* ===== 지역 섹션 ===== */
-.section {
-  padding: 56px 5%;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.section-label {
-  font-size: 11px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--thread);
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-.section-title {
-  font-family: var(--font-title);
-  font-size: clamp(22px, 3vw, 30px);
-  font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 8px;
-}
-.section-desc {
-  font-size: 14px;
-  color: var(--ink-faint);
-  margin-bottom: 40px;
+  gap: 12px;
 }
 
-/* ===== 지역 카드 그리드 ===== */
-.region-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-}
-.region-card {
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  overflow: hidden;
-  transition: box-shadow 0.2s, transform 0.2s;
-  cursor: pointer;
-  display: block;
-}
-.region-card:hover {
-  box-shadow: 0 8px 24px rgba(29,29,27,0.1);
-  transform: translateY(-2px);
-}
-.region-card-head {
-  background: var(--bg-paper-alt);
-  padding: 24px 24px 20px;
-  border-bottom: 1px solid var(--border);
-  position: relative;
-}
-.region-name {
-  font-family: var(--font-title);
-  font-size: 22px;
-  font-weight: 800;
-  color: var(--ink);
-  margin-bottom: 4px;
-}
-.region-name-en {
-  font-size: 12px;
-  color: var(--ink-faint);
-  letter-spacing: 1px;
-}
-.region-count {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: var(--thread);
-  color: #fff;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 20px;
-}
-.region-card-body {
-  padding: 20px 24px;
-}
-.region-sites {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.region-site-item {
+.btn-icon-action {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  color: var(--ink-soft);
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s;
 }
-.site-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--thread);
-  flex-shrink: 0;
+.btn-icon-action:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.2);
 }
-.region-more {
-  margin-top: 16px;
+.btn-icon-action.active {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  background: var(--accent-gold-glow);
+}
+
+.btn-register {
+  background: rgba(20, 24, 38, 0.8);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 9px 18px;
+  font-family: var(--font-title);
   font-size: 13px;
-  color: var(--thread);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+  backdrop-filter: blur(8px);
+}
+.btn-register:hover {
+  background: var(--accent-gold);
+  color: #000;
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 15px var(--accent-gold-glow);
+}
+
+/* ===== 뷰 제어 탭 ===== */
+.view-tabs-container {
+  max-width: 1200px;
+  margin: 16px auto 0;
+  padding: 0 5%;
+  position: relative;
+  z-index: 5;
+}
+.view-tabs {
+  display: flex;
+  background: rgba(13, 15, 22, 0.7);
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  gap: 4px;
+  flex-wrap: wrap;
+  backdrop-filter: blur(10px);
+}
+.tab-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--font-title);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.tab-btn:hover {
+  color: var(--text-main);
+  background: rgba(255, 255, 255, 0.03);
+}
+.tab-btn.active {
+  background: var(--accent-gold);
+  color: #000;
+  box-shadow: 0 4px 15px var(--accent-gold-glow);
+}
+
+/* ===== 각 섹션 뷰 ===== */
+.view-section {
+  display: none;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 5% 56px;
+  animation: fadeIn 0.4s ease-out;
+}
+.view-section.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== A. AI 앱 소개 섹션 스타일 ===== */
+.apps-hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 48px 40px;
+  margin-bottom: 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.apps-hero::before {
+  content: '';
+  position: absolute;
+  top: -10%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  height: 20%;
+  background: radial-gradient(circle, rgba(232, 162, 0, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.apps-hero h2 {
+  font-family: var(--font-title);
+  font-size: clamp(22px, 4vw, 28px);
+  color: var(--accent-gold);
+  margin-bottom: 12px;
   font-weight: 700;
+}
+.apps-hero p {
+  color: var(--text-muted);
+  font-size: 14.5px;
+  max-width: 720px;
+  margin: 0 auto;
+  line-height: 1.85;
+}
+
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+.app-card-wrapper {
+  perspective: 1000px;
+}
+.app-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transform-style: preserve-3d;
+}
+.app-card-head {
+  padding: 24px 24px 16px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.app-card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.app-card-title {
+  font-family: var(--font-title);
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.app-card-icon-wrapper {
+  margin-bottom: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.3s;
+}
+.app-card:hover .app-card-icon-wrapper {
+  transform: scale(1.08) rotate(3deg);
+}
+.app-card-subtitle {
+  font-size: 11px;
+  color: var(--accent-gold);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.app-card-badge {
+  font-family: monospace;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.app-card-body {
+  padding: 24px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.app-card-desc {
+  font-size: 13.5px;
+  color: rgba(243, 244, 246, 0.8);
+  line-height: 1.75;
+}
+.app-card-spec-box {
+  background: rgba(13, 15, 22, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 14px;
+}
+.app-card-spec-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+.app-card-spec-list {
+  list-style: none;
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.app-card-spec-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.app-card-spec-list li::before {
+  content: '✓';
+  font-weight: bold;
+}
+
+.app-card-foot {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.app-card-link-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  font-weight: 700;
+  transition: all 0.25s;
   display: flex;
   align-items: center;
   gap: 4px;
 }
+.app-card-pwa-badge {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-color);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
 
-/* 준비 중 카드 */
-.region-card.coming-soon {
-  opacity: 0.55;
+/* App Identities */
+.app-math {
+  --app-color: var(--color-math);
+  --app-glow: var(--math-glow);
+}
+.app-math .app-card-spec-title { color: var(--color-math); }
+.app-math .app-card-spec-list li::before { color: var(--color-math); }
+.app-math .app-card-badge {
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--color-math);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+.app-math .app-card-link-btn {
+  background: var(--color-math);
+  color: #fff;
+}
+.app-math .app-card-link-btn:hover {
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+  filter: brightness(1.15);
+}
+
+.app-planner {
+  --app-color: var(--color-planner);
+  --app-glow: var(--planner-glow);
+}
+.app-planner .app-card-spec-title { color: var(--color-planner); }
+.app-planner .app-card-spec-list li::before { color: var(--color-planner); }
+.app-planner .app-card-badge {
+  background: rgba(232, 162, 0, 0.08);
+  color: var(--color-planner);
+  border: 1px solid rgba(232, 162, 0, 0.2);
+}
+.app-planner .app-card-link-btn {
+  background: var(--color-planner);
+  color: #000;
+}
+.app-planner .app-card-link-btn:hover {
+  box-shadow: 0 0 15px rgba(232, 162, 0, 0.4);
+  filter: brightness(1.15);
+}
+
+.app-english {
+  --app-color: var(--color-english);
+  --app-glow: var(--english-glow);
+}
+.app-english .app-card-spec-title { color: var(--color-english); }
+.app-english .app-card-spec-list li::before { color: var(--color-english); }
+.app-english .app-card-badge {
+  background: rgba(6, 182, 212, 0.08);
+  color: var(--color-english);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+.app-english .app-card-link-btn {
+  background: var(--color-english);
+  color: #fff;
+}
+.app-english .app-card-link-btn:hover {
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+  filter: brightness(1.15);
+}
+
+.app-survey {
+  --app-color: var(--color-survey);
+  --app-glow: var(--survey-glow);
+}
+.app-survey .app-card-spec-title { color: var(--color-survey); }
+.app-survey .app-card-spec-list li::before { color: var(--color-survey); }
+.app-survey .app-card-badge {
+  background: rgba(16, 185, 129, 0.08);
+  color: var(--color-survey);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+.app-survey .app-card-link-btn {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.app-market {
+  --app-color: var(--color-market);
+  --app-glow: var(--market-glow);
+}
+.app-market .app-card-spec-title { color: var(--color-market); }
+.app-market .app-card-spec-list li::before { color: var(--color-market); }
+.app-market .app-card-badge {
+  background: rgba(195, 141, 86, 0.08);
+  color: var(--color-market);
+  border: 1px solid rgba(195, 141, 86, 0.2);
+}
+.app-market .app-card-link-btn {
+  background: var(--color-market);
+  color: #fff;
+}
+.app-market .app-card-link-btn:hover {
+  box-shadow: 0 0 15px rgba(195, 141, 86, 0.4);
+  filter: brightness(1.15);
+}
+
+.app-card:hover {
+  border-color: var(--app-color);
+  box-shadow: 0 12px 30px var(--app-glow);
+}
+
+/* ===== B. 버전 대시보드 스타일 ===== */
+.changelog-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+}
+.changelog-head-group {
+  margin-bottom: 24px;
+}
+.changelog-title {
+  font-family: var(--font-title);
+  font-size: 22px;
+  color: var(--accent-gold);
+  font-weight: 800;
+}
+.changelog-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Health diagnostics telemetry */
+.telemetry-panel {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.telemetry-card {
+  background: rgba(13, 15, 22, 0.5);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 16px;
+}
+.telemetry-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.telemetry-value {
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.changelog-table-container {
+  overflow-x: auto;
+  margin-bottom: 32px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+}
+.changelog-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.changelog-table th, .changelog-table td {
+  padding: 14px 18px;
+  font-size: 13.5px;
+  border-bottom: 1px solid var(--border-color);
+}
+.changelog-table th {
+  background: rgba(13, 15, 22, 0.8);
+  color: var(--accent-gold);
+  font-weight: 700;
+  font-family: var(--font-title);
+}
+.changelog-table td {
+  background: transparent;
+}
+.changelog-table tr:last-child td {
+  border-bottom: none;
+}
+.changelog-table .version-text {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+.changelog-table .status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.changelog-table .status-badge.live {
+  background: rgba(66, 122, 113, 0.15);
+  color: #55b2a2;
+  border: 1px solid rgba(66, 122, 113, 0.3);
+}
+.changelog-table .status-badge.planned {
+  background: rgba(195, 141, 86, 0.15);
+  color: #c38d56;
+  border: 1px solid rgba(195, 141, 86, 0.3);
+}
+
+.roadmap-group {
+  border-top: 1px solid var(--border-color);
+  padding-top: 32px;
+}
+.roadmap-title {
+  font-family: var(--font-title);
+  font-size: 17px;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+.roadmap-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+}
+.roadmap-item {
+  background: rgba(13, 15, 22, 0.4);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+}
+.roadmap-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.roadmap-subject {
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+.roadmap-period {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.roadmap-desc {
+  font-size: 12.5px;
+  color: rgba(243, 244, 246, 0.75);
+  line-height: 1.6;
+}
+
+/* ===== C. 지구본 뷰 스타일 ===== */
+.globe-view-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 40px 24px;
+  overflow: hidden;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+.globe-canvas-container {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  height: 480px;
+  cursor: grab;
+  border-radius: 50%;
+}
+.globe-canvas-container:active {
+  cursor: grabbing;
+}
+#globeCanvas {
+  width: 100%;
+  height: 100%;
+}
+.globe-overlay-card {
+  position: absolute;
+  background: rgba(14, 16, 23, 0.85);
+  border: 1.5px solid var(--accent-gold);
+  border-radius: 10px;
+  padding: 14px 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-gold-glow);
+  display: none;
+  pointer-events: none;
+  z-index: 10;
+  max-width: 260px;
+  transform: translate(-50%, -100%);
+  margin-top: -12px;
+  backdrop-filter: blur(12px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.globe-overlay-card::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: rgba(14, 16, 23, 0.85);
+  border-right: 1.5px solid var(--accent-gold);
+  border-bottom: 1.5px solid var(--accent-gold);
+}
+.gcard-title {
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.gcard-badge {
+  background: rgba(232, 162, 0, 0.15);
+  color: var(--accent-gold);
+  font-family: var(--font-title);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+.gcard-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 4px;
+}
+.gcard-link {
+  font-size: 11.5px;
+  color: var(--accent-gold);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.globe-instruction {
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ===== D. 디렉토리 뷰 스타일 ===== */
+.directory-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 400px;
+}
+.search-input {
+  width: 100%;
+  background: rgba(13, 15, 22, 0.6);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 16px 10px 40px;
+  font-family: var(--font-title);
+  font-size: 13.5px;
+  color: var(--text-main);
+  outline: none;
+  transition: all 0.25s;
+  backdrop-filter: blur(8px);
+}
+.search-input:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px var(--accent-gold-glow);
+}
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.4;
   pointer-events: none;
 }
-.coming-badge {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: var(--border-strong);
-  color: var(--ink-faint);
-  font-size: 11px;
-  padding: 3px 8px;
-  border-radius: 20px;
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.filter-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-family: var(--font-title);
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-btn.active, .filter-btn:hover {
+  background: var(--accent-gold);
+  color: #000;
+  border-color: var(--accent-gold);
 }
 
-/* ===== 업체 등록 안내 ===== */
-.register-band {
-  background: var(--ink);
-  color: #fff;
-  padding: 56px 5%;
+.directory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+.dir-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.25s;
+  display: flex;
+  flex-direction: column;
+  backdrop-filter: blur(12px);
+}
+.dir-card:hover {
+  border-color: var(--accent-gold);
+  box-shadow: 0 10px 25px rgba(232, 162, 0, 0.05);
+}
+.dir-card-head {
+  padding: 20px 20px 14px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+.dir-card-title {
+  font-family: var(--font-title);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+.dir-card-region {
+  font-size: 11px;
+  color: var(--accent-gold);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.dir-card-badge {
+  background: rgba(232, 162, 0, 0.1);
+  color: var(--accent-gold);
+  font-family: var(--font-title);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 5px;
+  border: 1px solid rgba(232, 162, 0, 0.15);
+}
+.dir-card-body {
+  padding: 16px 20px;
+  flex-grow: 1;
+}
+.dir-card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+.dir-card-foot {
+  padding: 14px 20px;
+  border-top: 1px solid var(--border-color);
+  background: rgba(0,0,0,0.1);
+}
+.dir-card-link {
+  font-size: 12.5px;
+  color: var(--accent-gold);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dir-card.pending {
+  opacity: 0.55;
+}
+.dir-card.pending .dir-card-badge {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+/* ===== E. 마을 새 소식 피드 스타일 ===== */
+.timeline-feed {
+  max-width: 680px;
+  margin: 0 auto;
+  position: relative;
+  padding-left: 24px;
+}
+.timeline-feed::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: var(--border-color);
+}
+.feed-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+.feed-item::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 8px;
+  transform: translateX(-50%);
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  border: 2px solid var(--bg-main);
+}
+.feed-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+.feed-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 20px;
+  backdrop-filter: blur(12px);
+}
+.feed-source {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.feed-title {
+  font-family: var(--font-title);
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.feed-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 12px;
+}
+.feed-link {
+  font-size: 12.5px;
+  color: var(--accent-gold);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* PWA 가이드 영역 */
+.register-section {
+  background: var(--bg-sidebar);
+  border-top: 1px solid var(--border-color);
+  padding: 64px 5%;
   text-align: center;
 }
-.register-band h2 {
+.register-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.register-section h2 {
   font-family: var(--font-title);
-  font-size: clamp(22px, 3vw, 32px);
+  font-size: clamp(22px, 4vw, 28px);
   font-weight: 800;
   margin-bottom: 12px;
-  color: #fff;
+  color: var(--accent-gold);
 }
-.register-band p {
-  font-size: 15px;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 28px;
-  max-width: 540px;
+.register-section p {
+  font-size: 14.5px;
+  color: var(--text-muted);
+  margin-bottom: 36px;
+  max-width: 560px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -264,188 +1098,1396 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   justify-content: center;
   gap: 40px;
-  margin-bottom: 36px;
+  margin-bottom: 40px;
   flex-wrap: wrap;
 }
 .reg-step {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  flex: 1;
+  min-width: 140px;
 }
 .reg-step-num {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 1.5px solid var(--thread);
-  color: var(--thread);
+  border: 1.5px solid var(--accent-gold);
+  color: var(--accent-gold);
+  font-family: var(--font-title);
   font-size: 14px;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--accent-gold-glow);
 }
-.reg-step span {
-  font-size: 13px;
-  color: rgba(255,255,255,0.65);
+.reg-step-text {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
 }
-.btn-apply {
-  background: var(--thread);
-  color: #fff;
+
+/* ===== Spotlight Search Modal ===== */
+#searchConsoleModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(5, 7, 10, 0.7);
+  backdrop-filter: blur(6px);
+  z-index: 10000;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 10vh;
+}
+#searchConsoleModal.open {
+  display: flex;
+}
+.search-console-box {
+  width: 100%;
+  max-width: 560px;
+  background: rgba(14, 17, 26, 0.95);
+  border: 1px solid var(--accent-gold);
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 25px var(--accent-gold-glow);
+  overflow: hidden;
+  animation: slideDownConsole 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideDownConsole {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+.search-console-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.search-console-input {
+  flex: 1;
+  background: transparent;
   border: none;
-  border-radius: 4px;
-  padding: 14px 32px;
-  font-family: var(--font-body);
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s;
+  outline: none;
+  font-family: var(--font-title);
+  font-size: 16px;
+  color: var(--text-main);
+  placeholder-color: var(--text-muted);
 }
-.btn-apply:hover { background: var(--thread-strong, #8e6f48); }
+.search-console-hint-key {
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-family: monospace;
+  color: var(--text-muted);
+}
+.search-console-results {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 8px 0;
+}
+.search-console-item {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+.search-console-item:hover, .search-console-item.selected {
+  background: rgba(255, 255, 255, 0.03);
+  border-left-color: var(--accent-gold);
+}
+.search-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.search-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.search-item-desc {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+.search-item-action-pill {
+  font-size: 11px;
+  color: var(--accent-gold);
+  border: 1px solid rgba(232, 162, 0, 0.3);
+  background: var(--accent-gold-glow);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
 
 /* ===== 푸터 ===== */
 footer {
-  border-top: 1px solid var(--border);
-  padding: 32px 5%;
+  border-top: 1px solid var(--border-color);
+  padding: 40px 5%;
   text-align: center;
-  font-size: 12px;
-  color: var(--ink-faint);
+  font-family: var(--font-title);
+  font-size: 12.5px;
+  color: var(--text-muted);
 }
-footer a { color: var(--thread); }
-footer .footer-nav {
+footer a {
+  color: var(--accent-gold);
+  transition: color 0.2s;
+}
+footer a:hover {
+  color: var(--accent-gold-hover);
+}
+.footer-nav {
   display: flex;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 12px;
+  gap: 24px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
 }
 
-/* ===== 반응형 ===== */
-@media (max-width: 600px) {
-  .site-header { padding: 32px 5% 28px; }
-  .register-steps { gap: 24px; }
+/* ===== 반응형 모바일 오버라이드 ===== */
+@media (max-width: 768px) {
+  .site-header { padding: 20px 5% 16px; }
+  .view-tabs-container { text-align: center; margin-top: 12px; }
+  .register-steps { gap: 20px; }
+  .globe-canvas-container { max-width: 320px; height: 320px; }
 }
 </style>
 </head>
 <body>
 
+<div class="ambient-bg"></div>
+<div class="ambient-grid"></div>
+
 <!-- 플랫폼 바 -->
 <div class="platform-bar">
-  <a href="https://y-life.kr">y-life.kr</a>
-  <span class="sep">›</span>
-  <span class="current">yeon.ai.kr</span>
+  <div class="platform-bar-links">
+    <a href="https://y-life.kr">y-life.kr</a>
+    <span class="sep">›</span>
+    <span class="current">yeon.ai.kr (v6.1.1)</span>
+  </div>
+  <div class="system-live-status">
+    <span class="live-indicator"></span>
+    <span>연아카데미AI 학습망 Online</span>
+  </div>
 </div>
 
 <!-- 헤더 -->
 <header class="site-header">
   <div class="brand">
-    <div class="brand-name">yeon<span>.ai.kr</span></div>
-    <div class="brand-sub">사람과 사람이 이어지는 연 마을</div>
+    <div class="brand-name">yeon<span>.ai.kr</span> <span class="beta-badge">BETA · 다듬는 중</span></div>
+    <div class="brand-sub">사람과 배움이 깊은 연아카데미 AI 포털</div>
   </div>
   <div class="header-actions">
-    <a href="https://y-life.kr" style="font-size:13px; color:var(--ink-faint);">← y-life.kr 플랫폼으로</a>
-    <button class="btn-register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">사이트 등록하기</button>
+    <button class="btn-icon-action" id="audioToggleBtn" onclick="toggleSynthAudio()" title="UI 효과음 토글">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+        <line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>
+      </svg>
+    </button>
+    <button class="btn-icon-action" onclick="openSearchConsole()" title="통합 검색 (Ctrl+K)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </button>
+    <button class="btn-register" onclick="document.getElementById('register').scrollIntoView({behavior:'smooth'})">PWA 설치안내</button>
   </div>
 </header>
 
-<!-- 안내 밴드 -->
-<div class="intro-band">
-  <strong>yeon.ai.kr</strong>은 y-life.kr 플랫폼의 마을입니다 — 지역의 학원, 가게, 블로그, 포트폴리오가 한 곳에 모여있습니다.
-</div>
-
-<!-- 지역 목록 -->
-<div class="section">
-  <div class="section-label">지역별 찾기</div>
-  <h2 class="section-title">어느 지역을 찾으시나요?</h2>
-  <p class="section-desc">지역을 선택하면 그 지역에 등록된 사이트와 업체를 볼 수 있습니다.</p>
-
-  <div class="region-grid">
-
-    <!-- 울산 (활성) -->
-    <a href="./ulsan/" class="region-card">
-      <div class="region-card-head">
-        <div class="region-name">울산</div>
-        <div class="region-name-en">Ulsan</div>
-        <div class="region-count">1곳</div>
-      </div>
-      <div class="region-card-body">
-        <div class="region-sites">
-          <div class="region-site-item">
-            <div class="site-dot"></div>
-            연플래닝 — 자기주도 학원
-          </div>
-        </div>
-        <div class="region-more">울산 전체 보기 →</div>
-      </div>
-    </a>
-
-    <!-- 부산 (준비 중) -->
-    <div class="region-card coming-soon">
-      <div class="region-card-head">
-        <div class="region-name">부산</div>
-        <div class="region-name-en">Busan</div>
-        <div class="coming-badge">준비 중</div>
-      </div>
-      <div class="region-card-body">
-        <div class="region-sites">
-          <div class="region-site-item" style="color:var(--ink-faint);">
-            <div class="site-dot" style="background:var(--border-strong);"></div>
-            첫 번째 사이트를 기다립니다
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 서울 (준비 중) -->
-    <div class="region-card coming-soon">
-      <div class="region-card-head">
-        <div class="region-name">서울</div>
-        <div class="region-name-en">Seoul</div>
-        <div class="coming-badge">준비 중</div>
-      </div>
-      <div class="region-card-body">
-        <div class="region-sites">
-          <div class="region-site-item" style="color:var(--ink-faint);">
-            <div class="site-dot" style="background:var(--border-strong);"></div>
-            첫 번째 사이트를 기다립니다
-          </div>
-        </div>
-      </div>
-    </div>
-
+<!-- 뷰 전환 탭바 -->
+<div class="view-tabs-container">
+  <div class="view-tabs">
+    <button class="tab-btn active" onclick="switchView('apps')">📱 AI 학습 앱</button>
+    <button class="tab-btn" onclick="switchView('changelog')">📊 버전 대시보드</button>
+    <button class="tab-btn" onclick="switchView('globe')">🌐 연 마을 지도</button>
+    <button class="tab-btn" onclick="switchView('directory')">📋 지역별 목록</button>
+    <button class="tab-btn" onclick="switchView('feed')">💬 마을 새 소식</button>
   </div>
 </div>
 
-<!-- 등록 안내 -->
-<div class="register-band" id="register">
-  <h2>내 사이트를 연 마을에 등록하세요</h2>
-  <p>학원, 가게, 블로그, 포트폴리오 — 어떤 종류든 여기에 자리를 만들 수 있습니다.</p>
-  <div class="register-steps">
-    <div class="reg-step">
-      <div class="reg-step-num">1</div>
-      <span>y-life.kr에서<br>사이트 만들기</span>
+<!-- ==================== 1. AI 학습 앱 리스트 섹션 ==================== -->
+<section class="view-section active" id="appsSection">
+  <div class="apps-hero">
+    <h2>연아카데미 AI 학습 생태계</h2>
+    <p>사교육에 의존하지 않고 스스로 우뚝 서는 힘을 기릅니다. 학생이 촬영해 등록하는 학습 데이터 자동 영역화 분석부터 의식적 몰입 성찰 일기, 복습 일정 자동 배치까지 연아카데미AI 에이전트와 연플래너가 동행합니다.</p>
+  </div>
+
+  <div class="apps-grid">
+    <!-- 수학AI -->
+    <div class="app-card-wrapper">
+      <div class="app-card app-math">
+        <div class="app-card-head">
+          <div class="app-card-title-group">
+            <div class="app-card-icon-wrapper">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-math)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/>
+                <line x1="10" y1="3" x2="14" y2="21"/><line x1="14" y1="3" x2="10" y2="21"/>
+              </svg>
+            </div>
+            <span class="app-card-subtitle">Mathematics AI</span>
+            <h3 class="app-card-title">수풀 수학 AI</h3>
+          </div>
+          <span class="app-card-badge">v6.1.1</span>
+        </div>
+        <div class="app-card-body">
+          <p class="app-card-desc">풀이가 필요한 문항 데이터를 분석하여, 단순한 공식 대입을 통한 주입식 풀이가 아닌 수학적 개념을 관통하는 3가지 다각적 접근 풀이법을 도출해냅니다.</p>
+          <div class="app-card-spec-box">
+            <div class="app-card-spec-title">완전학습 맞춤 시스템</div>
+            <ul class="app-card-spec-list">
+              <li>정밀 수식 인쇄 및 화면 렌더링</li>
+              <li>무분별한 질문 방지를 위한 일일 사용 제한</li>
+              <li>평가 결과 연동을 통한 단원 완전학습 관리</li>
+            </ul>
+          </div>
+        </div>
+        <div class="app-card-foot">
+          <a href="./supul/su-pul.html" class="app-card-link-btn" target="_blank">앱 실행하기 →</a>
+          <span class="app-card-pwa-badge">PWA 연동</span>
+        </div>
+      </div>
     </div>
-    <div class="reg-step">
-      <div class="reg-step-num">2</div>
-      <span>지역과 업종<br>선택하기</span>
+
+    <!-- 연플래너 -->
+    <div class="app-card-wrapper">
+      <div class="app-card app-planner">
+        <div class="app-card-head">
+          <div class="app-card-title-group">
+            <div class="app-card-icon-wrapper">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-planner)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </div>
+            <span class="app-card-subtitle">Self Planner</span>
+            <h3 class="app-card-title">연플래너 & 자기관리</h3>
+          </div>
+          <span class="app-card-badge">v6.1.1</span>
+        </div>
+        <div class="app-card-body">
+          <p class="app-card-desc">의식적 몰입 훈련과 스케줄을 기록하고 다듬는 통합 학습 관리판. 주기적 학습 알림 배치를 통해 복습 주기를 설계하고 행동 목표 작성을 돕습니다.</p>
+          <div class="app-card-spec-box">
+            <div class="app-card-spec-title">자기주도 관리 규격</div>
+            <ul class="app-card-spec-list">
+              <li>행동 우선순위 지표 배치 및 드래그 편집</li>
+              <li>학습 데이터 암호화를 통한 철저한 기록 보호</li>
+              <li>어려운 개념의 자동 피드백 조정을 통한 복습 최적화</li>
+            </ul>
+          </div>
+        </div>
+        <div class="app-card-foot">
+          <a href="./ulsan/yeon-planning/" class="app-card-link-btn" target="_blank">앱 실행하기 →</a>
+          <span class="app-card-pwa-badge">PWA 연동</span>
+        </div>
+      </div>
     </div>
-    <div class="reg-step">
-      <div class="reg-step-num">3</div>
-      <span>연 마을에<br>자동 등록</span>
+
+    <!-- 영어AI -->
+    <div class="app-card-wrapper">
+      <div class="app-card app-english">
+        <div class="app-card-head">
+          <div class="app-card-title-group">
+            <div class="app-card-icon-wrapper">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-english)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/>
+              </svg>
+            </div>
+            <span class="app-card-subtitle">English Speech AI</span>
+            <h3 class="app-card-title">눈치껏짐작해! 영어 AI</h3>
+          </div>
+          <span class="app-card-badge">v6.1.1</span>
+        </div>
+        <div class="app-card-body">
+          <p class="app-card-desc">음성 인식을 결합한 인터랙티브 영어 구문 및 말하기 학습 도구. 대화형 플로팅 마이크 도구를 이용해 발음을 훈련하고 회화 맥락을 익힐 수 있습니다.</p>
+          <div class="app-card-spec-box">
+            <div class="app-card-spec-title">음성 대화 기술</div>
+            <ul class="app-card-spec-list">
+              <li>실시간 발화 자동 감지 및 턴 마감 최적화</li>
+              <li>드래그 이동 및 화면 배치 맞춤 기능</li>
+              <li>학습 어휘 교정을 위한 보안 서버 동기화 채널</li>
+            </ul>
+          </div>
+        </div>
+        <div class="app-card-foot">
+          <a href="./yeongpul/yeong-pul.html" class="app-card-link-btn" target="_blank">앱 실행하기 →</a>
+          <span class="app-card-pwa-badge">PWA 연동</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 스무고개 강점 발견 -->
+    <div class="app-card-wrapper">
+      <div class="app-card app-survey">
+        <div class="app-card-head">
+          <div class="app-card-title-group">
+            <div class="app-card-icon-wrapper">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-survey)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+            </div>
+            <span class="app-card-subtitle">Identity Discovery</span>
+            <h3 class="app-card-title">스무고개 강점 탐색</h3>
+          </div>
+          <span class="app-card-badge">v6.1.1</span>
+        </div>
+        <div class="app-card-body">
+          <p class="app-card-desc">학생의 무의식적인 긍정 지표와 잠재된 타고난 재능을 발견하는 성향 탐색 프로그램. 낙인 없이 긍정 지표를 분석하여 보고서를 생성합니다.</p>
+          <div class="app-card-spec-box">
+            <div class="app-card-spec-title">탐색 프로그램 명세</div>
+            <ul class="app-card-spec-list">
+              <li>생각 서술형 주관식 데이터 기반 AI 분석</li>
+              <li>낙인 방지를 위한 긍정 지향 대체어 시스템</li>
+              <li>가치 분류 레이더 및 분석 보고서 제공</li>
+            </ul>
+          </div>
+        </div>
+        <div class="app-card-foot">
+          <span class="app-card-link-btn" style="opacity: 0.6; cursor: default;">오프라인 연동 중</span>
+          <span class="app-card-pwa-badge">오프라인 지점배포</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 연라이프 -->
+    <div class="app-card-wrapper">
+      <div class="app-card app-market">
+        <div class="app-card-head">
+          <div class="app-card-title-group">
+            <div class="app-card-icon-wrapper">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-market)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <span class="app-card-subtitle">Global Trends & Reflection</span>
+            <h3 class="app-card-title">연라이프 · y-life.kr</h3>
+          </div>
+          <span class="app-card-badge">v1.2.0</span>
+        </div>
+        <div class="app-card-body">
+          <p class="app-card-desc">우리의 깊은 교육적 고민과 성찰을 나누며, 미래를 준비하는 글로벌 트렌드 지식과 생각의 화두를 탐독할 수 있는 연라이프 미디어 플랫폼입니다.</p>
+          <div class="app-card-spec-box">
+            <div class="app-card-spec-title">지식 및 사색 플랫폼 명세</div>
+            <ul class="app-card-spec-list">
+              <li>시대적 흐름과 사색의 화두 제시</li>
+              <li>글로벌 트렌드 교육 지식 연계</li>
+              <li>공유형 지식 마당 및 나만의 마당 개설</li>
+            </ul>
+          </div>
+        </div>
+        <div class="app-card-foot">
+          <a href="https://y-life.kr" class="app-card-link-btn" target="_blank">플랫폼 이동하기 →</a>
+          <span class="app-card-pwa-badge">외부 미디어</span>
+        </div>
+      </div>
     </div>
   </div>
-  <button class="btn-apply" onclick="window.open('https://y-life.kr','_blank')">y-life.kr에서 시작하기</button>
+</section>
+
+<!-- ==================== 2. 통합 버전 대시보드 섹션 ==================== -->
+<section class="view-section" id="changelogSection">
+  <div class="changelog-wrapper">
+    <div class="changelog-head-group">
+      <h2 class="changelog-title">전 과목 통합 AI 버전 대시보드</h2>
+      <p class="changelog-desc">연아카데미 AI 생태계에 속한 학습 도구들의 상태 점검 및 최신 갱신 기록을 한눈에 관리합니다.</p>
+    </div>
+
+    <!-- Live Telemetry Health Monitor -->
+    <div class="telemetry-panel">
+      <div class="telemetry-card">
+        <div class="telemetry-label">자가진단 연결상태</div>
+        <div class="telemetry-value" id="diagApi">
+          <span style="width: 8px; height: 8px; background-color: #2ecc71; border-radius: 50%; display: inline-block;"></span>
+          <span>측정 중...</span>
+        </div>
+      </div>
+      <div class="telemetry-card">
+        <div class="telemetry-label">버전 인증검사</div>
+        <div class="telemetry-value" id="diagVersion">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span id="diagVerText">v6.1.1</span>
+        </div>
+      </div>
+      <div class="telemetry-card">
+        <div class="telemetry-label">브라우저 저장공간</div>
+        <div class="telemetry-value" id="diagStorage">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2ecc71" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4 3 9 3s9-1.34 9-3"/></svg>
+          <span id="diagStorageText">0.05% 사용</span>
+        </div>
+      </div>
+      <div class="telemetry-card">
+        <div class="telemetry-label">코어 체크섬 상태</div>
+        <div class="telemetry-value" style="color: #2ecc71;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>보안 인증완료</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="changelog-table-container">
+      <table class="changelog-table">
+        <thead>
+          <tr>
+            <th>애플리케이션 명칭</th>
+            <th>버전</th>
+            <th>최신 업데이트 핵심 요약</th>
+            <th>업데이트 일자</th>
+            <th>구동 상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>연아카데미 AI 포털 (yeon-ai.kr)</strong></td>
+            <td><span class="version-text">v6.1.1</span></td>
+            <td>통합 PWA 앱 추가 및 리뉴얼, 과목별 업데이트 대시보드 런칭, 실시간 자가진단 및 무인 백그라운드 자동 갱신 탑재.</td>
+            <td>2026.05.27</td>
+            <td><span class="status-badge live">정상가동</span></td>
+          </tr>
+          <tr>
+            <td><strong>연플래너 & 자기관리 (Self Manager)</strong></td>
+            <td><span class="version-text">v6.1.1</span></td>
+            <td>행동 우선순위 지표 배치 최적화, 학생 데이터의 고도화된 다중 암호화 보안 기술 적용, 오답 복습 스케줄 지표 반영.</td>
+            <td>2026.05.26</td>
+            <td><span class="status-badge live">정상가동</span></td>
+          </tr>
+          <tr>
+            <td><strong>수풀 수학 AI (Supul Math AI)</strong></td>
+            <td><span class="version-text">v6.1.1</span></td>
+            <td>수학적 분석 3단계 개념 맞춤 해법 제공 검수 완료, LaTeX 수식 렌더링 호환성 개선, 보안 데이터 통신망 가동.</td>
+            <td>2026.05.26</td>
+            <td><span class="status-badge live">정상가동</span></td>
+          </tr>
+          <tr>
+            <td><strong>눈치껏짐작해! 영어 AI (Yeongpul)</strong></td>
+            <td><span class="version-text">v6.1.1</span></td>
+            <td>실시간 음성 자동 턴 마감 훈련 기능 최적화, 대화형 마이크 드래그 배치 맞춤, 챕터 데이터 서버 자동 보정 채널 연동.</td>
+            <td>2026.05.26</td>
+            <td><span class="status-badge live">정상가동</span></td>
+          </tr>
+          <tr>
+            <td><strong>스무고개 강점 탐색 (Twenty Questions)</strong></td>
+            <td><span class="version-text">v6.1.1</span></td>
+            <td>서술형 항목 데이터에 대한 재능 분류 해석 메커니즘 수립, 성향 분석 데이터 보고서 발송 시스템 갱신.</td>
+            <td>2026.05.26</td>
+            <td><span class="status-badge live">정상가동</span></td>
+          </tr>
+          <tr>
+            <td><strong>과학 AI (Science App)</strong></td>
+            <td><span class="version-text">v6.0.0</span></td>
+            <td>물리/화학 실험 분석 데이터 및 가상 오답 노트 수집 데이터 설계 검수 진행 중.</td>
+            <td>-</td>
+            <td><span class="status-badge planned">준비중</span></td>
+          </tr>
+          <tr>
+            <td><strong>사회·역사 AI (History App)</strong></td>
+            <td><span class="version-text">v6.0.0</span></td>
+            <td>한국사 연계 랜드마크 분석 및 주요 문항 구성 모델 설계 기획.</td>
+            <td>-</td>
+            <td><span class="status-badge planned">준비중</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="roadmap-group">
+      <h3 class="roadmap-title">향후 개발 및 도입 로드맵</h3>
+      <div class="roadmap-timeline">
+        <div class="roadmap-item">
+          <div class="roadmap-item-head">
+            <span class="roadmap-subject">학습 관리자 대시보드 고도화</span>
+            <span class="roadmap-period">Phase 1</span>
+          </div>
+          <p class="roadmap-desc">연아카데미 분원별 학생 자동 분류 배치와 학생 기록 분석 의견 취합, 지점 피드백 시스템 통합을 수립합니다.</p>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-item-head">
+            <span class="roadmap-subject">과학 / 역사 앱 순차 런칭</span>
+            <span class="roadmap-period">Phase 2</span>
+          </div>
+          <p class="roadmap-desc">사진 촬영으로 등록하는 과학 요약 자료와 역사 인포그래픽 데이터 흐름을 노션 및 학원 공유 뱅크로 연계하는 통합 버전을 공개합니다.</p>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-item-head">
+            <span class="roadmap-subject">비대면 소통 채널 보안 프록시 수립</span>
+            <span class="roadmap-period">Phase 3</span>
+          </div>
+          <p class="roadmap-desc">자동 학습 도우미 챗봇의 백엔드 통신 및 데이터 마이그레이션 보안 프록시를 완전히 연결하여 학생 및 학부모 전용 대화를 지원합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 3. 3D 지구본 보기 섹션 ==================== -->
+<section class="view-section" id="globeSection">
+  <div class="globe-view-wrapper">
+    <div class="globe-canvas-container" id="globeContainer">
+      <canvas id="globeCanvas"></canvas>
+      <!-- 인터랙티브 툴팁 오버레이 -->
+      <div class="globe-overlay-card" id="globeTooltip">
+        <div class="gcard-title" id="gTooltipTitle">울산 연플래닝 <span class="gcard-badge" id="gTooltipBadge">본원</span></div>
+        <div class="gcard-desc" id="gTooltipDesc">자기주도학습 연아카데미 시청점</div>
+        <a href="#" class="gcard-link" id="gTooltipLink" target="_blank">방문하기 →</a>
+      </div>
+    </div>
+    <div class="globe-instruction">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4M12 16V8"/></svg>
+      지구본을 마우스로 드래그하여 돌려볼 수 있으며, 각 지점에 마우스를 올리면 연결을 확인합니다.
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 4. 디렉토리 목록 섹션 ==================== -->
+<section class="view-section" id="directorySection">
+  <div class="directory-toolbar">
+    <div class="search-wrapper">
+      <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input type="text" class="search-input" id="directorySearch" placeholder="도시명 또는 연아카데미 검색..." oninput="filterDirectory()">
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterCategory('all')">전체</button>
+      <button class="filter-btn" onclick="filterCategory('partner')">연아카데미</button>
+      <button class="filter-btn" onclick="filterCategory('commercial')">상점/가게</button>
+      <button class="filter-btn" onclick="filterCategory('blog')">블로그/포트폴리오</button>
+    </div>
+  </div>
+
+  <div class="directory-grid" id="directoryGrid">
+    <!-- 울산 연플래닝 (활성) -->
+    <div class="dir-card" data-category="partner" data-name="연플래닝 울산 시청점">
+      <div class="dir-card-head">
+        <div>
+          <div class="dir-card-region">울산 · Ulsan</div>
+          <h3 class="dir-card-title">연플래닝</h3>
+        </div>
+        <span class="dir-card-badge">연아카데미</span>
+      </div>
+      <div class="dir-card-body">
+        <p class="dir-card-desc">배움 철학을 깊이 담은 첫 번째 자기주도학습 연아카데미 시청점입니다. 의식적 몰입 및 망각곡선 훈련 적용.</p>
+      </div>
+      <div class="dir-card-foot">
+        <a href="./ulsan/yeon-planning/" class="dir-card-link">공식 사이트 열기 →</a>
+      </div>
+    </div>
+
+    <!-- 서울 (준비중) -->
+    <div class="dir-card pending" data-category="blog" data-name="서울 분원">
+      <div class="dir-card-head">
+        <div>
+          <div class="dir-card-region">서울 · Seoul</div>
+          <h3 class="dir-card-title">서울 분원</h3>
+        </div>
+        <span class="dir-card-badge">준비 중</span>
+      </div>
+      <div class="dir-card-body">
+        <p class="dir-card-desc">서울 지역의 첫 번째 연아카데미 소통 공간이 곧 개설됩니다. 등록 대기 상태입니다.</p>
+      </div>
+      <div class="dir-card-foot">
+        <span class="dir-card-link" style="color:var(--text-muted); cursor:default;">오픈 예정</span>
+      </div>
+    </div>
+
+    <!-- 부산 (준비중) -->
+    <div class="dir-card pending" data-category="commercial" data-name="부산 분원">
+      <div class="dir-card-head">
+        <div>
+          <div class="dir-card-region">부산 · Busan</div>
+          <h3 class="dir-card-title">부산 분원</h3>
+        </div>
+        <span class="dir-card-badge">준비 중</span>
+      </div>
+      <div class="dir-card-body">
+        <p class="dir-card-desc">부산 지역의 배움 인연을 이어줄 사이트가 제작 대기 중입니다. 첫 등록을 대기합니다.</p>
+      </div>
+      <div class="dir-card-foot">
+        <span class="dir-card-link" style="color:var(--text-muted); cursor:default;">오픈 예정</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 5. 마을 새 소식 피드 섹션 ==================== -->
+<section class="view-section" id="feedSection">
+  <div class="timeline-feed">
+    <!-- 연플래닝 공지 -->
+    <div class="feed-item partner">
+      <div class="feed-date">2026.05.27</div>
+      <div class="feed-card">
+        <div class="feed-source">🏫 울산 연플래닝 아카데미</div>
+        <h3 class="feed-title">연아카데미 통합 AI 포털 v6.1.1 런칭 안내</h3>
+        <p class="feed-desc">과목별 학습 도구들과 연플래너를 모바일과 태블릿 홈 화면에 앱으로 추가하고 갱신 사항을 한눈에 확인할 수 있는 공식 통합 홈페이지가 배포 완료되었습니다.</p>
+        <a href="./ulsan/yeon-planning/index.html" class="feed-link" target="_blank">안내글 바로가기 →</a>
+      </div>
+    </div>
+
+    <!-- 빌더 업데이트 소식 -->
+    <div class="feed-item">
+      <div class="feed-date">2026.05.18</div>
+      <div class="feed-card">
+        <div class="feed-source">⚙️ 연라이프 사이트 빌더</div>
+        <h3 class="feed-title">신규 디자인 템플릿 '묵화' & '풀잎' 출시</h3>
+        <p class="feed-desc">한지 배경과 어울리는 여백 중심의 동양미 넘치는 레이아웃 템플릿 2종이 사이트 빌더에 탑재되었습니다. 코딩 없이 나만의 마당을 열어보세요.</p>
+        <a href="https://y-life.kr" class="feed-link" target="_blank">사이트 빌더 열기 →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 등록 및 PWA 설치 안내 섹션 -->
+<div class="register-section" id="register">
+  <div class="register-container">
+    <h2>연아카데미 AI 학습 앱 홈화면 추가 가이드</h2>
+    <p>본 플랫폼에서 배포되는 학습 앱들은 복잡한 앱스토어 설치 과정 없이 모바일 및 PC 홈 화면에 단독형 웹앱(PWA) 형태로 추가하여 구동이 가능합니다.</p>
+    <div class="register-steps">
+      <div class="reg-step">
+        <div class="reg-step-num">1</div>
+        <div class="reg-step-text">원하는 과목 앱의<br>바로가기 링크 클릭</div>
+      </div>
+      <div class="reg-step">
+        <div class="reg-step-num">2</div>
+        <div class="reg-step-text">브라우저 메뉴에서<br>'홈 화면에 추가' 선택</div>
+      </div>
+      <div class="reg-step">
+        <div class="reg-step-num">3</div>
+        <div class="reg-step-text">바탕화면 아이콘을 눌러<br>선생님 계정 승인 후 실행</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Spotlight Search Modal -->
+<div id="searchConsoleModal" onclick="if(event.target===this)closeSearchConsole()">
+  <div class="search-console-box">
+    <div class="search-console-head">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" class="search-console-input" id="consoleQuery" placeholder="필요한 서비스명이나 기능을 입력하세요..." oninput="searchConsoleFilter()" onkeydown="handleConsoleKeys(event)">
+      <span class="search-console-hint-key">ESC</span>
+    </div>
+    <div class="search-console-results" id="consoleResults"></div>
+  </div>
 </div>
 
 <!-- 푸터 -->
 <footer>
   <div class="footer-nav">
     <a href="https://y-life.kr">y-life.kr 플랫폼</a>
-    <a href="./ulsan/">울산</a>
-    <a href="#register">사이트 등록</a>
+    <a href="#register">PWA 설치안내</a>
   </div>
-  <p>© 2026 yeon.ai.kr — <a href="https://y-life.kr">y-life.kr</a> 플랫폼의 연 마을</p>
+  <p>© 2026 yeon.ai.kr — <a href="https://y-life.kr">y-life.kr</a> 연라이프 생태계 AI 포털</p>
 </footer>
+
+<script>
+// 전역 설정
+const BUILD_VERSION = "6.1.1";
+window.YEON_BUILD_VERSION = BUILD_VERSION;
+
+// Web Audio API 효과음 엔진
+let audioCtx = null;
+let soundEnabled = false;
+
+function initAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+}
+
+function playSynthSound(freq, duration, type = 'sine') {
+  if (!soundEnabled) return;
+  try {
+    initAudio();
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch(e) {}
+}
+
+function toggleSynthAudio() {
+  soundEnabled = !soundEnabled;
+  const btn = document.getElementById('audioToggleBtn');
+  if (soundEnabled) {
+    btn.classList.add('active');
+    btn.setAttribute('title', '효과음 켜짐');
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>`;
+    playSynthSound(600, 0.15);
+  } else {
+    btn.classList.remove('active');
+    btn.setAttribute('title', '효과음 꺼짐');
+    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>\n</svg>`;
+  }
+}
+
+// 토스트 메시지 함수
+function showToast(msg, duration = 3000) {
+  let toast = document.getElementById('pwaToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'pwaToast';
+    document.body.appendChild(toast);
+  }
+  toast.innerText = msg;
+  toast.classList.add('show');
+  playSynthSound(440, 0.25);
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, duration);
+}
+
+// ===== 뷰 전환 토글 함수 =====
+function switchView(viewId) {
+  playSynthSound(520, 0.08);
+  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+
+  const tabIndexMap = { apps: 1, changelog: 2, globe: 3, directory: 4, feed: 5 };
+  const idx = tabIndexMap[viewId] || 1;
+  
+  document.querySelector(`.tab-btn:nth-child(${idx})`).classList.add('active');
+  document.getElementById(`${viewId}Section`).classList.add('active');
+
+  if (viewId === 'globe') {
+    resizeCanvas();
+  }
+}
+
+// ===== 디렉토리 검색 및 필터 함수 =====
+let currentCategory = 'all';
+function filterCategory(cat) {
+  playSynthSound(480, 0.06);
+  currentCategory = cat;
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  filterDirectory();
+}
+
+function filterDirectory() {
+  const query = document.getElementById('directorySearch').value.toLowerCase();
+  const cards = document.querySelectorAll('.dir-card');
+
+  cards.forEach(card => {
+    const name = card.getAttribute('data-name').toLowerCase();
+    const cat = card.getAttribute('data-category');
+    
+    const matchesSearch = name.includes(query);
+    const matchesCat = (currentCategory === 'all') || (cat === currentCategory);
+
+    if (matchesSearch && matchesCat) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// ===== Spotlight Search Console 기능 =====
+const searchDb = [
+  { name: "📱 수학AI (수풀)", desc: "수학 개념 및 3단계 해법 제공", action: () => window.open('./supul/su-pul.html', '_blank'), cat: "앱 실행" },
+  { name: "📱 영어AI (영풀)", desc: "음성 대화 회화 및 발음 훈련", action: () => window.open('./yeongpul/yeong-pul.html', '_blank'), cat: "앱 실행" },
+  { name: "📱 연플래너 & 자기관리", desc: "의식적 몰입 및 스케줄러 관리", action: () => window.open('./ulsan/yeon-planning/', '_blank'), cat: "앱 실행" },
+  { name: "🌐 연라이프 (y-life.kr)", desc: "우리의 고민과 성찰, 세계 트렌드를 나누는 지식 플랫폼", action: () => window.open('https://y-life.kr', '_blank'), cat: "외부 채널" },
+  { name: "📋 울산 시청점 연아카데미", desc: "자기주도학습 연아카데미 시청 본원", action: () => { switchView('directory'); document.getElementById('directorySearch').value = '시청점'; filterDirectory(); }, cat: "바로가기" },
+  { name: "📊 시스템 최신 갱신 기록", desc: "전체 통합 배포 로그 및 버전 현황", action: () => switchView('changelog'), cat: "바로가기" },
+  { name: "🌐 연 마을 3D 지도", desc: "전국 지점 분포 및 데이터 연계 현황", action: () => switchView('globe'), cat: "바로가기" },
+  { name: "📲 PWA 웹앱 설치 안내", desc: "바탕화면 홈 추가 방법 가이드", action: () => document.getElementById('register').scrollIntoView({behavior:'smooth'}), cat: "안내" }
+];
+
+let selectedConsoleIdx = 0;
+
+function openSearchConsole() {
+  playSynthSound(700, 0.12);
+  const modal = document.getElementById('searchConsoleModal');
+  modal.classList.add('open');
+  document.getElementById('consoleQuery').value = '';
+  document.getElementById('consoleQuery').focus();
+  searchConsoleFilter();
+}
+
+function closeSearchConsole() {
+  document.getElementById('searchConsoleModal').classList.remove('open');
+}
+
+function searchConsoleFilter() {
+  const query = document.getElementById('consoleQuery').value.toLowerCase().trim();
+  const container = document.getElementById('consoleResults');
+  container.innerHTML = '';
+  
+  const filtered = searchDb.filter(item => 
+    item.name.toLowerCase().includes(query) || 
+    item.desc.toLowerCase().includes(query)
+  );
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="padding:20px; text-align:center; color:var(--text-muted); font-size:13px;">일치하는 검색 결과가 없습니다.</div>`;
+    return;
+  }
+
+  filtered.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = `search-console-item ${idx === selectedConsoleIdx ? 'selected' : ''}`;
+    div.innerHTML = `
+      <div class="search-item-info">
+        <span class="search-item-name">${item.name}</span>
+        <span class="search-item-desc">${item.desc}</span>
+      </div>
+      <span class="search-item-action-pill">${item.cat}</span>
+    `;
+    div.onclick = () => {
+      item.action();
+      closeSearchConsole();
+    };
+    container.appendChild(div);
+  });
+}
+
+function handleConsoleKeys(e) {
+  const items = document.querySelectorAll('.search-console-item');
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    if (items.length === 0) return;
+    selectedConsoleIdx = (selectedConsoleIdx + 1) % items.length;
+    searchConsoleFilter();
+    playSynthSound(400, 0.05);
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (items.length === 0) return;
+    selectedConsoleIdx = (selectedConsoleIdx - 1 + items.length) % items.length;
+    searchConsoleFilter();
+    playSynthSound(400, 0.05);
+  } else if (e.key === 'Enter') {
+    e.preventDefault();
+    if (items.length > 0) {
+      items[selectedConsoleIdx].click();
+    }
+  } else if (e.key === 'Escape') {
+    closeSearchConsole();
+  }
+}
+
+// 단축키 바인딩 (Ctrl + K)
+window.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    e.preventDefault();
+    openSearchConsole();
+  }
+});
+
+// Card 3D tilt effect
+document.addEventListener('mousemove', (e) => {
+  const cards = document.querySelectorAll('.app-card');
+  cards.forEach(card => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    if (x > 0 && x < rect.width && y > 0 && y < rect.height) {
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      const tiltX = (yc - y) / 10;
+      const tiltY = (x - xc) / 10;
+      
+      card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px)`;
+      card.style.boxShadow = `0 15px 35px var(--app-glow)`;
+    } else {
+      card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0px)';
+      card.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.15)';
+    }
+  });
+});
+
+
+// ===== 3D CANVAS 지구본 엔진 (어두운 테마 최적화) =====
+const canvas = document.getElementById('globeCanvas');
+const ctx = canvas.getContext('2d');
+const container = document.getElementById('globeContainer');
+const tooltip = document.getElementById('globeTooltip');
+
+// 위경도 데이터 매핑 (Ulsan 본원을 중심으로 전역망 설계)
+const nodes = [
+  { name: "울산 연플래닝", lat: 35.5389, lon: 129.3114, type: "partner", desc: "자기주도학습 연아카데미 시청 본원 (Active)", url: "./ulsan/yeon-planning/" },
+  { name: "서울 분원", lat: 37.5665, lon: 126.9780, type: "pending", desc: "서울지역 AI 학습 네트워크 구축 대기" },
+  { name: "부산 분원", lat: 35.1796, lon: 129.0756, type: "pending", desc: "부산지역 AI 학습 네트워크 구축 대기" },
+  { name: "도쿄 지점", lat: 35.6762, lon: 139.6503, type: "pending", desc: "도쿄 글로벌 배움 교류 지점 준비 중" },
+  { name: "뉴욕 지점", lat: 40.7128, lon: -74.0060, type: "pending", desc: "뉴욕 글로벌 배움 교류 지점 준비 중" },
+  { name: "런던 지점", lat: 51.5074, lon: -0.1278, type: "pending", desc: "런던 글로벌 배움 교류 지점 준비 중" },
+  { name: "파리 지점", lat: 48.8566, lon: 2.3522, type: "pending", desc: "파리 글로벌 배움 교류 지점 준비 중" }
+];
+
+let width = container.clientWidth;
+let height = container.clientHeight;
+let R = Math.min(width, height) * 0.38; // 지구 반경
+let cx = width / 2;
+let cy = height / 2;
+
+// 각도 변수 (라디안 단위)
+let rotY = -2.1; 
+let rotX = 0.4;  
+let isDragging = false;
+let startX, startY;
+let velocityY = 0.002; 
+let lastActivityTime = Date.now();
+
+function resizeCanvas() {
+  width = container.clientWidth;
+  height = container.clientHeight;
+  canvas.width = width;
+  canvas.height = height;
+  R = Math.min(width, height) * 0.38;
+  cx = width / 2;
+  cy = height / 2;
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+// 드래그 제어
+container.addEventListener('mousedown', (e) => {
+  isDragging = true;
+  startX = e.clientX;
+  startY = e.clientY;
+  velocityY = 0;
+  lastActivityTime = Date.now();
+  tooltip.style.display = 'none';
+});
+
+window.addEventListener('mousemove', (e) => {
+  if (!isDragging) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  rotY += dx * 0.005;
+  rotX = Math.max(-Math.PI/3, Math.min(Math.PI/3, rotX - dy * 0.005));
+  startX = e.clientX;
+  startY = e.clientY;
+  lastActivityTime = Date.now();
+});
+
+window.addEventListener('mouseup', () => {
+  isDragging = false;
+});
+
+// 터치 대응
+container.addEventListener('touchstart', (e) => {
+  isDragging = true;
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+  velocityY = 0;
+  lastActivityTime = Date.now();
+  tooltip.style.display = 'none';
+});
+
+window.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  const dx = e.touches[0].clientX - startX;
+  const dy = e.touches[0].clientY - startY;
+  rotY += dx * 0.005;
+  rotX = Math.max(-Math.PI/3, Math.min(Math.PI/3, rotX - dy * 0.005));
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+  lastActivityTime = Date.now();
+});
+
+container.addEventListener('touchend', () => {
+  isDragging = false;
+});
+
+let pulseTime = 0;
+let packetTime = 0;
+
+function draw() {
+  ctx.clearRect(0, 0, width, height);
+  pulseTime += 0.05;
+  packetTime += 0.006;
+
+  // 유휴 시간 3초 지나면 느리게 자동 회전
+  if (!isDragging && Date.now() - lastActivityTime > 3000) {
+    rotY += 0.0012;
+  }
+
+  // 바다 배경 어두운 구체 그리기 (Atmospheric outer glow)
+  ctx.beginPath();
+  ctx.arc(cx, cy, R, 0, 2 * Math.PI);
+  const sphereGlow = ctx.createRadialGradient(cx, cy, R * 0.7, cx, cy, R);
+  sphereGlow.addColorStop(0, '#0f1118');
+  sphereGlow.addColorStop(0.8, '#131722');
+  sphereGlow.addColorStop(1, '#1b2030');
+  ctx.fillStyle = sphereGlow;
+  ctx.fill();
+
+  // 구체 외곽 대기광선
+  ctx.beginPath();
+  ctx.arc(cx, cy, R + 3, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(232, 162, 0, 0.15)';
+  ctx.lineWidth = 2.5;
+  ctx.stroke();
+
+  // 위도선 그리기
+  for (let lat = -60; lat <= 60; lat += 30) {
+    ctx.beginPath();
+    let first = true;
+    for (let lon = -180; lon <= 180; lon += 5) {
+      let radLat = lat * Math.PI / 180;
+      let radLon = lon * Math.PI / 180;
+      
+      let x0 = R * Math.cos(radLat) * Math.sin(radLon);
+      let y0 = R * Math.sin(radLat);
+      let z0 = R * Math.cos(radLat) * Math.cos(radLon);
+
+      let x1 = x0 * Math.cos(rotY) - z0 * Math.sin(rotY);
+      let z1 = x0 * Math.sin(rotY) + z0 * Math.cos(rotY);
+      let y2 = y0 * Math.cos(rotX) - z1 * Math.sin(rotX);
+      let z2 = y0 * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+      if (z2 > 0) {
+        let px = cx + x1;
+        let py = cy - y2;
+        if (first) { ctx.moveTo(px, py); first = false; }
+        else { ctx.lineTo(px, py); }
+      } else {
+        first = true;
+      }
+    }
+    ctx.strokeStyle = 'rgba(232, 162, 0, 0.08)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 경도선 그리기
+  for (let lon = -180; lon < 180; lon += 30) {
+    ctx.beginPath();
+    let first = true;
+    for (let lat = -90; lat <= 90; lat += 5) {
+      let radLat = lat * Math.PI / 180;
+      let radLon = lon * Math.PI / 180;
+
+      let x0 = R * Math.cos(radLat) * Math.sin(radLon);
+      let y0 = R * Math.sin(radLat);
+      let z0 = R * Math.cos(radLat) * Math.cos(radLon);
+
+      let x1 = x0 * Math.cos(rotY) - z0 * Math.sin(rotY);
+      let z1 = x0 * Math.sin(rotY) + z0 * Math.cos(rotY);
+      let y2 = y0 * Math.cos(rotX) - z1 * Math.sin(rotX);
+      let z2 = y0 * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+      if (z2 > 0) {
+        let px = cx + x1;
+        let py = cy - y2;
+        if (first) { ctx.moveTo(px, py); first = false; }
+        else { ctx.lineTo(px, py); }
+      } else {
+        first = true;
+      }
+    }
+    ctx.strokeStyle = 'rgba(232, 162, 0, 0.08)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  // 노드 좌표 계산
+  nodes.forEach(node => {
+    let radLat = node.lat * Math.PI / 180;
+    let radLon = node.lon * Math.PI / 180;
+
+    let x0 = R * Math.cos(radLat) * Math.sin(radLon);
+    let y0 = R * Math.sin(radLat);
+    let z0 = R * Math.cos(radLat) * Math.cos(radLon);
+
+    let x1 = x0 * Math.cos(rotY) - z0 * Math.sin(rotY);
+    let z1 = x0 * Math.sin(rotY) + z0 * Math.cos(rotY);
+    let y2 = y0 * Math.cos(rotX) - z1 * Math.sin(rotX);
+    let z2 = y0 * Math.sin(rotX) + z1 * Math.cos(rotX);
+
+    if (z2 > 0) {
+      node.px = cx + x1;
+      node.py = cy - y2;
+    } else {
+      node.px = -9999;
+      node.py = -9999;
+    }
+  });
+
+  // Ulsan (Index 0) 본원에서 다른 모든 지점으로 3D 아크 그리기
+  const ulsan = nodes[0];
+  if (ulsan.px !== -9999) {
+    for (let i = 1; i < nodes.length; i++) {
+      const dest = nodes[i];
+      
+      // 위경도 보간으로 3D 아크 점들 구하기
+      ctx.beginPath();
+      let first = true;
+      
+      const steps = 30;
+      for (let t = 0; t <= steps; t++) {
+        const ratio = t / steps;
+        const lat = ulsan.lat + ratio * (dest.lat - ulsan.lat);
+        const lon = ulsan.lon + ratio * (dest.lon - ulsan.lon);
+        
+        const radLat = lat * Math.PI / 180;
+        const radLon = lon * Math.PI / 180;
+        
+        // 지면에서 솟아오르는 아치형 돔 (Height factor)
+        const arcHeight = Math.sin(Math.PI * ratio) * (R * 0.22);
+        const currentR = R + arcHeight;
+        
+        const x_0 = currentR * Math.cos(radLat) * Math.sin(radLon);
+        const y_0 = currentR * Math.sin(radLat);
+        const z_0 = currentR * Math.cos(radLat) * Math.cos(radLon);
+        
+        const x_1 = x_0 * Math.cos(rotY) - z_0 * Math.sin(rotY);
+        const z_1 = x_0 * Math.sin(rotY) + z_0 * Math.cos(rotY);
+        const y_2 = y_0 * Math.cos(rotX) - z_1 * Math.sin(rotX);
+        const z_2 = y_0 * Math.sin(rotX) + z_1 * Math.cos(rotX);
+        
+        if (z_2 > 0) {
+          const px = cx + x_1;
+          const py = cy - y_2;
+          if (first) { ctx.moveTo(px, py); first = false; }
+          else { ctx.lineTo(px, py); }
+        } else {
+          first = true;
+        }
+      }
+      ctx.strokeStyle = 'rgba(232, 162, 0, 0.15)';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      // 플라잉 패킷 그리기
+      const ratioPacket = (packetTime + (i * 0.15)) % 1.0;
+      const lat = ulsan.lat + ratioPacket * (dest.lat - ulsan.lat);
+      const lon = ulsan.lon + ratioPacket * (dest.lon - ulsan.lon);
+      
+      const radLat = lat * Math.PI / 180;
+      const radLon = lon * Math.PI / 180;
+      const arcHeight = Math.sin(Math.PI * ratioPacket) * (R * 0.22);
+      const currentR = R + arcHeight;
+      
+      const x_0 = currentR * Math.cos(radLat) * Math.sin(radLon);
+      const y_0 = currentR * Math.sin(radLat);
+      const z_0 = currentR * Math.cos(radLat) * Math.cos(radLon);
+      
+      const x_1 = x_0 * Math.cos(rotY) - z_0 * Math.sin(rotY);
+      const z_1 = x_0 * Math.sin(rotY) + z_0 * Math.cos(rotY);
+      const y_2 = y_0 * Math.cos(rotX) - z_1 * Math.sin(rotX);
+      const z_2 = y_0 * Math.sin(rotX) + z_1 * Math.cos(rotX);
+      
+      if (z_2 > 0) {
+        const px = cx + x_1;
+        const py = cy - y_2;
+        ctx.beginPath();
+        ctx.arc(px, py, 3.5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ffb81c';
+        ctx.shadowColor = '#E8A200';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+        ctx.shadowBlur = 0; // shadow 초기화
+      }
+    }
+  }
+
+  // 지점 노드 그리기
+  nodes.forEach(node => {
+    if (node.px !== -9999) {
+      if (node.type === 'partner') {
+        let scale = Math.sin(pulseTime) * 6 + 12;
+        ctx.beginPath();
+        ctx.arc(node.px, node.py, scale, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(232, 162, 0, 0.08)';
+        ctx.fill();
+
+        let scale2 = Math.sin(pulseTime + Math.PI/2) * 3 + 6;
+        ctx.beginPath();
+        ctx.arc(node.px, node.py, scale2, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(232, 162, 0, 0.15)';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(node.px, node.py, 4.5, 0, 2 * Math.PI);
+        ctx.fillStyle = '#E8A200';
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(node.px, node.py, 3.5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'rgba(243, 244, 246, 0.4)';
+        ctx.fill();
+      }
+    }
+  });
+
+  // 호버 툴팁 감지
+  let activeNode = null;
+  let minDistance = 14; 
+  if (mouseX && mouseY && !isDragging) {
+    nodes.forEach(node => {
+      if (node.px !== -9999) {
+        let dist = Math.hypot(node.px - mouseX, node.py - mouseY);
+        if (dist < minDistance) {
+          activeNode = node;
+        }
+      }
+    });
+  }
+
+  if (activeNode) {
+    showTooltip(activeNode);
+  }
+
+  requestAnimationFrame(draw);
+}
+
+// 툴팁 위치 제어
+let mouseX = null, mouseY = null;
+container.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouseX = e.clientX - rect.left;
+  mouseX = mouseX * (canvas.width / rect.width); // 스케일 조정
+  mouseY = e.clientY - rect.top;
+  mouseY = mouseY * (canvas.height / rect.height);
+});
+
+container.addEventListener('mouseleave', () => {
+  mouseX = null;
+  mouseY = null;
+  tooltip.style.display = 'none';
+});
+
+function showTooltip(node) {
+  tooltip.style.display = 'block';
+  // 화면 좌표계로 다시 역변환하여 배치
+  const rect = canvas.getBoundingClientRect();
+  const renderX = (node.px * (rect.width / canvas.width));
+  const renderY = (node.py * (rect.height / canvas.height));
+  
+  tooltip.style.left = renderX + 'px';
+  tooltip.style.top = renderY + 'px';
+
+  document.getElementById('gTooltipTitle').innerHTML = node.name + (node.type === 'partner' ? ' <span class="gcard-badge">본원</span>' : ' <span class="gcard-badge" style="background:#2b2e3a; color:#9ca3af;">구축대기</span>');
+  document.getElementById('gTooltipDesc').innerText = node.desc;
+  
+  const link = document.getElementById('gTooltipLink');
+  if (node.url) {
+    link.style.display = 'inline-flex';
+    link.href = node.url;
+  } else {
+    link.style.display = 'none';
+  }
+}
+
+// 실행
+requestAnimationFrame(draw);
+
+
+// ===== 자가진단 및 자동 업데이트 규격 구현 (v6.1.1 표준 §7 및 §18) =====
+const VERSION_CHECK_INTERVAL = 5 * 60 * 1000;
+let currentVersion = BUILD_VERSION;
+
+// 실시간 자가 진단 및 텔레메트리 업데이트 (표준 §7)
+async function runSelfDiagnostics() {
+  const timeStart = Date.now();
+  let apiEl = document.getElementById('diagApi');
+  let verEl = document.getElementById('diagVersion');
+  let verTextEl = document.getElementById('diagVerText');
+  let storageEl = document.getElementById('diagStorage');
+  let storageTextEl = document.getElementById('diagStorageText');
+  
+  // 1. API 연결 상태 체크 (version.json 호출 지연)
+  try {
+    const res = await fetch('/version.json?t=' + Date.now(), { cache: 'no-cache' });
+    const latency = Date.now() - timeStart;
+    
+    if (res.ok) {
+      apiEl.style.color = '#2ecc71';
+      apiEl.innerHTML = `<span style="width: 8px; height: 8px; background-color: #2ecc71; border-radius: 50%; display: inline-block; box-shadow: 0 0 6px #2ecc71;"></span> 연결 완료 (${latency}ms)`;
+    } else {
+      throw 0;
+    }
+  } catch(e) {
+    apiEl.style.color = 'var(--cat-caution)';
+    apiEl.innerHTML = `⚠️ 서버 무응답 (30초 한계)`;
+  }
+  
+  // 2. 버전 인증 검사
+  verTextEl.innerText = BUILD_VERSION;
+  
+  // 3. 브라우저 저장공간 진단 (LocalStorage 한계 용량 80% 진단)
+  let totalBytes = 0;
+  for (let key in localStorage) {
+    if (localStorage.hasOwnProperty(key)) {
+      totalBytes += (localStorage[key].length + key.length) * 2; // UTF-16
+    }
+  }
+  const maxStorage = 5 * 1024 * 1024; // 5MB limit
+  const percentUsed = (totalBytes / maxStorage) * 100;
+  
+  if (percentUsed > 80) {
+    storageEl.style.color = 'var(--cat-caution)';
+    storageTextEl.innerText = `${percentUsed.toFixed(2)}% 사용 (정량 한계초과)`;
+  } else {
+    storageEl.style.color = '#2ecc71';
+    storageTextEl.innerText = `${percentUsed.toFixed(2)}% 사용 (안정)`;
+  }
+}
+
+// 자동 버전 대조 및 백그라운드 리로드 (표준 §18)
+async function checkVersion() {
+  try {
+    const r = await fetch('/version.json?t=' + Date.now(), { cache: 'no-cache' });
+    const j = await r.json();
+    if (j.version !== currentVersion) {
+      if (j.force) { 
+        showToast('보안 업데이트를 적용합니다...'); 
+        setTimeout(() => location.reload(), 1000); 
+      } else { 
+        showToast('새로운 학습 환경이 감지되었습니다. ✨'); 
+        scheduleSoftReload(); 
+      }
+    }
+  } catch(_) {}
+}
+
+function scheduleSoftReload() {
+  let lastActivity = Date.now();
+  ['click','keydown','touchstart','scroll'].forEach(ev =>
+    window.addEventListener(ev, () => lastActivity = Date.now())
+  );
+  
+  const tick = setInterval(() => {
+    const idle = Date.now() - lastActivity > 30000; // 30초 유휴
+    const isInput = ['INPUT','TEXTAREA'].includes(document.activeElement?.tagName);
+    if (idle && !isInput && !window.YEON_CHAT_PENDING) {
+      clearInterval(tick);
+      showToast('학습 시스템 갱신 완료 ✨', 3000);
+      setTimeout(() => location.reload(), 800);
+    }
+  }, 5000);
+}
+
+// 첫 로드 구동
+window.addEventListener('load', () => {
+  runSelfDiagnostics();
+  checkVersion();
+  setInterval(checkVersion, VERSION_CHECK_INTERVAL);
+});
+</script>
 
 </body>
 </html>

@@ -881,7 +881,10 @@ input::placeholder, textarea::placeholder {
 <!-- 상단 바 -->
 <div class="app-bar">
  <div style="cursor:pointer;" onclick="switchTab('analysis')">
- <h1 id="appTitle">수풀AI · 수학 완전학습</h1>
+   <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:2px;">
+     <h1 id="appTitle">수풀AI · 수학 완전학습</h1>
+     <span style="font-family: monospace; font-size:11px; font-weight:700; background:rgba(82, 110, 138, 0.12); color:var(--color-primary); padding:2px 6px; border-radius:4px; display:inline-block; line-height:1;">v6.1.1</span>
+   </div>
 <script>
 (function(){
  try {
@@ -3494,14 +3497,7 @@ function speakWord(word) {
 }
 
 function speakSentence(text) {
- window.speechSynthesis.cancel();
- const u = new SpeechSynthesisUtterance(text);
- u.lang = _getVoiceLang();
- u.rate = _getTtsRate(0.8);
- const v = _getVoice(); if (v) u.voice = v;
- const btn = event && event.currentTarget;
- if (btn) { btn.classList.add('playing'); u.onend = () => btn.classList.remove('playing'); }
- window.speechSynthesis.speak(u);
+ // TTS 湲곕뒫??鍮꾪솢?깊솕?덉뒿?덈떎.
 }
 
 // ===== 단어 학습량 자동 추적 시스템 =====
@@ -6818,14 +6814,7 @@ function loadTextSample(){
 }
 
 function speakAllSentences(){
- if (!tlCurrent) return;
- window.speechSynthesis.cancel();
- tlCurrent.sentences.forEach((sd,i)=>{
- const u = new SpeechSynthesisUtterance(sd.text);
- u.lang=_getVoiceLang(); u.rate=_getTtsRate(0.85);
- const _v=_getVoice(); if(_v) u.voice=_v;
- window.speechSynthesis.speak(u);
- });
+ // TTS 湲곕뒫??鍮꾪솢?깊솕?덉뒿?덈떎.
 }
 
 function saveTextToReview(){
@@ -8366,7 +8355,7 @@ function renderReviewCard() {
  document.getElementById('fcBack').textContent = card.ko;
  document.getElementById('fcGrammar').textContent = card.grammar || '';
  }
- } else if (reviewState.mode === 'listen') {
+ } else if (reviewState.mode === 'recall') {
  document.getElementById('reviewListen').style.display = 'block';
  document.getElementById('reviewListenAnswer').style.display = 'none';
  document.getElementById('listenShowBtn').style.display = '';
