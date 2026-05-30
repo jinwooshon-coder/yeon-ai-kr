@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "updated": "2026-05-08",
+  "today": {
+    "low": "low/20260508-ai-chingu.html",
+    "high": "high/20260508-digital-simin.html"
+  },
+  "archive": {
+    "low": [
+      { "id": "20260508-ai-chingu", "date": "2026-05-08", "title": "AI는 친구가 될 수 있을까?", "file": "low/20260508-ai-chingu.html" },
+      { "id": "20260515-chingu-datum", "date": "2026-05-15", "title": "친구와 다투었을 때, 어떻게 할까?", "file": "low/20260515-chingu-datum.html" }
+    ],
+    "high": [
+      { "id": "20260508-digital-simin", "date": "2026-05-08", "title": "디지털 시민이란 무엇인가", "file": "high/20260508-digital-simin.html" },
+      { "id": "20260515-fairness", "date": "2026-05-15", "title": "공정함이란 무엇인가", "file": "high/20260515-fairness.html" }
+    ]
+  }
+}

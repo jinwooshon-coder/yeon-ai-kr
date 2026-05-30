@@ -1,0 +1,3477 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>책풀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+:root {
+  /* Core brand */
+  --yp-ink:    #1f2a2a;
+  --yp-deep:   #2f5d62;
+  --yp-pine:   #427a71;
+  --yp-accent: #c38d56;
+
+  /* Surfaces */
+  --yp-sage:  #dfe8de;
+  --yp-mist:  #f4f1eb;
+  --yp-sand:  #e7d9bf;
+  --yp-peach: #f3e7dd;
+  --yp-line:  #d7d1c5;
+  --yp-card:  #fffdf8;
+  --yp-white: #ffffff;
+
+  /* Text */
+  --yp-text-primary:   var(--yp-ink);
+  --yp-text-secondary: #536060;
+  --yp-text-muted:     #6a7676;
+  --yp-text-soft:      #7b8686;
+  --yp-text-on-dark:   var(--yp-white);
+
+  /* Background */
+  --yp-bg-page:
+    radial-gradient(circle at top left, rgba(195, 141, 86, 0.10), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(66, 122, 113, 0.14), transparent 20%),
+    linear-gradient(180deg, #f8f5ef 0%, #f4f0e9 100%);
+
+  --yp-border-soft: 1px solid rgba(66, 122, 113, 0.10);
+  --yp-border-card: 1px solid rgba(31, 42, 42, 0.06);
+  --yp-shadow-soft: 0 18px 40px rgba(37, 49, 49, 0.08);
+  --yp-shadow-card: 0 10px 24px rgba(37, 49, 49, 0.06);
+
+  --yp-radius-hero: 36px;
+  --yp-radius-xl:   32px;
+  --yp-radius-lg:   24px;
+  --yp-radius-md:   20px;
+  --yp-radius-sm:   16px;
+  --yp-radius-pill: 999px;
+
+  --yp-space-2xs: 6px;
+  --yp-space-xs:  10px;
+  --yp-space-sm:  14px;
+  --yp-space-md:  18px;
+  --yp-space-lg:  24px;
+  --yp-space-xl:  32px;
+  --yp-space-2xl: 40px;
+
+  --yp-font-title: "Noto Serif KR", serif;
+  --yp-font-body:  "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: var(--yp-font-body);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--yp-text-primary);
+  background: var(--yp-bg-page);
+  background-attachment: fixed;
+}
+
+/* ---------- App Shell ---------- */
+.app {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+@media (max-width: 768px) {
+  .app { grid-template-columns: 1fr; }
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  background: rgba(255, 255, 255, 0.6);
+  border-right: var(--yp-border-soft);
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -260px;
+    top: 0;
+    z-index: 200;
+    width: 240px;
+    transition: left 0.25s ease;
+    background: var(--yp-mist);
+  }
+  .sidebar.open { left: 0; }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 24px;
+  border-bottom: 1px dashed rgba(66, 122, 113, 0.18);
+  margin-bottom: 16px;
+}
+.brand-mark {
+  width: 32px; height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--yp-deep), var(--yp-pine));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--yp-white);
+  font-family: var(--yp-font-title);
+  font-weight: 700;
+  font-size: 16px;
+}
+.brand-name {
+  font-family: var(--yp-font-title);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: var(--yp-ink);
+}
+.brand-sub {
+  font-size: 11px;
+  color: var(--yp-text-soft);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+
+.nav { list-style: none; padding: 0; margin: 0; }
+.nav li { margin-bottom: 4px; }
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  color: var(--yp-text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+.nav a:hover {
+  background: rgba(66, 122, 113, 0.08);
+  color: var(--yp-deep);
+}
+.nav a.active {
+  background: var(--yp-deep);
+  color: var(--yp-white);
+  font-weight: 600;
+}
+.nav a.active svg { color: var(--yp-white); }
+.nav svg {
+  width: 18px; height: 18px;
+  flex-shrink: 0;
+  color: var(--yp-text-muted);
+}
+.nav-section {
+  font-size: 11px;
+  color: var(--yp-text-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px 12px 6px;
+  font-weight: 600;
+}
+
+.sidebar-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(66, 122, 113, 0.18);
+  font-size: 12px;
+  color: var(--yp-text-soft);
+}
+.sidebar-footer .branch-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--yp-radius-pill);
+  background: var(--yp-sand);
+  color: var(--yp-ink);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ---------- Main ---------- */
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+  background: rgba(255, 253, 248, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: var(--yp-border-soft);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.appbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--yp-line);
+  border-radius: 10px;
+  width: 36px; height: 36px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+}
+@media (max-width: 768px) {
+  .menu-toggle { display: inline-flex; }
+}
+.appbar-title {
+  font-family: var(--yp-font-title);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--yp-ink);
+}
+.appbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.icon-btn {
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: transparent;
+  border: 1px solid var(--yp-line);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yp-text-secondary);
+  transition: all 0.15s ease;
+}
+.icon-btn:hover {
+  background: rgba(66, 122, 113, 0.06);
+  color: var(--yp-deep);
+}
+.icon-btn.refreshing svg { animation: spin 0.6s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px 6px 6px;
+  border-radius: var(--yp-radius-pill);
+  background: var(--yp-card);
+  border: var(--yp-border-card);
+  font-size: 13px;
+  color: var(--yp-text-secondary);
+}
+.user-chip .avatar {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--yp-pine);
+  color: var(--yp-white);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.content {
+  padding: 28px 24px 80px;
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+}
+@media (max-width: 768px) {
+  .content { padding: 20px 16px 100px; }
+}
+
+.screen { display: none; }
+.screen.active { display: block; animation: fade 0.18s ease; }
+@keyframes fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Common Components ---------- */
+.page-head {
+  margin-bottom: 24px;
+}
+.page-eyebrow {
+  font-size: 12px;
+  color: var(--yp-text-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.page-title {
+  font-family: var(--yp-font-title);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--yp-ink);
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+.page-desc {
+  color: var(--yp-text-secondary);
+  font-size: 14px;
+  margin: 0;
+}
+
+.card {
+  background: var(--yp-card);
+  border: var(--yp-border-card);
+  border-radius: var(--yp-radius-lg);
+  padding: 24px;
+  box-shadow: var(--yp-shadow-card);
+}
+.card-soft {
+  background: rgba(255, 255, 255, 0.6);
+  border: var(--yp-border-soft);
+  border-radius: var(--yp-radius-lg);
+  padding: 22px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  border-radius: 12px;
+  padding: 11px 18px;
+  font-family: var(--yp-font-body);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-primary { background: var(--yp-deep); color: var(--yp-white); }
+.btn-primary:hover { background: var(--yp-pine); }
+.btn-warm { background: var(--yp-accent); color: var(--yp-white); }
+.btn-warm:hover { filter: brightness(0.94); }
+.btn-ghost {
+  background: transparent;
+  color: var(--yp-deep);
+  border: 1px solid rgba(66, 122, 113, 0.25);
+}
+.btn-ghost:hover { background: rgba(66, 122, 113, 0.06); }
+.btn-sm { padding: 7px 12px; font-size: 13px; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--yp-radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  background: rgba(66, 122, 113, 0.12);
+  color: var(--yp-deep);
+}
+.badge-warm {
+  background: rgba(195, 141, 86, 0.16);
+  color: var(--yp-accent);
+}
+
+/* ---------- Login Screen ---------- */
+.login-wrap {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+.login-card {
+  max-width: 380px;
+  width: 100%;
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-xl);
+  box-shadow: var(--yp-shadow-soft);
+  padding: 36px 28px;
+  text-align: center;
+}
+.login-logo {
+  width: 56px; height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--yp-deep), var(--yp-pine));
+  margin: 0 auto 16px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--yp-white);
+  font-family: var(--yp-font-title);
+  font-weight: 700;
+  font-size: 22px;
+}
+.login-title {
+  font-family: var(--yp-font-title);
+  font-size: 22px;
+  margin: 0 0 6px;
+  color: var(--yp-ink);
+}
+.login-sub {
+  font-size: 13px;
+  color: var(--yp-text-secondary);
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+.login-form { display: flex; flex-direction: column; gap: 12px; }
+.input {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--yp-line);
+  background: var(--yp-white);
+  font-family: var(--yp-font-body);
+  font-size: 14px;
+  color: var(--yp-ink);
+}
+.input:focus {
+  outline: none;
+  border-color: var(--yp-pine);
+  box-shadow: 0 0 0 3px rgba(66, 122, 113, 0.12);
+}
+.role-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--yp-mist);
+  padding: 4px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.role-tabs button {
+  border: none;
+  background: transparent;
+  padding: 9px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--yp-text-secondary);
+  cursor: pointer;
+}
+.role-tabs button.active {
+  background: var(--yp-white);
+  color: var(--yp-deep);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+/* ---------- Dashboard ---------- */
+.greet {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.greet-title {
+  font-family: var(--yp-font-title);
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 4px;
+  letter-spacing: -0.02em;
+}
+.greet-sub {
+  color: var(--yp-text-secondary);
+  font-size: 14px;
+  margin: 0;
+}
+.streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--yp-radius-pill);
+  background: var(--yp-sand);
+  color: var(--yp-ink);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.coach-card {
+  background: linear-gradient(135deg, rgba(66, 122, 113, 0.92), rgba(47, 93, 98, 0.95));
+  color: var(--yp-white);
+  border-radius: var(--yp-radius-lg);
+  padding: 24px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.coach-card::after {
+  content: "";
+  position: absolute;
+  right: -40px; bottom: -40px;
+  width: 180px; height: 180px;
+  border-radius: 50%;
+  background: rgba(195, 141, 86, 0.18);
+}
+.coach-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,0.15);
+  padding: 4px 10px;
+  border-radius: var(--yp-radius-pill);
+  margin-bottom: 12px;
+  font-weight: 700;
+}
+.coach-msg {
+  font-size: 17px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+}
+.coach-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.coach-actions button {
+  background: rgba(255,255,255,0.92);
+  color: var(--yp-deep);
+  border: none;
+  padding: 9px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.coach-actions button:hover { background: var(--yp-white); }
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+@media (max-width: 768px) {
+  .dash-grid { grid-template-columns: 1fr; }
+  .dash-two-col { grid-template-columns: 1fr !important; }
+  .focus-tips { grid-template-columns: 1fr !important; }
+}
+
+.now-reading h3,
+.section-h3 {
+  font-family: var(--yp-font-title);
+  font-size: 16px;
+  margin: 0 0 14px;
+  color: var(--yp-ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.book-row {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(66, 122, 113, 0.12);
+}
+.book-row:last-child { border-bottom: none; }
+.book-cover {
+  width: 44px; height: 60px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, var(--yp-sand), var(--yp-peach));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yp-ink);
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: var(--yp-font-title);
+}
+.book-info { flex: 1; min-width: 0; }
+.book-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  color: var(--yp-ink);
+}
+.book-meta {
+  font-size: 12px;
+  color: var(--yp-text-soft);
+  margin: 0;
+}
+.progress-bar {
+  height: 6px;
+  background: var(--yp-mist);
+  border-radius: 3px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--yp-pine);
+  border-radius: 3px;
+}
+
+.question-stat {
+  text-align: center;
+  padding: 18px 12px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--yp-radius-md);
+  margin-bottom: 10px;
+}
+.qs-num {
+  font-family: var(--yp-font-title);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--yp-deep);
+  line-height: 1;
+}
+.qs-label {
+  font-size: 12px;
+  color: var(--yp-text-secondary);
+  margin-top: 4px;
+}
+.qs-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.recent-q-list { list-style: none; padding: 0; margin: 0; }
+.recent-q-list li {
+  padding: 10px 0;
+  font-size: 13px;
+  color: var(--yp-text-secondary);
+  border-bottom: 1px dashed rgba(66, 122, 113, 0.10);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.recent-q-list li:last-child { border-bottom: none; }
+.recent-q-list li::before {
+  content: "?";
+  color: var(--yp-accent);
+  font-weight: 700;
+  font-family: var(--yp-font-title);
+  flex-shrink: 0;
+}
+
+/* ---------- Shelf (책장) ---------- */
+.shelf-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--yp-line);
+}
+.shelf-tabs button {
+  background: transparent;
+  border: none;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--yp-text-soft);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+.shelf-tabs button.active {
+  color: var(--yp-deep);
+  border-bottom-color: var(--yp-deep);
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+.book-card {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-md);
+  padding: 16px;
+  border: var(--yp-border-card);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+.book-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--yp-shadow-soft);
+}
+.book-card .big-cover {
+  width: 100%;
+  aspect-ratio: 3/4;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--yp-sand), var(--yp-peach));
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--yp-font-title);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--yp-ink);
+  text-align: center;
+  padding: 8px;
+}
+
+/* ---------- Reading screen ---------- */
+.reading-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 18px;
+}
+@media (max-width: 900px) {
+  .reading-layout { grid-template-columns: 1fr; }
+}
+.reading-text {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-lg);
+  padding: 32px 28px;
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--yp-ink);
+  min-height: 480px;
+  border: var(--yp-border-card);
+}
+.reading-text h4 {
+  font-family: var(--yp-font-title);
+  font-size: 20px;
+  margin: 0 0 16px;
+}
+.reading-text p { margin: 0 0 14px; }
+.reading-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px dashed rgba(66, 122, 113, 0.12);
+  font-size: 13px;
+  color: var(--yp-text-soft);
+}
+
+.q-side {
+  background: var(--yp-peach);
+  border-radius: var(--yp-radius-lg);
+  padding: 20px;
+  align-self: start;
+  position: sticky;
+  top: 80px;
+  border: 1px solid rgba(195, 141, 86, 0.25);
+}
+.q-side-title {
+  font-family: var(--yp-font-title);
+  font-size: 15px;
+  margin: 0 0 4px;
+  color: var(--yp-ink);
+}
+.q-side-desc {
+  font-size: 12px;
+  color: var(--yp-text-secondary);
+  margin: 0 0 14px;
+}
+.q-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(195, 141, 86, 0.35);
+  background: var(--yp-white);
+  font-family: var(--yp-font-body);
+  font-size: 14px;
+  resize: vertical;
+  min-height: 70px;
+}
+.q-input:focus {
+  outline: none;
+  border-color: var(--yp-accent);
+  box-shadow: 0 0 0 3px rgba(195, 141, 86, 0.15);
+}
+.q-list {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0 0;
+  max-height: 240px;
+  overflow-y: auto;
+}
+.q-list li {
+  padding: 10px 12px;
+  background: var(--yp-white);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  color: var(--yp-ink);
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.q-list li::before {
+  content: "?";
+  color: var(--yp-accent);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* ---------- Note (3-tier) ---------- */
+.note-layout {
+  display: grid;
+  gap: 14px;
+}
+.note-tier {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-lg);
+  padding: 20px 22px;
+  border-left: 4px solid var(--yp-pine);
+  border-top: var(--yp-border-card);
+  border-right: var(--yp-border-card);
+  border-bottom: var(--yp-border-card);
+}
+.note-tier.t1 { border-left-color: var(--yp-accent); }
+.note-tier.t2 { border-left-color: var(--yp-pine); }
+.note-tier.t3 { border-left-color: var(--yp-deep); }
+.note-tier-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.note-tier-title {
+  font-family: var(--yp-font-title);
+  font-size: 15px;
+  margin: 0;
+  color: var(--yp-ink);
+}
+.note-tier-desc {
+  font-size: 12px;
+  color: var(--yp-text-soft);
+  margin-left: 8px;
+  font-weight: 400;
+}
+.note-tier textarea {
+  width: 100%;
+  border: 1px solid var(--yp-line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-family: var(--yp-font-body);
+  font-size: 14px;
+  resize: vertical;
+  min-height: 90px;
+  background: var(--yp-white);
+}
+.note-tier textarea:focus {
+  outline: none;
+  border-color: var(--yp-pine);
+  box-shadow: 0 0 0 3px rgba(66, 122, 113, 0.10);
+}
+
+.ai-feedback {
+  background: rgba(195, 141, 86, 0.10);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--yp-text-secondary);
+  display: flex;
+  gap: 8px;
+}
+.ai-feedback strong { color: var(--yp-accent); }
+
+/* ---------- Discussion (AI 토론) ---------- */
+.chat {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-lg);
+  padding: 0;
+  border: var(--yp-border-card);
+  display: flex;
+  flex-direction: column;
+  height: 540px;
+}
+.chat-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--yp-line);
+  font-family: var(--yp-font-title);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.chat-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-msg {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: var(--yp-radius-md);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.chat-msg.me {
+  align-self: flex-end;
+  background: var(--yp-deep);
+  color: var(--yp-white);
+  border-bottom-right-radius: 6px;
+}
+.chat-msg.ai {
+  align-self: flex-start;
+  background: var(--yp-mist);
+  color: var(--yp-ink);
+  border-bottom-left-radius: 6px;
+}
+.chat-msg.ai strong { color: var(--yp-accent); }
+.chat-foot {
+  padding: 14px 16px;
+  border-top: 1px solid var(--yp-line);
+  display: flex;
+  gap: 8px;
+}
+.chat-foot input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1px solid var(--yp-line);
+  border-radius: 12px;
+  font-family: var(--yp-font-body);
+  font-size: 14px;
+}
+.chat-foot input:focus {
+  outline: none;
+  border-color: var(--yp-pine);
+}
+
+/* ---------- Diagnosis ---------- */
+.diag-step {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-lg);
+  padding: 28px;
+  text-align: center;
+  border: var(--yp-border-card);
+}
+.diag-stage {
+  font-size: 12px;
+  color: var(--yp-text-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.diag-q {
+  font-family: var(--yp-font-title);
+  font-size: 22px;
+  margin: 0 0 24px;
+  color: var(--yp-ink);
+  line-height: 1.5;
+}
+.diag-options {
+  display: grid;
+  gap: 10px;
+  max-width: 480px;
+  margin: 0 auto 20px;
+}
+.diag-option {
+  padding: 14px 16px;
+  background: var(--yp-mist);
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--yp-font-body);
+  color: var(--yp-ink);
+  transition: all 0.15s;
+}
+.diag-option:hover {
+  background: var(--yp-white);
+  border-color: var(--yp-pine);
+}
+
+/* ---------- Manage (선생님) ---------- */
+.manage-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.kpi-card {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-md);
+  padding: 18px;
+  border: var(--yp-border-card);
+}
+.kpi-label {
+  font-size: 12px;
+  color: var(--yp-text-soft);
+  margin-bottom: 6px;
+}
+.kpi-value {
+  font-family: var(--yp-font-title);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--yp-deep);
+  line-height: 1;
+}
+.kpi-sub { font-size: 12px; color: var(--yp-text-secondary); margin-top: 6px; }
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-md);
+  overflow: hidden;
+  border: var(--yp-border-card);
+}
+.student-table th {
+  text-align: left;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--yp-text-soft);
+  text-transform: uppercase;
+  padding: 12px 14px;
+  background: var(--yp-mist);
+  border-bottom: 1px solid var(--yp-line);
+  font-weight: 600;
+}
+.student-table td {
+  padding: 14px;
+  font-size: 14px;
+  border-bottom: 1px dashed rgba(66, 122, 113, 0.10);
+}
+.student-table tr:last-child td { border-bottom: none; }
+
+/* ---------- Question Widget (Floating) ---------- */
+.q-widget {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--yp-accent);
+  color: var(--yp-white);
+  border: none;
+  box-shadow: 0 12px 28px rgba(195, 141, 86, 0.35);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  transition: transform 0.15s ease;
+}
+.q-widget:hover { transform: scale(1.05); }
+.q-widget svg { width: 22px; height: 22px; }
+
+.q-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(31, 42, 42, 0.45);
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+.q-modal.open { display: flex; }
+.q-modal-card {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-xl);
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+  margin-bottom: 20px;
+  box-shadow: var(--yp-shadow-soft);
+}
+@media (min-width: 640px) {
+  .q-modal { align-items: center; }
+  .q-modal-card { margin-bottom: 0; }
+}
+.q-modal-h {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+.q-modal-title {
+  font-family: var(--yp-font-title);
+  font-size: 18px;
+  margin: 0;
+  color: var(--yp-ink);
+}
+.q-modal-sub {
+  font-size: 12px;
+  color: var(--yp-text-soft);
+  margin-top: 2px;
+}
+.close-btn {
+  background: transparent;
+  border: none;
+  color: var(--yp-text-muted);
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ---------- Column edition (컬럼편) ---------- */
+.col-hero {
+  background: linear-gradient(135deg, var(--yp-peach), var(--yp-sand));
+  border-radius: var(--yp-radius-xl);
+  padding: 28px 24px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(195, 141, 86, 0.20);
+}
+.col-hero .eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--yp-accent);
+  margin-bottom: 6px;
+}
+.col-hero h1 {
+  font-family: var(--yp-font-title);
+  font-size: 26px;
+  margin: 0 0 6px;
+  letter-spacing: -0.02em;
+  color: var(--yp-ink);
+}
+.col-hero .col-meta {
+  font-size: 13px;
+  color: var(--yp-text-secondary);
+}
+
+.level-toggle {
+  display: inline-flex;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--yp-radius-pill);
+  padding: 4px;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+.level-toggle button {
+  border: none;
+  background: transparent;
+  padding: 7px 16px;
+  border-radius: var(--yp-radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--yp-text-secondary);
+  cursor: pointer;
+}
+.level-toggle button.active {
+  background: var(--yp-deep);
+  color: var(--yp-white);
+}
+
+.col-guide {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-md);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  border: var(--yp-border-card);
+}
+.col-guide h4 {
+  font-family: var(--yp-font-title);
+  font-size: 15px;
+  margin: 0 0 10px;
+}
+.col-guide ol {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 13px;
+  color: var(--yp-text-secondary);
+  line-height: 1.85;
+}
+.col-guide ol li strong { color: var(--yp-deep); }
+
+.col-video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--yp-mist);
+  border-radius: var(--yp-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--yp-text-soft);
+  font-size: 13px;
+  margin-bottom: 14px;
+  border: 1px dashed var(--yp-line);
+}
+
+/* Study layout */
+.study-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 18px;
+}
+@media (max-width: 960px) {
+  .study-layout { grid-template-columns: 1fr; }
+}
+.study-text {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-lg);
+  padding: 30px 28px;
+  font-size: 16px;
+  line-height: 1.95;
+  color: var(--yp-ink);
+  border: var(--yp-border-card);
+  user-select: text;
+  position: relative;
+}
+.study-text h1 {
+  font-family: var(--yp-font-title);
+  font-size: 22px;
+  margin: 0 0 16px;
+  letter-spacing: -0.02em;
+}
+.study-text p { margin: 0 0 14px; }
+.study-text p strong { background: rgba(195, 141, 86, 0.12); padding: 0 3px; border-radius: 3px; }
+.vocab-mark {
+  border-bottom: 1px dashed var(--yp-pine);
+  cursor: help;
+  background: rgba(66, 122, 113, 0.05);
+}
+.vocab-mark.opened { background: rgba(66, 122, 113, 0.15); }
+.user-underline {
+  background: rgba(255, 232, 130, 0.55);
+  padding: 0 1px;
+}
+.user-underline.matched { background: rgba(110, 181, 166, 0.45); }
+
+.study-side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: start;
+  position: sticky;
+  top: 80px;
+}
+
+.tool-card {
+  background: var(--yp-card);
+  border: var(--yp-border-card);
+  border-radius: var(--yp-radius-md);
+  padding: 16px;
+}
+.tool-card h4 {
+  font-family: var(--yp-font-title);
+  font-size: 14px;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tool-card h4 .badge { font-size: 10px; }
+
+/* 회독 counter */
+.read-counter {
+  background: linear-gradient(135deg, var(--yp-deep), var(--yp-pine));
+  color: var(--yp-white);
+  border-radius: var(--yp-radius-md);
+  padding: 16px;
+}
+.read-counter h4 { color: var(--yp-white); margin: 0 0 10px; font-family: var(--yp-font-title); font-size: 14px; }
+.read-dots {
+  display: flex;
+  gap: 4px;
+  margin: 8px 0 12px;
+  flex-wrap: wrap;
+}
+.read-dot {
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 700;
+}
+.read-dot.done {
+  background: var(--yp-accent);
+  border-color: var(--yp-accent);
+  color: var(--yp-white);
+}
+.read-dot.active {
+  border-color: var(--yp-white);
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--yp-white);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+.read-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 10px;
+}
+.read-controls { display: flex; gap: 6px; }
+.read-controls button {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--yp-deep);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.read-controls button:hover { background: var(--yp-white); }
+.read-controls button.warm {
+  background: var(--yp-accent);
+  color: var(--yp-white);
+}
+
+/* Vocab list */
+.vocab-list { list-style: none; margin: 0; padding: 0; }
+.vocab-list li {
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: var(--yp-mist);
+  margin-bottom: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.vocab-list li:hover { background: rgba(66, 122, 113, 0.10); }
+.vocab-list li.opened {
+  background: rgba(66, 122, 113, 0.14);
+  border-left: 3px solid var(--yp-deep);
+}
+.vocab-list .vocab-word { font-weight: 700; color: var(--yp-deep); }
+.vocab-list .vocab-mean {
+  color: var(--yp-text-secondary);
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+}
+.vocab-list li.opened .vocab-mean { display: block; }
+
+/* Keyword check */
+.kw-status {
+  font-size: 12px;
+  color: var(--yp-text-secondary);
+  margin-top: 8px;
+}
+.kw-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.kw-chip {
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: var(--yp-radius-pill);
+  background: var(--yp-mist);
+  color: var(--yp-text-soft);
+}
+.kw-chip.matched {
+  background: rgba(110, 181, 166, 0.25);
+  color: var(--yp-deep);
+  font-weight: 700;
+}
+.kw-chip.matched::before { content: "✓ "; }
+
+/* Mindmap simple */
+.mindmap {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  align-items: center;
+}
+.mindmap input {
+  border: 1px solid var(--yp-line);
+  border-radius: 8px;
+  padding: 7px 9px;
+  font-family: var(--yp-font-body);
+  font-size: 12px;
+  background: var(--yp-white);
+  width: 100%;
+}
+.mindmap input:focus { outline: none; border-color: var(--yp-pine); }
+.mindmap .center {
+  grid-column: 2 / 3;
+  background: rgba(195, 141, 86, 0.12);
+  border: 1px solid var(--yp-accent);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--yp-accent);
+  font-weight: 700;
+}
+.mindmap .center input {
+  border: none;
+  background: transparent;
+  text-align: center;
+  font-weight: 700;
+  color: var(--yp-ink);
+  font-size: 13px;
+}
+.mindmap-hint {
+  font-size: 11px;
+  color: var(--yp-text-soft);
+  margin-top: 8px;
+}
+
+/* Thoughts (생각거리) */
+.thoughts-options { display: flex; flex-direction: column; gap: 8px; }
+.thought-opt {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--yp-line);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1.5;
+  background: var(--yp-white);
+  align-items: flex-start;
+}
+.thought-opt:hover { border-color: var(--yp-pine); }
+.thought-opt input { margin-top: 3px; flex-shrink: 0; }
+.thought-opt.selected {
+  background: rgba(66, 122, 113, 0.08);
+  border-color: var(--yp-deep);
+}
+.thought-write {
+  margin-top: 12px;
+  width: 100%;
+  border: 1px solid var(--yp-line);
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-family: var(--yp-font-body);
+  font-size: 14px;
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Test screen */
+.test-card {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-md);
+  padding: 22px;
+  margin-bottom: 12px;
+  border: var(--yp-border-card);
+}
+.test-q-num {
+  font-size: 11px;
+  color: var(--yp-text-soft);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.test-q-text {
+  font-family: var(--yp-font-title);
+  font-size: 16px;
+  margin: 0 0 14px;
+  color: var(--yp-ink);
+  line-height: 1.55;
+}
+.test-options { display: flex; flex-direction: column; gap: 8px; }
+.test-opt {
+  display: flex;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--yp-line);
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--yp-white);
+  align-items: flex-start;
+}
+.test-opt:hover { border-color: var(--yp-pine); }
+.test-opt input { margin-top: 3px; flex-shrink: 0; }
+.test-opt.selected {
+  background: rgba(66, 122, 113, 0.08);
+  border-color: var(--yp-deep);
+}
+.test-open-input {
+  width: 100%;
+  border: 1px solid var(--yp-line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--yp-font-body);
+  font-size: 14px;
+  resize: vertical;
+  min-height: 80px;
+}
+.test-cat-tag {
+  display: inline-block;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: var(--yp-radius-pill);
+  background: rgba(195, 141, 86, 0.16);
+  color: var(--yp-accent);
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+/* Result screen */
+.result-summary {
+  background: linear-gradient(135deg, rgba(66, 122, 113, 0.92), rgba(47, 93, 98, 0.95));
+  color: var(--yp-white);
+  border-radius: var(--yp-radius-lg);
+  padding: 28px;
+  margin-bottom: 16px;
+}
+.result-summary h2 {
+  font-family: var(--yp-font-title);
+  margin: 0 0 6px;
+  font-size: 22px;
+}
+.score-bars {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+}
+.score-row { display: flex; align-items: center; gap: 12px; font-size: 13px; }
+.score-row .label { width: 70px; flex-shrink: 0; opacity: 0.85; }
+.score-row .bar {
+  flex: 1;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.score-row .fill {
+  height: 100%;
+  background: var(--yp-accent);
+  border-radius: 5px;
+}
+.score-row .pct { width: 42px; text-align: right; font-weight: 700; }
+
+.result-card {
+  background: var(--yp-card);
+  border-radius: var(--yp-radius-md);
+  padding: 20px;
+  margin-bottom: 12px;
+  border: var(--yp-border-card);
+}
+.result-card h3 {
+  font-family: var(--yp-font-title);
+  font-size: 15px;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.result-card h3 svg { color: var(--yp-accent); }
+.result-card p { margin: 0 0 8px; font-size: 14px; color: var(--yp-text-secondary); line-height: 1.7; }
+.result-card .quote {
+  background: var(--yp-mist);
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--yp-ink);
+  margin: 8px 0;
+  border-left: 3px solid var(--yp-pine);
+}
+
+.parent-card {
+  background: var(--yp-sand);
+  border-radius: var(--yp-radius-md);
+  padding: 18px 20px;
+  margin-top: 10px;
+  border: 1px solid rgba(195, 141, 86, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.parent-card svg { color: var(--yp-accent); flex-shrink: 0; }
+.parent-card div { font-size: 13px; color: var(--yp-ink); }
+.parent-card strong { display: block; margin-bottom: 2px; font-family: var(--yp-font-title); font-size: 14px; }
+
+/* utility */
+.flex { display: flex; }
+.justify-between { justify-content: space-between; }
+.items-center { align-items: center; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.muted { color: var(--yp-text-muted); }
+.soft { color: var(--yp-text-soft); }
+.center { text-align: center; }
+
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+
+  <!-- ========== Sidebar ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">책</div>
+      <div>
+        <div class="brand-name">책풀</div>
+        <div class="brand-sub">AI · 자기주도 독서</div>
+      </div>
+    </div>
+
+    <div class="nav-section">학생</div>
+    <ul class="nav" id="nav-student">
+      <li><a href="#/dashboard" data-route="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+        오늘의 책풀</a></li>
+      <li><a href="#/column" data-route="column">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+        오늘의 컬럼</a></li>
+      <li><a href="#/shelf" data-route="shelf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 4v16M16 4v16"/></svg>
+        책장</a></li>
+      <li><a href="#/reading" data-route="reading">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5h8a3 3 0 0 1 3 3v13"/><path d="M22 5h-8a3 3 0 0 0-3 3"/><path d="M2 5v14h8a3 3 0 0 1 3 2"/><path d="M22 5v14h-8a3 3 0 0 0-3 2"/></svg>
+        읽기</a></li>
+      <li><a href="#/note" data-route="note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+        독서노트</a></li>
+      <li><a href="#/discussion" data-route="discussion">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        AI 토론</a></li>
+      <li><a href="#/diagnosis" data-route="diagnosis">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        레벨 테스트</a></li>
+      <li><a href="#/parent-report" data-route="parent-report">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-5"/></svg>
+        월간 리포트</a></li>
+    </ul>
+
+    <div class="nav-section">선생님</div>
+    <ul class="nav">
+      <li><a href="#/manage" data-route="manage">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        반·학생 관리</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div class="branch-tag" id="branch-tag">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span id="branch-name">삼산점</span>
+      </div>
+      <div style="margin-top: 10px;">v0.1 · 2026</div>
+      <div style="margin-top: 8px;">
+        <button onclick="resetDemo()" style="background: transparent; border: 1px dashed rgba(66, 122, 113, 0.25); border-radius: 8px; padding: 5px 10px; font-size: 11px; color: var(--yp-text-soft); cursor: pointer; font-family: var(--yp-font-body);">데모 초기화</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== Main ========== -->
+  <main class="main">
+    <header class="appbar">
+      <div class="appbar-left">
+        <button class="menu-toggle" id="menu-toggle" aria-label="메뉴">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+        <div class="appbar-title" id="appbar-title">오늘의 책풀</div>
+      </div>
+      <div class="appbar-right">
+        <button class="icon-btn" id="refresh-btn" title="새로 고침">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+        </button>
+        <div class="user-chip">
+          <div class="avatar" id="user-avatar">학</div>
+          <span id="user-name">학생</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- ========== Login ========== -->
+      <section class="screen" id="screen-login">
+        <div class="login-wrap">
+          <div class="login-card">
+            <div class="login-logo">책</div>
+            <h1 class="login-title">책풀</h1>
+            <p class="login-sub">AI와 함께 스스로 읽고,<br>좋은 질문을 만드는 시간.</p>
+
+            <div class="role-tabs" id="role-tabs">
+              <button class="active" data-role="student">학생</button>
+              <button data-role="teacher">선생님</button>
+            </div>
+
+            <form class="login-form" id="login-form" onsubmit="event.preventDefault(); doLogin();">
+              <input class="input" type="text" id="login-id" placeholder="아이디" autocomplete="off">
+              <input class="input" type="password" id="login-pw" placeholder="비밀번호">
+              <button type="submit" class="btn btn-primary" style="justify-content:center; margin-top: 6px;">들어가기</button>
+            </form>
+            <div style="font-size: 12px; color: var(--yp-text-soft); margin-top: 18px;">
+              연학원 학생만 이용할 수 있어요.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== Dashboard (학생 메인) ========== -->
+      <section class="screen" id="screen-dashboard">
+        <div class="greet">
+          <div>
+            <h1 class="greet-title">오늘도 한 페이지, 한 질문.</h1>
+            <p class="greet-sub" id="greet-sub">정답을 찾는 시간이 아니라, 좋은 질문을 만드는 시간이에요.</p>
+          </div>
+          <div class="streak-pill">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14l-4-4-4 4"/><path d="M14 6l-4-4-4 4"/></svg>
+            연속 7일 독서
+          </div>
+        </div>
+
+        <!-- 오늘의 두 갈래 (컬럼 + 책) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px;" class="dash-two-col">
+          <!-- 오늘의 컬럼 -->
+          <div class="col-hero" style="cursor: pointer; padding: 22px 20px; margin-bottom: 0;" onclick="navigate('column')">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom: 8px;">
+              <div style="background: var(--yp-accent); color: var(--yp-white); width: 38px; height: 38px; border-radius: 10px; display:flex; align-items:center; justify-content:center; flex-shrink: 0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div class="eyebrow" style="margin-bottom: 0; font-size: 10px;">오늘의 컬럼</div>
+                <div style="font-family: var(--yp-font-title); font-size: 16px; color: var(--yp-ink); font-weight: 700;">5회독 · 마인드맵 · 평가</div>
+              </div>
+            </div>
+            <div style="font-size: 12px; color: var(--yp-text-secondary); line-height: 1.55;">학년별 트랙 자동 매칭 · 로그인과 함께 시작</div>
+            <div style="color: var(--yp-deep); font-weight: 700; font-size: 13px; margin-top: 10px; text-align: right;">시작 →</div>
+          </div>
+
+          <!-- 오늘 읽을 책 (박미향 스펙: 도서 소개 + 흥미·집중 요령) -->
+          <div style="background: linear-gradient(135deg, var(--yp-sage), #f0f5ed); border-radius: var(--yp-radius-xl); padding: 22px 20px; cursor: pointer; border: 1px solid rgba(66, 122, 113, 0.18);" onclick="navigate('reading')">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom: 8px;">
+              <div style="background: var(--yp-deep); color: var(--yp-white); width: 38px; height: 38px; border-radius: 10px; display:flex; align-items:center; justify-content:center; flex-shrink: 0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+              </div>
+              <div style="flex: 1;">
+                <div class="eyebrow" style="margin-bottom: 0; font-size: 10px; color: var(--yp-deep);">오늘 읽을 책</div>
+                <div style="font-family: var(--yp-font-title); font-size: 16px; color: var(--yp-ink); font-weight: 700;">마당을 나온 암탉</div>
+              </div>
+            </div>
+            <div style="font-size: 12px; color: var(--yp-text-secondary); line-height: 1.55;">레벨 3 · 96 / 184 페이지 · 황선미</div>
+            <div style="color: var(--yp-deep); font-weight: 700; font-size: 13px; margin-top: 10px; text-align: right;">이어서 읽기 →</div>
+          </div>
+        </div>
+
+        <!-- 도서 소개 + 흥미 유발 + 집중 요령 (박미향 스펙) -->
+        <div class="card" style="background: linear-gradient(180deg, #fffdf8 0%, #f4f0e9 100%); margin-bottom: 18px;">
+          <h3 class="section-h3" style="margin-bottom: 8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>
+            오늘 읽을 책 — 「마당을 나온 암탉」 들어가기 전에
+          </h3>
+          <p style="font-size: 13px; color: var(--yp-text-secondary); margin: 0 0 14px; line-height: 1.7;">
+            <strong style="color: var(--yp-deep);">잎싹</strong>은 매일 알을 빼앗기던 암탉이에요. 어느 날 자기 자리가 아니라는 걸 깨닫고 마당을 떠나는데, 거기서 청둥오리 알을 만나게 됩니다. <em>"진짜 엄마는 누구일까?"</em> 라는 질문이 책 끝까지 따라옵니다.
+          </p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;" class="focus-tips">
+            <div style="background: rgba(66, 122, 113, 0.08); border-radius: 12px; padding: 12px 14px;">
+              <div style="font-size: 11px; font-weight: 700; color: var(--yp-deep); margin-bottom: 4px; letter-spacing: 0.04em;">📖 오늘 집중해서 읽을 부분</div>
+              <div style="font-size: 13px; color: var(--yp-ink); line-height: 1.55;">잎싹이 마당을 떠나기로 결심하는 5장. <strong>"왜?"</strong>를 마음속에 두고 읽어보세요.</div>
+            </div>
+            <div style="background: rgba(195, 141, 86, 0.10); border-radius: 12px; padding: 12px 14px;">
+              <div style="font-size: 11px; font-weight: 700; color: var(--yp-accent); margin-bottom: 4px; letter-spacing: 0.04em;">⏱️ 집중력 향상 요령</div>
+              <div style="font-size: 13px; color: var(--yp-ink); line-height: 1.55;">25분 읽고 → 5분 메모. 스마트폰은 옆방에. 떠오른 질문은 바로 ❓ 위젯에.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI Coach -->
+        <div class="coach-card">
+          <span class="coach-label">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+            AI 코치
+          </span>
+          <p class="coach-msg">어제 읽은 「마당을 나온 암탉」 기억나? <br>"왜 잎싹은 떠나기로 했을까?" — 이 질문 하나만 들고 오늘 다시 펼쳐볼래?</p>
+          <div class="coach-actions">
+            <button onclick="navigate('reading')">읽기 이어가기</button>
+            <button onclick="navigate('discussion')">AI와 더 깊이 토론</button>
+          </div>
+        </div>
+
+        <!-- Two columns: Now Reading + Question Stats -->
+        <div class="dash-grid">
+          <div class="card now-reading">
+            <h3 class="section-h3">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 5h8a3 3 0 0 1 3 3v13"/><path d="M22 5h-8a3 3 0 0 0-3 3"/></svg>
+              지금 읽는 책
+            </h3>
+            <div class="book-row">
+              <div class="book-cover">암탉</div>
+              <div class="book-info">
+                <p class="book-title">마당을 나온 암탉</p>
+                <p class="book-meta">레벨 3 · 96 / 184 페이지</p>
+                <div class="progress-bar"><div class="progress-fill" style="width: 52%;"></div></div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="navigate('reading')">계속</button>
+            </div>
+            <div class="book-row">
+              <div class="book-cover">샬롯</div>
+              <div class="book-info">
+                <p class="book-title">샬롯의 거미줄</p>
+                <p class="book-meta">레벨 3 · 24 / 192 페이지</p>
+                <div class="progress-bar"><div class="progress-fill" style="width: 12%;"></div></div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="navigate('reading')">계속</button>
+            </div>
+            <div class="mt-12" style="text-align: right;">
+              <button class="btn btn-ghost btn-sm" onclick="navigate('shelf')">전체 책장 보기</button>
+            </div>
+          </div>
+
+          <div class="card-soft">
+            <h3 class="section-h3">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11a3 3 0 1 1 5.83 1.13"/><circle cx="12" cy="17" r="1"/></svg>
+              내가 던진 질문
+            </h3>
+            <div class="qs-row">
+              <div class="question-stat">
+                <div class="qs-num">128</div>
+                <div class="qs-label">100일 누적</div>
+              </div>
+              <div class="question-stat">
+                <div class="qs-num">12</div>
+                <div class="qs-label">이번 주</div>
+              </div>
+            </div>
+            <div style="font-size: 12px; color: var(--yp-text-secondary); margin: 14px 0 8px;">최근 질문</div>
+            <ul class="recent-q-list">
+              <li>잎싹은 왜 알을 품고 싶어 했을까?</li>
+              <li>나그네는 왜 잎싹을 도와줬을까?</li>
+              <li>진짜 엄마는 무엇으로 정해질까?</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Today's mission -->
+        <div class="card">
+          <h3 class="section-h3">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 11l3 3 8-8"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            오늘의 자기주도 미션
+          </h3>
+          <div style="display:flex; flex-wrap:wrap; gap:10px;">
+            <span class="badge">📖 30분 읽기</span>
+            <span class="badge badge-warm">❓ 새 질문 3개</span>
+            <span class="badge">✍️ 독서노트 쓰기</span>
+          </div>
+          <p style="margin: 14px 0 0; font-size: 13px; color: var(--yp-text-secondary);">
+            세 가지 중 무엇부터 할지 <strong>네가 정해.</strong> 정한 만큼만 하면 충분해.
+          </p>
+        </div>
+      </section>
+
+      <!-- ========== Shelf ========== -->
+      <section class="screen" id="screen-shelf">
+        <div class="page-head">
+          <div class="page-eyebrow">책장</div>
+          <h1 class="page-title">내가 고른, 내가 읽는 책들</h1>
+          <p class="page-desc">AI는 추천만, 결정은 내가. 관심사·수준에 맞는 책을 둘러보고 골라서 시작하세요.</p>
+        </div>
+
+        <div class="shelf-tabs" id="shelf-tabs">
+          <button class="active" data-tab="reading">읽고 있는 책</button>
+          <button data-tab="recommend">AI 추천</button>
+          <button data-tab="finished">완독한 책</button>
+        </div>
+
+        <div class="book-grid" id="book-grid">
+          <!-- populated by JS -->
+        </div>
+      </section>
+
+      <!-- ========== Reading ========== -->
+      <section class="screen" id="screen-reading">
+        <div class="page-head">
+          <div class="page-eyebrow">읽기</div>
+          <h1 class="page-title">마당을 나온 암탉</h1>
+          <p class="page-desc">96 / 184 페이지 · 떠오르는 질문은 옆에 바로 적어두세요.</p>
+        </div>
+
+        <div class="reading-layout">
+          <article class="reading-text">
+            <h4>5장. 떠나는 마음</h4>
+            <p>잎싹은 마당을 둘러보았다. 닭들이 모이를 쪼고 있었다. 모두가 자기 자리를 알고 있었지만, 잎싹만은 자기 자리를 알 수 없었다.</p>
+            <p>"여기는 내 자리가 아니야."</p>
+            <p>잎싹은 처음으로 그렇게 생각했다. 자신이 낳은 알을 한 번도 품어본 적이 없었기 때문이다. 알은 매일 빼앗겼고, 잎싹은 그저 알을 낳기만 하는 닭이었다.</p>
+            <p>(이어지는 본문... ※ 실제 운영 시 책 본문을 PDF·전자책 뷰어로 임베드)</p>
+            <div class="reading-controls">
+              <button class="btn btn-ghost btn-sm">← 이전 페이지</button>
+              <span>5장 · 96 / 184</span>
+              <button class="btn btn-primary btn-sm">다음 페이지 →</button>
+            </div>
+          </article>
+
+          <aside class="q-side">
+            <h4 class="q-side-title">📝 질문 노트</h4>
+            <p class="q-side-desc">읽다 떠오른 질문을 한 줄로. 정답은 안 적어도 돼요.</p>
+            <textarea class="q-input" id="q-input-side" placeholder="예: 왜 잎싹은 알을 품고 싶었을까?"></textarea>
+            <button class="btn btn-warm btn-sm mt-12" style="width: 100%; justify-content: center;" onclick="addSideQuestion()">질문 저장</button>
+            <ul class="q-list" id="q-list-side">
+              <li>왜 잎싹은 알을 품고 싶어 했을까?</li>
+              <li>마당의 다른 닭들은 왜 잎싹을 이상하게 봤을까?</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ========== Note (3-tier) ========== -->
+      <section class="screen" id="screen-note">
+        <div class="page-head">
+          <div class="page-eyebrow">독서노트</div>
+          <h1 class="page-title">생각을 쓰는 시간</h1>
+          <p class="page-desc">줄거리 요약 대신, <strong>내 질문 → 단서 → 새 질문</strong> 순으로 정리해보세요.</p>
+        </div>
+
+        <div class="note-layout">
+          <div class="note-tier t1">
+            <div class="note-tier-h">
+              <h3 class="note-tier-title">① 내가 던진 질문 <span class="note-tier-desc">읽으면서 떠올랐던 질문 중 가장 마음에 드는 것</span></h3>
+            </div>
+            <textarea placeholder="예: 잎싹은 왜 마당을 나가기로 했을까?"></textarea>
+          </div>
+
+          <div class="note-tier t2">
+            <div class="note-tier-h">
+              <h3 class="note-tier-title">② 내가 찾은 단서 <span class="note-tier-desc">책 속에서 발견한 힌트, 인상 깊은 장면, 인용</span></h3>
+            </div>
+            <textarea placeholder="예: 잎싹은 알을 한 번도 품지 못했다는 부분이 마음에 남았다."></textarea>
+          </div>
+
+          <div class="note-tier t3">
+            <div class="note-tier-h">
+              <h3 class="note-tier-title">③ 새로 생긴 질문 <span class="note-tier-desc">단서를 따라가다 보니 다시 떠오른 질문</span></h3>
+            </div>
+            <textarea placeholder="예: 진짜 엄마는 알을 품는 닭일까, 아니면 마음으로 품는 사람일까?"></textarea>
+
+            <div class="ai-feedback">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" style="flex-shrink:0; margin-top: 2px; color: var(--yp-accent);"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+              <span><strong>AI 1차 피드백:</strong> 이 질문 정말 좋아요. "엄마를 무엇이 만드는가"는 책 전체 주제와 닿아 있어요. 한 단계 더 — "내가 본 진짜 엄마는 누구였지?"로 확장해볼래요? <em>(선생님이 곧 추가 첨삭을 남길 거예요)</em></span>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; justify-content: flex-end;">
+            <button class="btn btn-ghost">임시 저장</button>
+            <button class="btn btn-primary">노트 제출 (선생님 확인)</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== Discussion (AI) ========== -->
+      <section class="screen" id="screen-discussion">
+        <div class="page-head">
+          <div class="page-eyebrow">AI 토론</div>
+          <h1 class="page-title">질문이 더 깊어지는 시간</h1>
+          <p class="page-desc">AI는 답을 주지 않아요. 네 질문을 더 좋은 질문으로 만들어줄 뿐.</p>
+        </div>
+
+        <div class="chat">
+          <div class="chat-head">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>
+            AI 질문 코치
+          </div>
+          <div class="chat-body" id="chat-body">
+            <div class="chat-msg ai">안녕! 오늘 가져온 질문이 있어? 한 줄로 던져줘.</div>
+            <div class="chat-msg me">잎싹은 왜 마당을 나가기로 했을까?</div>
+            <div class="chat-msg ai">좋은 질문이야. <strong>"왜"</strong>로 시작했으니 이미 한 번 깊어진 거야. 이제 한 단계만 더 가볼까?<br><br>잎싹의 입장에서 생각해봐 — 마당을 <strong>나갈 때</strong>의 마음과, 처음 마당을 <strong>둘러볼 때</strong>의 마음은 어떻게 달랐을까?</div>
+            <div class="chat-msg me">처음엔 자기 자리가 어디인지 몰라서 불안했고, 나갈 때는 자기 마음을 따라가기로 결정한 것 같아.</div>
+            <div class="chat-msg ai">그 차이를 <strong>한 단어</strong>로 표현한다면? 그 단어가 너의 새 질문이 될 거야.</div>
+          </div>
+          <div class="chat-foot">
+            <input type="text" placeholder="네 답이나 새 질문을 입력해..." id="chat-input">
+            <button class="btn btn-primary btn-sm" onclick="sendChat()">보내기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== Diagnosis (레벨 테스트 정식) ========== -->
+      <section class="screen" id="screen-diagnosis">
+        <div class="page-head">
+          <div class="page-eyebrow">레벨 테스트</div>
+          <h1 class="page-title">읽기 힘 알아보기</h1>
+          <p class="page-desc">7문항(어휘·이해·추론·비판·질문). AI가 답에 따라 다음 문제를 골라요. 정답률 + <strong>질문 만드는 능력</strong>으로 레벨이 정해집니다.</p>
+        </div>
+
+        <div class="diag-step" id="diag-question-card">
+          <div class="diag-stage" id="diag-stage">1 / 7 문항</div>
+          <h3 class="diag-q" id="diag-q">불러오는 중...</h3>
+          <div id="diag-passage" style="background: var(--yp-mist); border-radius: 14px; padding: 18px 20px; max-width: 540px; margin: 0 auto 18px; text-align: left; font-size: 14px; line-height: 1.7; display: none;"></div>
+          <div class="diag-options" id="diag-options"></div>
+          <div id="diag-open" style="max-width: 540px; margin: 0 auto; display: none;">
+            <textarea class="test-open-input" id="diag-open-input" placeholder="자유롭게 적어보세요..." style="width: 100%;"></textarea>
+            <button class="btn btn-primary" style="margin-top: 10px;" onclick="diagSubmitOpen()">다음 →</button>
+          </div>
+          <div style="font-size:12px; color: var(--yp-text-soft); margin-top: 10px;" id="diag-hint"></div>
+        </div>
+
+        <!-- 결과 화면 -->
+        <div id="diag-result" style="display: none;">
+          <div class="result-summary">
+            <h2>읽기 힘 결과</h2>
+            <p style="opacity: 0.85; margin: 0 0 8px;">너의 레벨은 <strong style="font-size: 22px; font-family: var(--yp-font-title);" id="diag-level">L3-C2</strong> 입니다.</p>
+            <div class="score-bars" id="diag-score-bars"></div>
+          </div>
+          <div class="result-card">
+            <h3>강점 / 성장 포인트</h3>
+            <p id="diag-strength">(분석 메시지)</p>
+          </div>
+          <div class="result-card">
+            <h3>이 레벨에서 시작하기 좋은 책</h3>
+            <p id="diag-book-suggest">(추천 책 메시지)</p>
+            <div style="text-align: center; margin-top: 14px;">
+              <button class="btn btn-primary" onclick="navigate('shelf')">내 책장으로 가기 →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== Book Test (책별 10문항 평가) ========== -->
+      <section class="screen" id="screen-book-test">
+        <div class="page-head">
+          <div class="page-eyebrow">완독 평가</div>
+          <h1 class="page-title" id="book-test-title">책 평가</h1>
+          <p class="page-desc">10문항 — 어휘 3 / 사실 2 / 추론 2 / 비판 2 / 이해도 1. 이번엔 정답이 정해진 문제가 많아요.</p>
+        </div>
+
+        <div id="book-test-list"></div>
+
+        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px;">
+          <button class="btn btn-ghost" onclick="navigate('shelf')">나중에</button>
+          <button class="btn btn-primary" onclick="submitBookTest()">제출 →</button>
+        </div>
+      </section>
+
+      <!-- ========== Book Activity (책별 활동지) ========== -->
+      <section class="screen" id="screen-book-activity">
+        <div class="page-head">
+          <div class="page-eyebrow">독후 활동지</div>
+          <h1 class="page-title" id="book-activity-title">활동지</h1>
+          <p class="page-desc">책 한 권 읽고 끝이 아니라, 활동지로 한 번 더 정리하는 시간이에요. 천천히 써도 돼요.</p>
+        </div>
+
+        <div class="note-layout">
+          <div class="note-tier t1">
+            <div class="note-tier-h">
+              <h3 class="note-tier-title">① 인물의 마음 변화 <span class="note-tier-desc">처음·중간·끝에서 주인공의 마음이 어떻게 달라졌나요?</span></h3>
+            </div>
+            <textarea placeholder="예: 처음엔 외로웠지만, 중간에는 ..."></textarea>
+          </div>
+          <div class="note-tier t2">
+            <div class="note-tier-h">
+              <h3 class="note-tier-title">② 내가 작가라면 <span class="note-tier-desc">다르게 쓰고 싶은 장면이 있나요? 왜요?</span></h3>
+            </div>
+            <textarea placeholder="예: 마지막 장면을 ... 으로 바꾸고 싶다. 왜냐하면 ..."></textarea>
+          </div>
+          <div class="note-tier t3">
+            <div class="note-tier-h">
+              <h3 class="note-tier-title">③ 이 책에서 떠오른 질문 5개 <span class="note-tier-desc">정답이 없어도 좋아요. 좋은 질문 5개</span></h3>
+            </div>
+            <textarea placeholder="1. ...&#10;2. ...&#10;3. ...&#10;4. ...&#10;5. ..."></textarea>
+          </div>
+          <div class="note-tier" style="border-left-color: var(--yp-accent);">
+            <div class="note-tier-h">
+              <h3 class="note-tier-title">④ 비슷한 경험 <span class="note-tier-desc">책 속 한 장면과 닮은, 내 경험을 한 단락으로</span></h3>
+            </div>
+            <textarea placeholder="나도 한 번..."></textarea>
+          </div>
+          <div style="display: flex; gap: 8px; justify-content: flex-end;">
+            <button class="btn btn-ghost">임시 저장</button>
+            <button class="btn btn-primary" onclick="submitBookActivity()">제출 (선생님 첨삭 대기) →</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== Parent Monthly Report (월간 학부모 리포트) ========== -->
+      <section class="screen" id="screen-parent-report">
+        <div class="page-head">
+          <div class="page-eyebrow">학부모 월간 리포트</div>
+          <h1 class="page-title">5월 학습 종합 리포트</h1>
+          <p class="page-desc">학부모님께 자동 발송되는 양식입니다. 학생 본인도 자기 발전을 한눈에 볼 수 있어요.</p>
+        </div>
+
+        <div class="result-summary">
+          <h2>이번 달 한눈에 보기</h2>
+          <p style="opacity: 0.85; margin: 0 0 8px;">읽은 책 <strong>5권</strong> · 컬럼 <strong>22편</strong> · 던진 질문 <strong>128개</strong></p>
+          <div class="score-bars">
+            <div class="score-row"><span class="label">어휘</span><div class="bar"><div class="fill" style="width: 88%;"></div></div><span class="pct">88%</span></div>
+            <div class="score-row"><span class="label">사실 이해</span><div class="bar"><div class="fill" style="width: 92%;"></div></div><span class="pct">92%</span></div>
+            <div class="score-row"><span class="label">추론</span><div class="bar"><div class="fill" style="width: 76%;"></div></div><span class="pct">76%</span></div>
+            <div class="score-row"><span class="label">비판</span><div class="bar"><div class="fill" style="width: 81%;"></div></div><span class="pct">81%</span></div>
+            <div class="score-row"><span class="label">글쓰기</span><div class="bar"><div class="fill" style="width: 84%;"></div></div><span class="pct">84%</span></div>
+            <div class="score-row"><span class="label">질문력</span><div class="bar"><div class="fill" style="width: 90%;"></div></div><span class="pct">90%</span></div>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <h3>이번 달 읽은 책</h3>
+          <ul style="margin: 0; padding-left: 18px; color: var(--yp-text-secondary); line-height: 2;">
+            <li>마당을 나온 암탉 (황선미) · 레벨 3 · 평가 88%</li>
+            <li>샬롯의 거미줄 (E.B. 화이트) · 레벨 3 · 평가 91%</li>
+            <li>나무를 심은 사람 (장 지오노) · 레벨 4 · 평가 76%</li>
+            <li>몽실 언니 (권정생) · 레벨 3 · 평가 85%</li>
+            <li>책과 노니는 집 (이영서) · 레벨 4 · 평가 80%</li>
+          </ul>
+        </div>
+
+        <div class="result-card">
+          <h3>강점</h3>
+          <p>이번 달 가장 큰 성장 — <strong>질문력</strong>(90%)과 <strong>사실 이해</strong>(92%). 특히 「몽실 언니」 활동지에서 던진 "왜 어른은 사과를 주저할까?"라는 질문이 인상 깊었습니다. 표면을 넘어 인물의 동기를 파고드는 자세가 뚜렷합니다.</p>
+        </div>
+
+        <div class="result-card">
+          <h3>성장 포인트</h3>
+          <p>추론(76%)을 한 단계 더 올릴 시기입니다. 다음 달엔 <strong>"왜 그렇게 생각했어?"</strong>를 글에 두 번 더 적어보면, 추론 단계가 더 단단해질 거예요. 책 선택은 레벨 4 비중을 약간 늘려보겠습니다.</p>
+        </div>
+
+        <div class="result-card">
+          <h3>다음 달 목표</h3>
+          <p>레벨 4 도서 3권 · 컬럼 25편 · 활동지 5편 · 던진 질문 150개. 작년 같은 달 대비 25% 성장 목표입니다.</p>
+        </div>
+
+        <div class="parent-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 4l8 7 8-7"/></svg>
+          <div>
+            <strong>학부모님께 자동 발송됨</strong>
+            5월 1일~5월 31일 학습 결과를 등록 이메일로 자동 발송했습니다. (월 1회, 매월 말일)
+          </div>
+        </div>
+      </section>
+
+      <!-- ========== Column: Start (오늘의 컬럼) ========== -->
+      <section class="screen" id="screen-column">
+        <div class="page-head">
+          <div class="page-eyebrow">오늘의 컬럼</div>
+          <h1 class="page-title">오늘은 어떤 글을 만날까?</h1>
+          <p class="page-desc">컬럼은 5회독 → 마인드맵 → 요약 → 평가의 순서로 함께 합니다. 천천히 따라오세요.</p>
+        </div>
+
+        <div class="col-hero">
+          <div class="eyebrow">2026-05-08 · <span id="col-level-label">저학년</span></div>
+          <h1 id="col-title">불러오는 중...</h1>
+          <div class="col-meta" id="col-summary">불러오는 중...</div>
+          <div style="margin-top: 16px;">
+            <div class="level-toggle" id="col-level-toggle">
+              <button class="active" data-level="low">저학년</button>
+              <button data-level="high">고학년·중고등</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-video" id="col-video">
+          📺 컬럼 관련 동영상 (선생님이 등록한 링크가 여기에 표시됩니다)
+        </div>
+
+        <div class="col-guide">
+          <h4>컬럼 학습 가이드</h4>
+          <ol>
+            <li><strong>3회독</strong> — 천천히 세 번 읽으며 어휘를 익힌다</li>
+            <li><strong>+2독 → 마인드맵</strong> — 두 번 더 읽고 중심 질문과 가지를 정리</li>
+            <li><strong>5회독 후 요약·핵심 키워드</strong> — 본문에서 중요 문장에 밑줄 (자동 확인)</li>
+            <li><strong>생각해 볼 거리 1가지 선택</strong> → 자신의 생각을 글로</li>
+            <li><strong>"컬럼 마침"</strong> 후 어휘 2 + 이해·비판·추론 5 평가</li>
+          </ol>
+        </div>
+
+        <div style="text-align: center; margin-top: 22px;">
+          <button class="btn btn-primary" style="padding: 14px 28px; font-size: 15px;" onclick="navigate('column-study')">
+            컬럼 시작하기 →
+          </button>
+        </div>
+      </section>
+
+      <!-- ========== Column: Study (학습 화면) ========== -->
+      <section class="screen" id="screen-column-study">
+        <div class="page-head">
+          <div class="page-eyebrow">학습 중</div>
+          <h1 class="page-title" id="study-title">컬럼 학습</h1>
+          <p class="page-desc">우측 도구를 자유롭게 쓰면서 진행하세요. 회독은 시작 버튼으로 측정됩니다.</p>
+        </div>
+
+        <div class="study-layout">
+          <!-- 본문 -->
+          <article class="study-text" id="study-text">
+            <p style="text-align:center; color: var(--yp-text-soft);">컬럼 본문을 불러오는 중...</p>
+          </article>
+
+          <!-- 사이드 도구 -->
+          <aside class="study-side">
+            <!-- 회독 카운터 -->
+            <div class="read-counter">
+              <h4>📖 회독 카운터</h4>
+              <div class="read-stats">
+                <span id="read-current">0 / 10 회독</span>
+                <span id="read-time">00:00</span>
+              </div>
+              <div class="read-dots" id="read-dots"></div>
+              <div class="read-controls">
+                <button id="read-start" onclick="readStart()">시작</button>
+                <button class="warm" id="read-done" onclick="readDone()" style="display: none;">1회독 완료</button>
+              </div>
+            </div>
+
+            <!-- 어휘 -->
+            <div class="tool-card">
+              <h4>📚 어휘 노트 <span class="badge" id="vocab-progress">0 / 0</span></h4>
+              <ul class="vocab-list" id="vocab-list"></ul>
+              <div style="font-size: 11px; color: var(--yp-text-soft); margin-top: 8px;">
+                본문의 점선 단어를 클릭해도 의미가 떠요.
+              </div>
+            </div>
+
+            <!-- 핵심 키워드 (밑줄로 자동 확인) -->
+            <div class="tool-card">
+              <h4>🔑 핵심 키워드</h4>
+              <p style="font-size: 12px; color: var(--yp-text-secondary); margin: 0 0 6px;">본문에서 드래그해 밑줄 → 정답 키워드와 일치하면 ✓</p>
+              <div class="kw-status" id="kw-status">진행: 0 / 0</div>
+              <div class="kw-list" id="kw-list"></div>
+            </div>
+
+            <!-- 마인드맵 -->
+            <div class="tool-card">
+              <h4>🧠 마인드맵</h4>
+              <div class="mindmap" id="mindmap-grid">
+                <input placeholder="가지 1" data-mm="b1">
+                <div class="center">
+                  중심 질문
+                  <input placeholder="중심 질문..." data-mm="center" style="margin-top: 6px;">
+                </div>
+                <input placeholder="가지 2" data-mm="b2">
+                <input placeholder="가지 3" data-mm="b3">
+                <input placeholder="가지 4" data-mm="b4">
+                <input placeholder="가지 5" data-mm="b5">
+              </div>
+              <div class="mindmap-hint">중심 질문을 가운데에 두고, 그 질문과 연결되는 핵심 단어 5개를 가지에 적어보세요.</div>
+            </div>
+
+            <!-- 생각해 볼 거리 -->
+            <div class="tool-card">
+              <h4>💭 생각해 볼 거리 (1개 선택)</h4>
+              <div class="thoughts-options" id="thoughts-options"></div>
+              <textarea class="thought-write" id="thought-write" placeholder="선택한 질문에 대한 내 생각을 자유롭게 적어보세요. (정답 X)"></textarea>
+            </div>
+
+            <button class="btn btn-warm" style="width: 100%; justify-content: center; padding: 14px;" onclick="finishColumn()">
+              컬럼 마침 → 평가
+            </button>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ========== Column: Test (평가) ========== -->
+      <section class="screen" id="screen-column-test">
+        <div class="page-head">
+          <div class="page-eyebrow">평가</div>
+          <h1 class="page-title">짧은 평가</h1>
+          <p class="page-desc">어휘 2문항 + 이해·추론·비판 5문항. 정답이 없는 문항도 있어요.</p>
+        </div>
+
+        <div id="test-list"></div>
+
+        <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 18px;">
+          <button class="btn btn-ghost" onclick="navigate('column-study')">← 돌아가기</button>
+          <button class="btn btn-primary" onclick="submitTest()">제출 →</button>
+        </div>
+      </section>
+
+      <!-- ========== Column: Result (피드백 결과) ========== -->
+      <section class="screen" id="screen-column-result">
+        <div class="page-head">
+          <div class="page-eyebrow">결과 + 피드백</div>
+          <h1 class="page-title">오늘의 컬럼이 끝났어요</h1>
+          <p class="page-desc">전체 결과와 피드백입니다. 학부모님께도 같은 내용이 자동으로 전송됐어요.</p>
+        </div>
+
+        <!-- 점수 요약 -->
+        <div class="result-summary">
+          <h2 id="result-title">잘 따라왔어요!</h2>
+          <p style="opacity: 0.85; margin: 0;">오늘 컬럼 학습 결과예요. 점수보다 <strong>네가 던진 질문</strong>이 중요해요.</p>
+          <div class="score-bars" id="score-bars"></div>
+        </div>
+
+        <!-- AI 첨삭 (나의 생각 글) -->
+        <div class="result-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+            나의 생각 첨삭
+          </h3>
+          <div class="quote" id="result-thought-quote">(작성한 글 미리보기)</div>
+          <p id="result-thought-feedback">(AI 첨삭 메시지)</p>
+        </div>
+
+        <!-- 마인드맵 피드백 -->
+        <div class="result-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/></svg>
+            마인드맵 피드백
+          </h3>
+          <p id="result-mindmap-feedback">(마인드맵 분석)</p>
+        </div>
+
+        <!-- 앞으로 생각해 볼 거리 -->
+        <div class="result-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>
+            앞으로 생각해 볼 거리
+          </h3>
+          <p>이 컬럼에서 더 깊게 갈 수 있는 질문 3가지예요. 다음에 다시 펼쳐보세요.</p>
+          <ul id="result-future-q" style="margin: 0; padding-left: 18px; color: var(--yp-text-secondary); line-height: 1.85;"></ul>
+        </div>
+
+        <!-- 글쓰기에 첨가하면 좋을 내용 -->
+        <div class="result-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            글쓰기에 첨가하면 좋을 내용
+          </h3>
+          <p id="result-writing-tips">(글쓰기 팁)</p>
+        </div>
+
+        <!-- 학부모 자동 전송 시뮬 -->
+        <div class="parent-card">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 4l8 7 8-7"/></svg>
+          <div>
+            <strong>학부모님께 결과 보고서 전송됨</strong>
+            오늘 학습 내용·평가 결과·AI 첨삭이 등록 이메일로 자동 발송되었습니다. (이메일 채널 가정)
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 8px; justify-content: center; margin-top: 24px;">
+          <button class="btn btn-ghost" onclick="navigate('dashboard')">대시보드로</button>
+          <button class="btn btn-primary" onclick="navigate('column')">다음 컬럼 보기</button>
+        </div>
+      </section>
+
+      <!-- ========== Manage (Teacher) ========== -->
+      <section class="screen" id="screen-manage">
+        <div class="page-head">
+          <div class="page-eyebrow">선생님 영역</div>
+          <h1 class="page-title">반·학생 관리</h1>
+          <p class="page-desc">학생별 진도, 질문 누적, 첨삭 대기 현황을 한 화면에서.</p>
+        </div>
+
+        <div class="manage-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">활성 학생</div>
+            <div class="kpi-value">26</div>
+            <div class="kpi-sub">초등 24 · 중등 2</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">이번 주 누적 질문</div>
+            <div class="kpi-value">312</div>
+            <div class="kpi-sub">학생당 평균 12개</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">첨삭 대기</div>
+            <div class="kpi-value">8</div>
+            <div class="kpi-sub">AI 1차 완료 · 선생님 검토 필요</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">완독 (이번 달)</div>
+            <div class="kpi-value">19</div>
+            <div class="kpi-sub">목표 20권</div>
+          </div>
+        </div>
+
+        <table class="student-table">
+          <thead>
+            <tr><th>학생</th><th>레벨</th><th>지금 읽는 책</th><th>이번 주 질문</th><th>첨삭</th><th></th></tr>
+          </thead>
+          <tbody id="student-tbody">
+            <!-- populated by JS (학생 이름 노출 X — 익명 코드 사용) -->
+          </tbody>
+        </table>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ========== Floating Question Widget ========== -->
+  <button class="q-widget" id="q-widget" title="질문 적기" aria-label="질문 적기">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 11a3 3 0 1 1 5.83 1.13c-.36.74-1.13 1.13-1.83 1.62-.5.34-1 .77-1 1.25"/>
+      <circle cx="12" cy="17.5" r="0.6" fill="currentColor"/>
+    </svg>
+  </button>
+
+  <div class="q-modal" id="q-modal">
+    <div class="q-modal-card">
+      <div class="q-modal-h">
+        <div>
+          <h3 class="q-modal-title">떠오른 질문 적기</h3>
+          <div class="q-modal-sub">정답은 안 적어도 돼요. 질문 한 줄이면 충분.</div>
+        </div>
+        <button class="close-btn" onclick="closeQModal()" aria-label="닫기">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6l-12 12"/></svg>
+        </button>
+      </div>
+      <textarea class="q-input" id="q-modal-input" rows="3" placeholder="예: 왜 잎싹은 마당을 나가기로 했을까?"></textarea>
+      <div style="display:flex; gap:8px; margin-top: 12px; justify-content: flex-end;">
+        <button class="btn btn-ghost" onclick="closeQModal()">취소</button>
+        <button class="btn btn-warm" onclick="saveQModal()">저장</button>
+      </div>
+      <div id="q-modal-saved" style="font-size:12px; color: var(--yp-pine); margin-top: 10px; display: none;">
+        ✓ 저장했어요. 독서노트에서 다시 볼 수 있어요.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ========== URL Parameters (분점 분기) ==========
+const params = new URLSearchParams(location.search);
+const branch = params.get('branch') || 'samsan';
+const role = params.get('role') || 'student';
+const branchNames = {
+  samsan: '삼산점',
+  bonjeom: '본점',
+};
+document.getElementById('branch-name').textContent = branchNames[branch] || branch;
+
+// ========== localStorage 진행 상태 보존 ==========
+const LS_KEY = `chaekpul_${branch}_state_v1`;
+
+function saveState() {
+  try {
+    const state = {
+      diagComplete: !!(typeof diagState !== 'undefined' && diagState.complete),
+      diagAnswers: typeof diagState !== 'undefined' ? diagState.answers : [],
+      diagLevel: document.getElementById('diag-level')?.textContent || null,
+      column: typeof columnState !== 'undefined' ? {
+        level: columnState.level,
+        reads: columnState.reads,
+        readSeconds: columnState.readSeconds,
+        vocabOpened: [...columnState.vocabOpened],
+        keywordsMatched: [...columnState.keywordsMatched],
+        selectedThought: columnState.selectedThought,
+        thoughtText: columnState.thoughtText,
+        mindmap: columnState.mindmap
+      } : null,
+      bookTest: typeof bookTestState !== 'undefined' ? {
+        book: bookTestState.book,
+        answers: bookTestState.answers
+      } : null,
+      savedAt: Date.now()
+    };
+    localStorage.setItem(LS_KEY, JSON.stringify(state));
+  } catch (e) { /* 용량 초과 등 */ }
+}
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return;
+    const state = JSON.parse(raw);
+    // 24시간 지난 상태는 무시 (오래된 진행 누적 방지)
+    if (state.savedAt && Date.now() - state.savedAt > 86400000) return;
+
+    if (state.column && typeof columnState !== 'undefined') {
+      Object.assign(columnState, {
+        level: state.column.level || 'low',
+        reads: state.column.reads || 0,
+        readSeconds: state.column.readSeconds || 0,
+        vocabOpened: new Set(state.column.vocabOpened || []),
+        keywordsMatched: new Set(state.column.keywordsMatched || []),
+        selectedThought: state.column.selectedThought ?? -1,
+        thoughtText: state.column.thoughtText || '',
+        mindmap: state.column.mindmap || { center: '', b1: '', b2: '', b3: '', b4: '', b5: '' }
+      });
+    }
+    if (state.bookTest && typeof bookTestState !== 'undefined') {
+      Object.assign(bookTestState, {
+        book: state.bookTest.book || '',
+        answers: state.bookTest.answers || []
+      });
+    }
+    if (state.diagComplete && typeof diagState !== 'undefined') {
+      diagState.complete = true;
+      diagState.answers = state.diagAnswers || [];
+    }
+  } catch (e) { /* 파싱 실패 */ }
+}
+
+function clearLocalState() {
+  try { localStorage.removeItem(LS_KEY); } catch (e) {}
+}
+
+function resetDemo() {
+  if (!confirm('진행 상태(회독·마인드맵·평가 답안 등)를 모두 지우시겠어요?\n학생이 다시 처음부터 시작합니다.')) return;
+  clearLocalState();
+  // 메모리 상태 초기화
+  if (typeof columnState !== 'undefined') {
+    columnState.current = null;
+    columnState.reads = 0;
+    columnState.readSeconds = 0;
+    columnState.vocabOpened = new Set();
+    columnState.keywordsMatched = new Set();
+    columnState.selectedThought = -1;
+    columnState.thoughtText = '';
+    columnState.mindmap = { center: '', b1: '', b2: '', b3: '', b4: '', b5: '' };
+    columnState.testAnswers = [];
+  }
+  if (typeof diagState !== 'undefined') {
+    diagState.idx = 0;
+    diagState.answers = [];
+    diagState.complete = false;
+  }
+  if (typeof bookTestState !== 'undefined') {
+    bookTestState.book = '';
+    bookTestState.answers = [];
+  }
+  alert('초기화 완료! 페이지를 새로고침합니다.');
+  location.hash = '#/dashboard';
+  location.reload();
+}
+
+// ========== Mock Data ==========
+const SHELF_DATA = {
+  reading: [
+    { title: '마당을 나온 암탉', author: '황선미', level: 3, progress: 52 },
+    { title: '샬롯의 거미줄', author: 'E.B. 화이트', level: 3, progress: 12 },
+  ],
+  recommend: [
+    { title: '나무를 심은 사람', author: '장 지오노', level: 4, reason: '환경·자기주도 키워드' },
+    { title: '어린 왕자', author: '생텍쥐페리', level: 3, reason: '질문이 많은 학생에게' },
+    { title: '왕도둑 호첸플로츠', author: '오트프리트', level: 2, reason: '재미있는 모험 좋아함' },
+  ],
+  finished: [
+    { title: '몽실 언니', author: '권정생', level: 3, days: 14 },
+    { title: '책과 노니는 집', author: '이영서', level: 4, days: 21 },
+  ],
+};
+
+const STUDENTS_MOCK = [
+  { code: 'S-01', level: 'L3-C2', book: '마당을 나온 암탉', qweek: 14, pending: '대기' },
+  { code: 'S-02', level: 'L4-C1', book: '나무를 심은 사람', qweek: 9, pending: '완료' },
+  { code: 'S-03', level: 'L3-C3', book: '샬롯의 거미줄', qweek: 18, pending: '대기' },
+  { code: 'S-04', level: 'L2-C4', book: '왕도둑 호첸플로츠', qweek: 6, pending: '완료' },
+  { code: 'S-05', level: 'L3-C1', book: '몽실 언니', qweek: 22, pending: '대기' },
+];
+
+// ========== Routing ==========
+const ROUTES = ['login', 'dashboard', 'column', 'column-study', 'column-test', 'column-result', 'shelf', 'reading', 'note', 'discussion', 'diagnosis', 'book-test', 'book-activity', 'parent-report', 'manage'];
+const TITLES = {
+  login: '로그인',
+  dashboard: '오늘의 책풀',
+  column: '오늘의 컬럼',
+  'column-study': '컬럼 학습 중',
+  'column-test': '컬럼 평가',
+  'column-result': '컬럼 결과',
+  shelf: '책장',
+  reading: '읽기',
+  note: '독서노트',
+  discussion: 'AI 토론',
+  diagnosis: '레벨 테스트',
+  'book-test': '책 평가',
+  'book-activity': '독후 활동지',
+  'parent-report': '월간 리포트',
+  manage: '반·학생 관리',
+};
+
+function navigate(route) {
+  if (!ROUTES.includes(route)) route = 'dashboard';
+  location.hash = '#/' + route;
+}
+
+function applyRoute() {
+  const hash = location.hash.replace('#/', '') || 'dashboard';
+  const route = ROUTES.includes(hash) ? hash : 'dashboard';
+
+  // 화면 전환
+  document.querySelectorAll('.screen').forEach(el => el.classList.remove('active'));
+  const target = document.getElementById('screen-' + route);
+  if (target) target.classList.add('active');
+
+  // appbar 타이틀
+  document.getElementById('appbar-title').textContent = TITLES[route] || '책풀';
+
+  // sidebar active
+  document.querySelectorAll('.nav a').forEach(a => a.classList.toggle('active', a.dataset.route === route));
+
+  // 모바일 사이드바 닫기
+  document.getElementById('sidebar').classList.remove('open');
+
+  // 스크롤 리셋
+  document.querySelector('.content').scrollTop = 0;
+
+  // 화면별 후처리
+  if (route === 'shelf') renderShelf('reading');
+  if (route === 'manage') renderStudents();
+  if (route === 'column') initColumnStart();
+  if (route === 'column-study') initColumnStudy();
+  if (route === 'column-test') initColumnTest();
+  if (route === 'column-result') initColumnResult();
+  if (route === 'diagnosis') initDiagnosis();
+  if (route === 'book-test') initBookTest();
+}
+
+window.addEventListener('hashchange', applyRoute);
+
+// ========== Shelf Render ==========
+function renderShelf(tab) {
+  const grid = document.getElementById('book-grid');
+  const data = SHELF_DATA[tab] || [];
+  grid.innerHTML = data.map(b => {
+    const sub = tab === 'reading' ? `${b.progress}% 진행 · 레벨 ${b.level}`
+              : tab === 'recommend' ? `레벨 ${b.level} · ${b.reason}`
+              : `완독 · ${b.days}일 걸림`;
+    const primaryCta = tab === 'reading' ? '이어서 읽기'
+              : tab === 'recommend' ? '내가 시작' : '평가하기';
+    const primaryAction = tab === 'finished'
+      ? `startBookTest('${b.title}')`
+      : `navigate('reading')`;
+    const secondCta = tab === 'reading' && b.progress >= 50
+      ? `<button class="btn btn-warm btn-sm" style="width:100%; justify-content:center; margin-top:6px;" onclick="startBookTest('${b.title}')">완독 평가</button>`
+      : '';
+    return `
+      <div class="book-card">
+        <div class="big-cover">${b.title}</div>
+        <div style="font-weight:600; font-size:14px; margin-bottom:4px;">${b.title}</div>
+        <div style="font-size:12px; color: var(--yp-text-soft); margin-bottom:10px;">${b.author}</div>
+        <div style="font-size:12px; color: var(--yp-text-secondary); margin-bottom:12px;">${sub}</div>
+        <button class="btn btn-ghost btn-sm" style="width:100%; justify-content:center;" onclick="${primaryAction}">${primaryCta}</button>
+        ${secondCta}
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('shelf-tabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('button[data-tab]');
+  if (!btn) return;
+  document.querySelectorAll('#shelf-tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderShelf(btn.dataset.tab);
+});
+
+// ========== Students Render ==========
+function renderStudents() {
+  const tbody = document.getElementById('student-tbody');
+  tbody.innerHTML = STUDENTS_MOCK.map(s => `
+    <tr>
+      <td><strong>${s.code}</strong></td>
+      <td>${s.level}</td>
+      <td>${s.book}</td>
+      <td>${s.qweek}개</td>
+      <td>${s.pending === '대기' ? '<span class="badge badge-warm">대기</span>' : '<span class="badge">완료</span>'}</td>
+      <td><button class="btn btn-ghost btn-sm">열기</button></td>
+    </tr>
+  `).join('');
+}
+
+// ========== Login ==========
+function doLogin() {
+  // 임시: 실제 운영 시 Firebase 인증
+  navigate('dashboard');
+}
+document.getElementById('role-tabs').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  document.querySelectorAll('#role-tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+});
+
+// ========== Side question (reading screen) ==========
+function addSideQuestion() {
+  const input = document.getElementById('q-input-side');
+  const text = input.value.trim();
+  if (!text) return;
+  const list = document.getElementById('q-list-side');
+  const li = document.createElement('li');
+  li.textContent = text;
+  list.prepend(li);
+  input.value = '';
+}
+
+// ========== Chat (AI 토론) ==========
+function sendChat() {
+  const input = document.getElementById('chat-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const body = document.getElementById('chat-body');
+  const me = document.createElement('div');
+  me.className = 'chat-msg me';
+  me.textContent = text;
+  body.appendChild(me);
+  input.value = '';
+  body.scrollTop = body.scrollHeight;
+
+  // 임시 AI 응답
+  setTimeout(() => {
+    const ai = document.createElement('div');
+    ai.className = 'chat-msg ai';
+    ai.innerHTML = '좋아. 그 생각의 <strong>반대편</strong>은 어떨까? 잎싹이 만약 마당에 <strong>남기로</strong> 했다면, 그건 어떤 마음이었을까?';
+    body.appendChild(ai);
+    body.scrollTop = body.scrollHeight;
+  }, 500);
+}
+
+// ========== Floating Question Widget ==========
+const qModal = document.getElementById('q-modal');
+document.getElementById('q-widget').addEventListener('click', () => {
+  qModal.classList.add('open');
+  setTimeout(() => document.getElementById('q-modal-input').focus(), 100);
+});
+function closeQModal() {
+  qModal.classList.remove('open');
+  document.getElementById('q-modal-input').value = '';
+  document.getElementById('q-modal-saved').style.display = 'none';
+}
+function saveQModal() {
+  const text = document.getElementById('q-modal-input').value.trim();
+  if (!text) return;
+  // localStorage 저장 (Firebase 연동 전)
+  try {
+    const key = `chaekpul_questions_${branch}`;
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    list.unshift({ text, ts: Date.now() });
+    localStorage.setItem(key, JSON.stringify(list.slice(0, 200)));
+  } catch (e) {}
+  document.getElementById('q-modal-saved').style.display = 'block';
+  setTimeout(closeQModal, 1200);
+}
+qModal.addEventListener('click', (e) => {
+  if (e.target === qModal) closeQModal();
+});
+
+// ========== Refresh Button ==========
+document.getElementById('refresh-btn').addEventListener('click', (e) => {
+  const btn = e.currentTarget;
+  btn.classList.add('refreshing');
+  setTimeout(() => btn.classList.remove('refreshing'), 700);
+});
+
+// ========== Mobile Menu Toggle ==========
+document.getElementById('menu-toggle').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+// ========== postMessage to parent (admin embed) ==========
+function notifyParent(type, payload) {
+  if (window.parent !== window) {
+    window.parent.postMessage({ source: 'chaekpul', type, payload, branch }, '*');
+  }
+}
+window.addEventListener('hashchange', () => {
+  notifyParent('navigate', { route: location.hash });
+});
+
+// ========== Column Edition (컬럼편) ==========
+
+const COL_FALLBACK = {
+  low: {
+    bodyHtml: `<h1>AI는 친구가 될 수 있을까?</h1>
+      <p>요즘 AI라는 말을 자주 듣게 됩니다. AI는 사람처럼 대답하고, 그림도 그리고, 노래도 만들 수 있습니다. 어떤 친구는 모르는 게 있을 때 AI한테 먼저 묻기도 합니다. 그렇다면 AI는 우리의 진짜 친구가 될 수 있을까요?</p>
+      <p>친구는 함께 시간을 보냅니다. 같이 웃고, 가끔은 다투고, 다시 화해합니다. 친구는 내 마음을 알아주고, 내가 슬플 때 옆에 있어 줍니다. AI도 우리 이야기를 듣고 대답해 줍니다. 그래서 어떤 사람은 AI가 친구처럼 느껴진다고 합니다.</p>
+      <p>하지만 AI는 사람이 아닙니다. AI는 배가 고프지도, 졸리지도 않습니다. 친구가 다쳤을 때 같이 아파해 주지도 못합니다. AI가 우리에게 해 주는 따뜻한 말은, 사실은 사람이 만들어 둔 글들을 모아서 만든 것이에요.</p>
+      <p>그렇다면 AI는 우리에게 어떤 존재일까요? AI는 친구라기보다는 <strong>똑똑한 도구</strong>에 가까워요. 모르는 단어를 찾아주는 사전처럼, AI도 우리가 잘 모르는 것을 알려주고, 생각을 정리하도록 도와줍니다.</p>
+      <p>AI는 도구이고, 친구는 마음이 통하는 사람이에요. 둘은 하는 역할이 다릅니다. AI에게 모르는 걸 묻고, 친구에게는 마음을 나누면 됩니다. AI를 잘 쓰면서도 친구와 함께 시간을 보내는 사람이, 가장 멋지게 자라는 사람입니다.</p>`,
+    meta: {
+      title: 'AI는 친구가 될 수 있을까?',
+      level: 'low',
+      summary: 'AI는 친구처럼 말을 걸어 주지만, 진짜 친구가 아니라 똑똑한 도구다. AI와 친구의 역할을 구분해서 잘 쓰는 사람이 더 멋지게 자란다.',
+      keywords: ['AI', '친구', '도구', '마음', '구분'],
+      vocab: [
+        { word: '존재', meaning: '어떤 것이 있는 상태나 모습.' },
+        { word: '구분', meaning: '서로 다른 것을 나누어서 알아보는 것.' },
+        { word: '도구', meaning: '일을 할 때 쓰는 물건이나 수단.' },
+        { word: '역할', meaning: '맡아서 하는 일.' }
+      ],
+      thoughts: [
+        'AI에게는 묻지 않고 친구에게만 묻고 싶은 일이 있다면 어떤 것일까요?',
+        'AI를 잘 쓰는 사람이 되려면 어떤 습관이 필요할까요?',
+        '내가 AI라면, 사람들에게 어떤 말을 해 주고 싶나요?'
+      ],
+      tests: {
+        vocab: [
+          { q: "본문에서 '도구'와 가장 비슷한 뜻으로 쓰인 말은?", options: ['친구', '수단', '마음', '감정'], answer: 1 },
+          { q: "'구분'의 뜻으로 알맞은 것은?", options: ['서로 합치는 것', '서로 다른 것을 나누어 알아보는 것', '함께 노는 것', '오래 기억하는 것'], answer: 1 }
+        ],
+        comprehension: [
+          { q: '이 글에서 글쓴이가 가장 말하고 싶어 한 것은?', type: 'comp', options: ['AI는 친구보다 더 좋다', '친구가 있으면 AI는 필요 없다', 'AI는 도구이고 친구는 마음을 나누는 사람이다', 'AI는 사람이다'], answer: 2 },
+          { q: "글쓴이가 'AI는 친구가 아니다'라고 보는 이유로 알맞은 것은?", type: 'infer', options: ['AI는 똑똑하지 않아서', 'AI는 사람의 마음에 함께 아파해 주지 못해서', 'AI는 답을 못해서', 'AI는 학교에 못 가서'], answer: 1 },
+          { q: '이 글을 읽고 떠오른 가장 좋은 질문을 한 줄로 적어 보세요.', type: 'open' },
+          { q: "'AI를 쓰는 사람과, 친구를 만나는 사람이 다르지 않다'는 주장에 대해 어떻게 생각하나요?", type: 'critical', options: ['맞다. 둘 다 사람과 시간을 보내는 일이다', '다르다. AI는 도구이고 친구는 마음을 나누는 사람이다', 'AI를 쓰는 게 더 중요하다', '친구를 만나는 게 더 중요하다'], answer: 1 },
+          { q: "이 글의 마지막 부분에서 '두 가지를 잘 구분'하라고 한 것은?", type: 'comp', options: ['공부와 놀이', 'AI 쓰는 일과 친구와 보내는 시간', '학교와 집', '책과 영상'], answer: 1 }
+        ]
+      }
+    }
+  },
+  high: {
+    bodyHtml: `<h1>디지털 시민이란 무엇인가</h1>
+      <p>스마트폰과 SNS, 검색 엔진과 AI는 우리 일상을 깊숙이 파고들었다. 우리가 어디에 사는지보다 어떤 플랫폼을 쓰는지가 더 많은 것을 결정하는 시대다. 이런 시대에 한 가지 새로운 단어가 등장했다. <strong>'디지털 시민'</strong>이라는 말이다.</p>
+      <p>시민은 본래 한 도시나 국가의 구성원을 가리키는 말이다. 시민은 그 공동체의 권리를 누리고, 동시에 책임을 진다. '디지털 시민'은 단순히 인터넷을 잘 쓰는 사람이 아니다. 디지털 공간을 함께 살아가는 또 하나의 공동체로 보고, 그 공동체에서 권리와 책임을 동시에 자각하는 사람을 가리킨다.</p>
+      <p>디지털 시민에게 필요한 것은 세 가지다. 첫째는 <strong>비판적 읽기</strong>다. 본 것을 곧바로 믿지 않고 출처를 묻는 태도. 둘째는 <strong>책임 있는 표현</strong>이다. 익명이라는 가면 뒤에서 함부로 쏟아낸 말이 누군가의 삶을 무너뜨릴 수 있음을 기억하는 일. 셋째는 <strong>기술에 대한 이해</strong>다. 알고리즘이 어떻게 시야를 좁히는지, AI가 어떻게 학습되는지를 알고 선택하는 힘이다.</p>
+      <p>좋은 디지털 시민이 되기 위해 필요한 능력은 좋은 시민이 되기 위해 필요한 능력과 크게 다르지 않다. 의심하고, 묻고, 책임지는 자세 — 이것은 광장의 시민에게도, 디지털 공간의 시민에게도 똑같이 요구된다.</p>`,
+    meta: {
+      title: '디지털 시민이란 무엇인가',
+      level: 'high',
+      summary: '디지털 시민은 인터넷 사용자가 아니라, 디지털 공동체에서 권리와 책임을 자각하는 사람이다. 비판적 읽기, 책임 있는 표현, 기술에 대한 이해가 필요하다.',
+      keywords: ['디지털 시민', '비판적 읽기', '책임', '알고리즘', '공동체'],
+      vocab: [
+        { word: '공동체', meaning: '함께 살아가며 가치와 책임을 공유하는 집단.' },
+        { word: '자각', meaning: '스스로 깨닫고 분명히 인식하는 일.' },
+        { word: '알고리즘', meaning: '정해진 규칙에 따라 입력을 처리해 결과를 만들어 내는 절차.' },
+        { word: '광장', meaning: '사람들이 모여 의견을 나누는 공적 공간을 비유적으로 가리키는 말.' }
+      ],
+      thoughts: [
+        '내가 SNS에서 본 정보 중, 사실인지 한 번도 의심하지 않았던 것은 무엇이었나?',
+        '익명일 때 나의 말투와, 이름이 드러난 곳에서의 말투는 어떻게 다른가?',
+        '알고리즘이 추천하는 것만 보다 보면 잃는 것은 무엇일까?'
+      ],
+      tests: {
+        vocab: [
+          { q: "'자각'의 의미로 가장 알맞은 것은?", options: ['남이 알려 주어 알게 됨', '스스로 깨달아 분명히 인식함', '잠에서 깨어남', '감각이 둔해짐'], answer: 1 },
+          { q: "본문에서 '광장'이 비유적으로 가리키는 것은?", options: ['공원', '의견을 나누는 공적 공간', '시장', '학교 운동장'], answer: 1 }
+        ],
+        comprehension: [
+          { q: "글쓴이가 '디지털 시민'을 '인터넷 잘 쓰는 사람'과 구분한 이유로 가장 적절한 것은?", type: 'comp', options: ['기술적 능력보다 윤리적 책임이 핵심이라고 보기 때문', '인터넷 사용 시간을 줄여야 한다고 보기 때문', '옛 시민과 새 시민이 완전히 다르다고 보기 때문', '알고리즘이 나쁘다고 보기 때문'], answer: 0 },
+          { q: '본문에서 디지털 시민에게 가장 먼저 요구되는 능력은?', type: 'comp', options: ['기술에 대한 이해', '비판적 읽기', '책임 있는 표현', '빠른 반응'], answer: 1 },
+          { q: '글쓴이의 주장 중 가장 동의하기 어려운 부분은? 이유와 함께 한두 문장으로 적어 보세요.', type: 'critical_open' },
+          { q: "다음 중 글쓴이의 결론을 가장 잘 요약한 것은?", type: 'infer', options: ['디지털 시민은 새로운 기술 용어다', '좋은 디지털 시민이 되는 길은 좋은 시민이 되는 길과 본질적으로 같다', '기술이 발전할수록 사람의 책임은 줄어든다', '광장의 시민은 더 이상 필요 없다'], answer: 1 },
+          { q: '이 컬럼을 읽고 떠오른 가장 좋은 질문을 한 줄로 적어 보세요. (정답이 정해진 문제가 아닙니다.)', type: 'open' }
+        ]
+      }
+    }
+  }
+};
+
+let columnState = {
+  level: 'low',
+  current: null,
+  reads: 0,
+  readSeconds: 0,
+  readTimer: null,
+  readActive: false,
+  vocabOpened: new Set(),
+  keywordsMatched: new Set(),
+  selectedThought: -1,
+  thoughtText: '',
+  mindmap: { center: '', b1: '', b2: '', b3: '', b4: '', b5: '' },
+  testAnswers: [],
+  scores: { vocab: {n:0,c:0}, comp: {n:0,c:0}, infer: {n:0,c:0}, critical: {n:0,c:0} }
+};
+
+async function loadColumn(level) {
+  try {
+    const m = await fetch('columns/manifest.json').then(r => r.ok ? r.json() : Promise.reject());
+    const file = m.today[level];
+    const html = await fetch('columns/' + file).then(r => r.ok ? r.text() : Promise.reject());
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+    const article = doc.querySelector('article.column-body');
+    const metaEl = doc.querySelector('#chaek-pul-meta');
+    return {
+      bodyHtml: article ? article.innerHTML : '<p>본문 없음</p>',
+      meta: metaEl ? JSON.parse(metaEl.textContent) : {}
+    };
+  } catch (e) {
+    // file:// 환경 또는 manifest 없음 → 폴백
+    return COL_FALLBACK[level];
+  }
+}
+
+async function initColumnStart() {
+  const level = columnState.level;
+  if (!columnState.current || columnState.current.meta.level !== level) {
+    columnState.current = await loadColumn(level);
+  }
+  const c = columnState.current;
+  document.getElementById('col-title').textContent = c.meta.title || '';
+  document.getElementById('col-summary').textContent = c.meta.summary || '';
+  document.getElementById('col-level-label').textContent = level === 'low' ? '저학년' : '고학년·중고등';
+  // 토글 버튼 active 상태 동기화
+  document.querySelectorAll('#col-level-toggle button').forEach(b => b.classList.toggle('active', b.dataset.level === level));
+}
+
+// 학년 토글
+document.getElementById('col-level-toggle').addEventListener('click', async (e) => {
+  const btn = e.target.closest('button[data-level]');
+  if (!btn) return;
+  if (btn.dataset.level === columnState.level) return;
+  columnState.level = btn.dataset.level;
+  // 학년 바뀌면 진행 상태 리셋
+  columnState.current = null;
+  columnState.reads = 0;
+  columnState.readSeconds = 0;
+  columnState.vocabOpened = new Set();
+  columnState.keywordsMatched = new Set();
+  columnState.selectedThought = -1;
+  columnState.thoughtText = '';
+  columnState.mindmap = { center: '', b1: '', b2: '', b3: '', b4: '', b5: '' };
+  await initColumnStart();
+  saveState();
+});
+
+async function initColumnStudy() {
+  if (!columnState.current) await initColumnStart();
+  const c = columnState.current;
+  if (!c) return;
+
+  // 본문 표시 + 어휘 단어 마킹
+  let html = c.bodyHtml;
+  const vocab = c.meta.vocab || [];
+  vocab.forEach((v, i) => {
+    // 안전한 단어 매칭 (HTML 태그 외부에서만)
+    const re = new RegExp('(?<!<[^>]*?)' + v.word + '(?![^<]*?>)', 'g');
+    html = html.replace(re, `<span class="vocab-mark" data-vocab="${i}" title="클릭해서 의미 보기">${v.word}</span>`);
+  });
+  const studyText = document.getElementById('study-text');
+  studyText.innerHTML = html;
+  // study title
+  document.getElementById('study-title').textContent = c.meta.title;
+
+  // vocab 클릭 (이벤트 위임)
+  studyText.onclick = (e) => {
+    const m = e.target.closest('.vocab-mark');
+    if (!m) return;
+    const idx = +m.dataset.vocab;
+    columnState.vocabOpened.add(idx);
+    document.querySelectorAll(`.vocab-list li[data-vidx="${idx}"]`).forEach(li => li.classList.add('opened'));
+    document.querySelectorAll(`.vocab-mark[data-vocab="${idx}"]`).forEach(el => el.classList.add('opened'));
+    updateVocabProgress();
+  };
+
+  // 본문 텍스트 선택 → 키워드 매칭 (드래그)
+  studyText.onmouseup = () => {
+    const sel = window.getSelection();
+    const text = sel.toString().trim();
+    if (!text || text.length < 1 || text.length > 80) { sel.removeAllRanges(); return; }
+    if (sel.rangeCount > 0) {
+      try {
+        const range = sel.getRangeAt(0);
+        // 본문 영역 안에서만
+        if (!studyText.contains(range.commonAncestorContainer)) return;
+        const span = document.createElement('span');
+        span.className = 'user-underline';
+        const kws = c.meta.keywords || [];
+        let matched = false;
+        kws.forEach(k => { if (text.includes(k)) { columnState.keywordsMatched.add(k); span.classList.add('matched'); matched = true; } });
+        span.textContent = text;
+        range.deleteContents();
+        range.insertNode(span);
+        updateKeywordStatus();
+        sel.removeAllRanges();
+        if (matched) saveState();
+      } catch (err) { /* 이미 마크된 영역 등 */ }
+    }
+  };
+
+  // 어휘 리스트
+  const vList = document.getElementById('vocab-list');
+  vList.innerHTML = vocab.map((v, i) =>
+    `<li data-vidx="${i}" onclick="toggleVocab(${i})">
+      <span class="vocab-word">${v.word}</span>
+      <div class="vocab-mean">${v.meaning}</div>
+    </li>`
+  ).join('');
+  updateVocabProgress();
+
+  // 키워드 chips
+  const kws = c.meta.keywords || [];
+  const kwList = document.getElementById('kw-list');
+  kwList.innerHTML = kws.map(k => `<span class="kw-chip" data-kw="${k}">${k}</span>`).join('');
+  updateKeywordStatus();
+
+  // 생각거리
+  const thoughts = c.meta.thoughts || [];
+  const tEl = document.getElementById('thoughts-options');
+  tEl.innerHTML = thoughts.map((t, i) =>
+    `<label class="thought-opt${columnState.selectedThought === i ? ' selected' : ''}" data-idx="${i}">
+      <input type="radio" name="thought" value="${i}" ${columnState.selectedThought === i ? 'checked' : ''} onchange="selectThought(${i})">
+      <span>${t}</span>
+    </label>`
+  ).join('');
+
+  // 회독 카운터 초기화
+  resetReadDots();
+  // 시작/완료 버튼 가시성
+  document.getElementById('read-start').style.display = (columnState.readActive || columnState.reads >= 10) ? 'none' : 'block';
+  document.getElementById('read-done').style.display = columnState.readActive ? 'block' : 'none';
+
+  // 마인드맵 input 바인딩 (디바운스 저장)
+  let mmTimer = null;
+  document.querySelectorAll('#mindmap-grid input[data-mm]').forEach(inp => {
+    inp.value = columnState.mindmap[inp.dataset.mm] || '';
+    inp.oninput = e => {
+      columnState.mindmap[e.target.dataset.mm] = e.target.value;
+      clearTimeout(mmTimer);
+      mmTimer = setTimeout(saveState, 600);
+    };
+  });
+
+  // 글쓰기 input 바인딩 (디바운스 저장)
+  const tw = document.getElementById('thought-write');
+  tw.value = columnState.thoughtText || '';
+  let twTimer = null;
+  tw.oninput = e => {
+    columnState.thoughtText = e.target.value;
+    clearTimeout(twTimer);
+    twTimer = setTimeout(saveState, 600);
+  };
+}
+
+function toggleVocab(idx) {
+  columnState.vocabOpened.add(idx);
+  const li = document.querySelector(`.vocab-list li[data-vidx="${idx}"]`);
+  if (li) li.classList.toggle('opened');
+  updateVocabProgress();
+  saveState();
+}
+
+function updateVocabProgress() {
+  const total = (columnState.current?.meta.vocab || []).length;
+  const el = document.getElementById('vocab-progress');
+  if (el) el.textContent = `${columnState.vocabOpened.size} / ${total}`;
+}
+
+function updateKeywordStatus() {
+  const kws = columnState.current?.meta.keywords || [];
+  document.querySelectorAll('.kw-chip').forEach(chip => {
+    if (columnState.keywordsMatched.has(chip.dataset.kw)) chip.classList.add('matched');
+  });
+  const s = document.getElementById('kw-status');
+  if (s) s.textContent = `진행: ${columnState.keywordsMatched.size} / ${kws.length}`;
+}
+
+function selectThought(i) {
+  columnState.selectedThought = i;
+  document.querySelectorAll('.thought-opt').forEach((el, idx) => el.classList.toggle('selected', idx === i));
+  saveState();
+}
+
+function resetReadDots() {
+  const dotsEl = document.getElementById('read-dots');
+  if (!dotsEl) return;
+  let html = '';
+  for (let i = 1; i <= 10; i++) {
+    let cls = 'read-dot';
+    if (i <= columnState.reads) cls += ' done';
+    else if (i === columnState.reads + 1 && columnState.readActive) cls += ' active';
+    html += `<span class="${cls}">${i}</span>`;
+  }
+  dotsEl.innerHTML = html;
+  document.getElementById('read-current').textContent = `${columnState.reads} / 10 회독`;
+  document.getElementById('read-time').textContent = formatTime(columnState.readSeconds);
+}
+
+function formatTime(s) {
+  const m = Math.floor(s / 60).toString().padStart(2, '0');
+  const sec = (s % 60).toString().padStart(2, '0');
+  return `${m}:${sec}`;
+}
+
+function readStart() {
+  if (columnState.readActive || columnState.reads >= 10) return;
+  columnState.readActive = true;
+  document.getElementById('read-start').style.display = 'none';
+  document.getElementById('read-done').style.display = 'block';
+  if (!columnState.readTimer) {
+    columnState.readTimer = setInterval(() => {
+      columnState.readSeconds++;
+      const t = document.getElementById('read-time');
+      if (t) t.textContent = formatTime(columnState.readSeconds);
+    }, 1000);
+  }
+  resetReadDots();
+}
+
+function readDone() {
+  if (!columnState.readActive) return;
+  columnState.reads++;
+  columnState.readActive = false;
+  if (columnState.reads >= 10) {
+    if (columnState.readTimer) { clearInterval(columnState.readTimer); columnState.readTimer = null; }
+    document.getElementById('read-start').style.display = 'none';
+  } else {
+    document.getElementById('read-start').style.display = 'block';
+  }
+  document.getElementById('read-done').style.display = 'none';
+  resetReadDots();
+  saveState();
+}
+
+function finishColumn() {
+  if (columnState.readTimer) { clearInterval(columnState.readTimer); columnState.readTimer = null; columnState.readActive = false; }
+  navigate('column-test');
+}
+
+// ========== Column Test ==========
+function initColumnTest() {
+  if (!columnState.current) { navigate('column'); return; }
+  const meta = columnState.current.meta;
+  const tests = meta.tests || { vocab: [], comprehension: [] };
+  let html = '';
+  let qNum = 1;
+  let idx = 0;
+
+  const renderQ = (q, isVocab) => {
+    const tagMap = { vocab: '어휘', comp: '이해', infer: '추론', critical: '비판', critical_open: '비판', open: '질문' };
+    const tag = isVocab ? '어휘' : (tagMap[q.type] || '이해');
+    let body = '';
+    if (q.options) {
+      body = `<div class="test-options">` + q.options.map((o, i) =>
+        `<label class="test-opt" data-q="${idx}" onclick="selectTestOpt(${idx}, ${i})">
+          <input type="radio" name="q${idx}" value="${i}">
+          <span>${o}</span>
+        </label>`
+      ).join('') + `</div>`;
+    } else {
+      body = `<textarea class="test-open-input" placeholder="자유롭게 적어보세요... (정답이 없는 문항이에요)" oninput="setTestOpen(${idx}, this.value)"></textarea>`;
+    }
+    const card = `<div class="test-card">
+      <div class="test-q-num">Q${qNum} <span class="test-cat-tag">${tag}</span></div>
+      <div class="test-q-text">${q.q}</div>
+      ${body}
+    </div>`;
+    qNum++; idx++;
+    return card;
+  };
+
+  (tests.vocab || []).forEach(q => { html += renderQ(q, true); });
+  (tests.comprehension || []).forEach(q => { html += renderQ(q, false); });
+
+  document.getElementById('test-list').innerHTML = html;
+  columnState.testAnswers = new Array(idx).fill(null);
+}
+
+function selectTestOpt(qIdx, optIdx) {
+  columnState.testAnswers[qIdx] = optIdx;
+  document.querySelectorAll(`.test-opt[data-q="${qIdx}"]`).forEach((el, i) => el.classList.toggle('selected', i === optIdx));
+}
+
+function setTestOpen(qIdx, val) {
+  columnState.testAnswers[qIdx] = val;
+}
+
+function submitTest() {
+  if (!columnState.current) return;
+  const meta = columnState.current.meta;
+  const tests = meta.tests || { vocab: [], comprehension: [] };
+  const all = [...(tests.vocab || []).map(q => ({ ...q, _cat: 'vocab' })),
+               ...(tests.comprehension || []).map(q => ({ ...q, _cat: q.type || 'comp' }))];
+
+  let scores = { vocab: { n: 0, c: 0 }, comp: { n: 0, c: 0 }, infer: { n: 0, c: 0 }, critical: { n: 0, c: 0 } };
+  all.forEach((q, i) => {
+    const cat = q._cat === 'vocab' ? 'vocab'
+              : q._cat === 'infer' ? 'infer'
+              : (q._cat === 'critical' || q._cat === 'critical_open') ? 'critical'
+              : (q._cat === 'open' ? 'critical' : 'comp');
+    if (q.options && typeof q.answer === 'number') {
+      scores[cat].n++;
+      if (columnState.testAnswers[i] === q.answer) scores[cat].c++;
+    } else {
+      // 주관식: 작성 자체로 점수 (질문력 격려)
+      scores[cat].n++;
+      const ans = columnState.testAnswers[i];
+      if (typeof ans === 'string' && ans.trim().length >= 5) scores[cat].c++;
+    }
+  });
+  columnState.scores = scores;
+  navigate('column-result');
+}
+
+function initColumnResult() {
+  const sc = columnState.scores;
+  const labels = { vocab: '어휘', comp: '이해', infer: '추론', critical: '비판' };
+  const bars = document.getElementById('score-bars');
+  bars.innerHTML = Object.keys(labels).map(k => {
+    const n = sc[k]?.n || 0;
+    const c = sc[k]?.c || 0;
+    const pct = n > 0 ? Math.round(c / n * 100) : 0;
+    return `<div class="score-row"><span class="label">${labels[k]}</span><div class="bar"><div class="fill" style="width:${pct}%"></div></div><span class="pct">${pct}%</span></div>`;
+  }).join('');
+
+  // 나의 생각 첨삭
+  const tw = columnState.thoughtText || '';
+  document.getElementById('result-thought-quote').textContent = tw || '(이번엔 작성하지 않았어요. 다음엔 한 줄이라도 써보세요.)';
+  document.getElementById('result-thought-feedback').innerHTML = tw.length > 30
+    ? '글에 <strong>네 생각</strong>이 잘 드러나 있어요. 한 단계 더 — "그래서 나는 어떻게 살고 싶은가?"라는 질문을 마지막에 더해보면 글이 더 단단해져요.'
+    : '조금 더 길게 써보면 좋겠어요. 본문에서 인상 깊었던 한 문장을 인용하고, 그에 대한 네 생각을 두 문장 더해보세요.';
+
+  // 마인드맵 피드백
+  const mm = columnState.mindmap;
+  const filled = Object.values(mm).filter(v => v.trim().length > 0).length;
+  document.getElementById('result-mindmap-feedback').innerHTML = filled >= 5
+    ? `중심 질문 <strong>"${mm.center || '미작성'}"</strong>을 두고 가지가 잘 뻗어 있어요. 가지끼리 어떻게 연결되는지 화살표를 그려보면 사고가 더 입체적으로 보일 거예요.`
+    : `가지를 ${filled}개 채웠어요. 다음엔 5개 가지를 모두 채워보세요. 빈 가지는 "내가 아직 모르는 것"이라는 뜻이라, 그게 곧 다음 질문이 됩니다.`;
+
+  // 앞으로 생각해 볼 거리
+  const futureQ = (columnState.current?.meta.thoughts || [])
+    .filter((_, i) => i !== columnState.selectedThought).slice(0, 3);
+  document.getElementById('result-future-q').innerHTML = futureQ.map(q => `<li>${q}</li>`).join('');
+
+  // 글쓰기 첨가 팁
+  document.getElementById('result-writing-tips').textContent =
+    '도입에 본문 한 줄 인용 → 자기 경험 한 문단 → 다른 관점 한 문단 → 결론에서 새로운 질문 한 줄. 이 4단 구조로 다음 글을 써보면 글이 훨씬 깊어집니다.';
+
+  // 학부모 자동 전송 알림 (시뮬)
+  notifyParent('column-completed', {
+    title: columnState.current?.meta.title,
+    scores: columnState.scores,
+    thought: columnState.thoughtText,
+    branch
+  });
+}
+
+// ========== Diagnosis (레벨 테스트 정식) ==========
+
+const DIAG_QUESTIONS = [
+  {
+    cat: 'vocab',
+    q: "다음 중 '구분'의 뜻으로 가장 알맞은 것은?",
+    options: ['서로 합치는 것', '서로 다른 것을 나누어 알아보는 것', '함께 노는 것', '오래 기억하는 것'],
+    answer: 1,
+    hint: '어휘 1번'
+  },
+  {
+    cat: 'vocab',
+    q: "'자각'의 뜻으로 가장 알맞은 것은?",
+    options: ['남이 알려 주어 알게 됨', '스스로 깨달아 분명히 인식함', '잠에서 깨어남', '감각이 둔해짐'],
+    answer: 1,
+    hint: '어휘 2번'
+  },
+  {
+    cat: 'comp',
+    passage: "어른들은 누구나 처음에는 어린이였다. 그러나 그것을 기억하는 어른은 별로 없다.",
+    q: '이 글에서 글쓴이가 가장 안타까워하는 것은?',
+    options: ['어른들이 어린 시절을 잊는다는 것', '어린이가 너무 빨리 자란다는 것', '어른들이 너무 바쁘다는 것', '어린이가 어른을 무시한다는 것'],
+    answer: 0,
+    hint: '이해 1번'
+  },
+  {
+    cat: 'comp',
+    passage: "잎싹은 알을 한 번도 품어 본 적이 없었다. 알은 매일 빼앗겼고, 잎싹은 그저 알을 낳기만 하는 닭이었다.",
+    q: '잎싹의 처지를 가장 잘 표현한 것은?',
+    options: ['행복하다', '아무 생각 없다', '자기 의지가 빼앗긴 상태다', '리더가 되었다'],
+    answer: 2,
+    hint: '이해 2번'
+  },
+  {
+    cat: 'infer',
+    passage: "잎싹은 처음으로 마당을 둘러보았다. \"여기는 내 자리가 아니야.\"",
+    q: '잎싹이 곧 어떤 행동을 할 것 같은가?',
+    options: ['다른 닭과 친해진다', '마당을 떠난다', '주인에게 묻는다', '알을 더 많이 낳는다'],
+    answer: 1,
+    hint: '추론'
+  },
+  {
+    cat: 'critical',
+    passage: "AI는 사람의 글을 모아 답을 만들어준다. 하지만 사람처럼 함께 아파해 주지는 못한다.",
+    q: "'AI도 진짜 친구가 될 수 있다'는 주장에 어떻게 답하겠는가?",
+    options: ['맞다. 답을 잘 해주니까', '다르다. 친구는 마음을 함께 나누는 사람이다', 'AI가 더 낫다', '둘 다 똑같다'],
+    answer: 1,
+    hint: '비판'
+  },
+  {
+    cat: 'open',
+    passage: '"질문하는 사람이 미래를 만든다."',
+    q: '이 문장을 읽고 떠오른 가장 좋은 질문을 한 줄로 적어 보세요. (정답 X)',
+    type: 'open',
+    hint: '질문 만들기'
+  }
+];
+
+let diagState = { idx: 0, answers: [], complete: false };
+
+function initDiagnosis() {
+  if (diagState.complete) {
+    renderDiagResult();
+    return;
+  }
+  diagState.idx = 0;
+  diagState.answers = [];
+  document.getElementById('diag-question-card').style.display = 'block';
+  document.getElementById('diag-result').style.display = 'none';
+  renderDiagQuestion();
+}
+
+function renderDiagQuestion() {
+  const q = DIAG_QUESTIONS[diagState.idx];
+  document.getElementById('diag-stage').textContent = `${diagState.idx + 1} / ${DIAG_QUESTIONS.length} 문항`;
+  document.getElementById('diag-q').innerHTML = q.q;
+  document.getElementById('diag-hint').textContent = q.hint || '';
+
+  const passageEl = document.getElementById('diag-passage');
+  if (q.passage) {
+    passageEl.textContent = `"${q.passage}"`;
+    passageEl.style.display = 'block';
+  } else {
+    passageEl.style.display = 'none';
+  }
+
+  if (q.type === 'open') {
+    document.getElementById('diag-options').innerHTML = '';
+    document.getElementById('diag-open').style.display = 'block';
+    document.getElementById('diag-open-input').value = '';
+    document.getElementById('diag-open-input').focus();
+  } else {
+    document.getElementById('diag-open').style.display = 'none';
+    const opts = q.options.map((o, i) => `<button class="diag-option" onclick="diagAnswer(${i})">${o}</button>`).join('');
+    document.getElementById('diag-options').innerHTML = opts;
+  }
+}
+
+function diagAnswer(optIdx) {
+  diagState.answers.push(optIdx);
+  diagNext();
+}
+
+function diagSubmitOpen() {
+  const v = document.getElementById('diag-open-input').value.trim();
+  diagState.answers.push(v);
+  diagNext();
+}
+
+function diagNext() {
+  diagState.idx++;
+  if (diagState.idx >= DIAG_QUESTIONS.length) {
+    diagState.complete = true;
+    renderDiagResult();
+  } else {
+    renderDiagQuestion();
+  }
+}
+
+function renderDiagResult() {
+  document.getElementById('diag-question-card').style.display = 'none';
+  document.getElementById('diag-result').style.display = 'block';
+
+  // 점수 계산
+  let cats = { vocab: {n:0, c:0}, comp: {n:0, c:0}, infer: {n:0, c:0}, critical: {n:0, c:0}, open: {n:0, c:0} };
+  DIAG_QUESTIONS.forEach((q, i) => {
+    const cat = q.cat;
+    cats[cat].n++;
+    const ans = diagState.answers[i];
+    if (q.type === 'open') {
+      if (typeof ans === 'string' && ans.length >= 5) cats[cat].c++;
+    } else if (ans === q.answer) {
+      cats[cat].c++;
+    }
+  });
+
+  // 레벨 계산: 점수 평균
+  const totalC = Object.values(cats).reduce((s, x) => s + x.c, 0);
+  const totalN = Object.values(cats).reduce((s, x) => s + x.n, 0);
+  const pct = totalN > 0 ? Math.round(totalC / totalN * 100) : 0;
+  let level = 'L2-C2';
+  if (pct >= 90) level = 'L4-C2';
+  else if (pct >= 75) level = 'L3-C3';
+  else if (pct >= 60) level = 'L3-C1';
+  else if (pct >= 45) level = 'L2-C3';
+  document.getElementById('diag-level').textContent = level;
+
+  // 점수 막대
+  const labels = { vocab: '어휘', comp: '이해', infer: '추론', critical: '비판', open: '질문력' };
+  const bars = document.getElementById('diag-score-bars');
+  bars.innerHTML = Object.keys(labels).map(k => {
+    const n = cats[k].n;
+    const c = cats[k].c;
+    const p = n > 0 ? Math.round(c / n * 100) : 0;
+    return `<div class="score-row"><span class="label">${labels[k]}</span><div class="bar"><div class="fill" style="width:${p}%"></div></div><span class="pct">${p}%</span></div>`;
+  }).join('');
+
+  // 강점/성장
+  const sorted = Object.keys(cats).sort((a, b) => (cats[b].c / Math.max(1, cats[b].n)) - (cats[a].c / Math.max(1, cats[a].n)));
+  const strong = labels[sorted[0]];
+  const weak = labels[sorted[sorted.length - 1]];
+  document.getElementById('diag-strength').innerHTML = `<strong>강점:</strong> ${strong} 영역이 가장 안정적이에요. <br><strong>성장 포인트:</strong> ${weak} 영역을 다음 달 중점으로 잡으면 레벨이 한 단계 더 올라갈 거예요.`;
+
+  // 추천 책 메시지
+  document.getElementById('diag-book-suggest').innerHTML = `너의 레벨(<strong>${level}</strong>)에 맞춘 책 5권이 책장에 준비되어 있어. AI가 추천만 해줘 — 어떤 걸 먼저 읽을지는 네가 결정해.`;
+
+  saveState();
+}
+
+// ========== Book Test (책별 10문항) ==========
+
+const BOOK_TEST_DATA = {
+  '마당을 나온 암탉': [
+    { cat: 'vocab', q: "본문에서 '잎싹'이 뜻한 것은?", options: ['암탉의 이름', '식물', '음식', '도구'], answer: 0 },
+    { cat: 'vocab', q: "'품다'의 의미와 가장 가까운 것은?", options: ['빼앗다', '버리다', '안고 보호하다', '잊다'], answer: 2 },
+    { cat: 'vocab', q: "'마당'은 어디인가?", options: ['바다', '숲', '집 앞 열린 공간', '창고'], answer: 2 },
+    { cat: 'fact', q: '잎싹이 끝까지 품어준 것은?', options: ['자기 알', '청둥오리 알', '돌멩이', '병아리'], answer: 1 },
+    { cat: 'fact', q: '나그네는 어떤 동물?', options: ['고양이', '청둥오리', '여우', '비둘기'], answer: 1 },
+    { cat: 'infer', q: '잎싹이 마당을 떠난 가장 큰 이유는?', options: ['배고파서', '자기 자리가 아니라고 느껴서', '주인이 미워서', '심심해서'], answer: 1 },
+    { cat: 'infer', q: '잎싹이 새끼 오리를 끝까지 키운 이유는?', options: ['책임감과 사랑', '의무감', '강요받아서', '심심해서'], answer: 0 },
+    { cat: 'critical', q: "'진짜 엄마는 누구인가'라는 질문에 이 책이 주는 답은?", options: ['알을 낳은 사람', '함께 사는 사람', '마음으로 품는 사람', '강한 사람'], answer: 2 },
+    { cat: 'critical', q: '이 책에서 가장 동의하기 어려운 부분은? (간단히 적어보세요)', type: 'critical_open' },
+    { cat: 'understanding', q: '이 책 전체를 한 줄로 요약한다면?', options: ['용기 있는 닭의 모험', '진짜 엄마가 되는 길에 대한 이야기', '동물 친구들의 우정', '시골 풍경 이야기'], answer: 1 }
+  ],
+  '샬롯의 거미줄': [
+    { cat: 'vocab', q: "샬롯이 거미줄에 쓴 말의 뜻은?", options: ['이름', '광고 문구이자 칭찬', '욕설', '주문'], answer: 1 },
+    { cat: 'vocab', q: "'기적'의 의미로 가장 가까운 것은?", options: ['아주 신기한 일', '평범한 일', '실수', '약속'], answer: 0 },
+    { cat: 'vocab', q: "'배려'와 가장 비슷한 의미는?", options: ['무관심', '도움과 마음 씀', '경쟁', '거리 둠'], answer: 1 },
+    { cat: 'fact', q: '윌버를 살리기 위해 샬롯이 한 일은?', options: ['도망치게 했다', '거미줄에 글자를 썼다', '다른 돼지로 바꿨다', '주인을 설득했다'], answer: 1 },
+    { cat: 'fact', q: '샬롯은 어떤 동물?', options: ['거미', '쥐', '돼지', '거위'], answer: 0 },
+    { cat: 'infer', q: '샬롯이 윌버를 도운 이유로 가장 적절한 것은?', options: ['이익을 위해', '진정한 우정과 사랑', '심심해서', '강요받아서'], answer: 1 },
+    { cat: 'infer', q: '샬롯이 죽고 난 뒤 윌버가 알을 지킨 행동이 보여주는 것은?', options: ['책임 회피', '받은 사랑을 다음 세대로 잇는 마음', '두려움', '욕심'], answer: 1 },
+    { cat: 'critical', q: '"우정은 죽음으로 끝나지 않는다"는 메시지에 어떻게 답하겠는가?', options: ['끝난다. 죽으면 끝이다', '끝나지 않는다. 마음에 남고, 다음으로 이어진다', '잘 모르겠다', '책 속에서만 그렇다'], answer: 1 },
+    { cat: 'critical', q: '이 책에서 가장 인상 깊었지만, 이해되지 않았던 부분은? (간단히)', type: 'critical_open' },
+    { cat: 'understanding', q: '이 책 전체를 한 줄로 요약한다면?', options: ['농장 동물들의 일상', '한 거미가 친구를 살린 이야기', '돼지 키우기 안내', '계절의 변화'], answer: 1 }
+  ]
+};
+
+let bookTestState = { book: '', answers: [], cats: {} };
+
+function startBookTest(bookTitle) {
+  bookTestState.book = bookTitle || '마당을 나온 암탉';
+  bookTestState.answers = [];
+  navigate('book-test');
+}
+
+function initBookTest() {
+  const book = bookTestState.book || '마당을 나온 암탉';
+  const tests = BOOK_TEST_DATA[book] || BOOK_TEST_DATA['마당을 나온 암탉'];
+  document.getElementById('book-test-title').textContent = `「${book}」 평가`;
+
+  const labels = { vocab: '어휘', fact: '사실', infer: '추론', critical: '비판', critical_open: '비판', understanding: '이해도' };
+  let html = '';
+  tests.forEach((q, i) => {
+    const tag = labels[q.cat] || '';
+    let body = '';
+    if (q.options) {
+      body = `<div class="test-options">` + q.options.map((o, oi) =>
+        `<label class="test-opt" data-q="${i}" onclick="selectBookTestOpt(${i}, ${oi})">
+          <input type="radio" name="bq${i}" value="${oi}">
+          <span>${o}</span>
+        </label>`
+      ).join('') + `</div>`;
+    } else {
+      body = `<textarea class="test-open-input" oninput="setBookTestOpen(${i}, this.value)" placeholder="자유롭게 적어보세요..."></textarea>`;
+    }
+    html += `<div class="test-card">
+      <div class="test-q-num">Q${i + 1} <span class="test-cat-tag">${tag}</span></div>
+      <div class="test-q-text">${q.q}</div>
+      ${body}
+    </div>`;
+  });
+  document.getElementById('book-test-list').innerHTML = html;
+  bookTestState.answers = new Array(tests.length).fill(null);
+}
+
+function selectBookTestOpt(qIdx, optIdx) {
+  bookTestState.answers[qIdx] = optIdx;
+  document.querySelectorAll(`.test-opt[data-q="${qIdx}"]`).forEach((el, i) => el.classList.toggle('selected', i === optIdx));
+  saveState();
+}
+
+function setBookTestOpen(qIdx, val) {
+  bookTestState.answers[qIdx] = val;
+  // 디바운스 없이도 비교적 적은 호출이라 OK
+}
+
+function submitBookTest() {
+  const book = bookTestState.book;
+  const tests = BOOK_TEST_DATA[book] || BOOK_TEST_DATA['마당을 나온 암탉'];
+  let cats = { vocab: {n:0,c:0}, fact: {n:0,c:0}, infer: {n:0,c:0}, critical: {n:0,c:0}, understanding: {n:0,c:0} };
+  tests.forEach((q, i) => {
+    const cat = q

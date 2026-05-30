@@ -1356,12 +1356,12 @@ function autoLoginContinue(){
     tier: auto.tier, name: auto.name, memberId: auto.memberId,
     loginAt: new Date().toISOString(), auto: true
   }));
-  if (auto.tier === 'special' || auto.redirect === 'app.html'){
-    window.location.href = 'app.html';
+  if (auto.tier === 'special' || auto.redirect === 'yeong-pul.html'){
+    window.location.href = 'yeong-pul.html';
   } else if (auto.tier === 'premium'){
-    window.location.href = 'app.html';
+    window.location.href = 'yeong-pul.html';
   } else {
-    window.location.href = 'app.html';
+    window.location.href = 'yeong-pul.html';
   }
 }
 // 진입 시 무조건 학습 페이지로 바로 이동 — 로그인 장벽 없음
@@ -1373,7 +1373,7 @@ function autoLoginContinue(){
     return;
   }
   // 세션 없어도 바로 학습 페이지로 이동 (게스트 모드)
-  window.location.href = 'app.html';
+  window.location.href = 'yeong-pul.html';
 })();
 
 // ============================================
@@ -1542,7 +1542,7 @@ async function handleQuickStart(e){
   }));
 
   // 바로 학습 페이지로 이동
-  window.location.href = 'app.html';
+  window.location.href = 'yeong-pul.html';
 }
 
 // 자세한 정보로 가입 토글
@@ -1805,7 +1805,7 @@ function startTrialSession(){
   } else {
     alert('체험 모드로 입장합니다. 남은 '+(quota-used-1)+'회');
   }
-  window.location.href = 'app.html';
+  window.location.href = 'yeong-pul.html';
 }
 
 // ============================================
@@ -2845,7 +2845,7 @@ function demoBackend(action, payload){
         연락처:payload.phone, 이메일:payload.email||'',
         일회용비번:otp, 비번발급일시:now,
         유효기간시간:24, 사용여부:false, 사용일시:'',
-        특례플래그:'yeongpul-original', 관리자메모:'기존 학습 데이터 보유 (app.html)'
+        특례플래그:'yeongpul-original', 관리자메모:'기존 학습 데이터 보유 (yeong-pul.html)'
       });
       write(K_SPC, spc);
     }
@@ -2872,7 +2872,7 @@ function demoBackend(action, payload){
       spc[sIdx].사용일시 = now;
       spc[sIdx].일회용비번 = '';
       write(K_SPC, spc);
-      return {ok:true, demo:true, tier:'special', member, redirect: member.특례플래그==='yeongpul-original' ? 'app.html' : null};
+      return {ok:true, demo:true, tier:'special', member, redirect: member.특례플래그==='yeongpul-original' ? 'yeong-pul.html' : null};
     }
     // general (pending)
     const gen = read(K_GEN).find(r=> r.이름===payload.name && r.비밀번호===payload.password);
@@ -3032,11 +3032,11 @@ async function handleLogin(e){
     name: payload.name,
     memberId: memberId,
     password: res.tier === 'special' ? null : payload.password, // 특별회원 OTP는 소모되므로 저장 X
-    redirect: 'app.html'
+    redirect: 'yeong-pul.html'
   });
 
   // 모든 티어 → 학습 페이지로 바로 이동
-  window.location.href = 'app.html';
+  window.location.href = 'yeong-pul.html';
 }
 
 // ============================================
