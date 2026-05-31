@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>영풀 · 영어 완전학습</title>
+<title>영풀 V1.6 · 영어 완전학습</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#5A7A82">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="영풀">
+<meta name="apple-mobile-web-app-title" content="영풀 V1.6">
 <link rel="apple-touch-icon" href="icon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -21,82 +21,13 @@
   }
 })();
 
-// ===== PWA 설치 (진짜 앱처럼) =====
-var _pwaInstallPrompt = null;
-
-window.addEventListener('beforeinstallprompt', function(e){
-  e.preventDefault();
-  _pwaInstallPrompt = e;
-  // 설치 가능 → 배너 표시
-  setTimeout(showPwaInstallBanner, 2000);
-});
-
-function showPwaInstallBanner(){
-  if(!_pwaInstallPrompt) return;
-  var dismissed = localStorage.getItem('yeon_install_dismissed');
-  if(dismissed && Date.now() - Number(dismissed) < 7*24*60*60*1000) return;
-  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if(isStandalone) return;
-  if(document.getElementById('installBanner')) return;
-
-  var banner = document.createElement('div');
-  banner.id = 'installBanner';
-  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#2C3E42,#3D5A5E);color:#fff;padding:16px 20px;z-index:99999;box-shadow:0 -4px 20px rgba(0,0,0,.25);animation:slideUp .4s ease;font-family:inherit;';
-  banner.innerHTML = '<div style="display:flex;align-items:center;gap:12px;max-width:500px;margin:0 auto;">' +
-    '<div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#7A9AA2,#3E5459);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#F0F4F5;flex-shrink:0;">영풀</div>' +
-    '<div style="flex:1;">' +
-      '<div style="font-size:15px;font-weight:700;">영풀v6.1.1 앱 설치</div>' +
-      '<div style="font-size:12px;opacity:.8;margin-top:2px;">홈 화면에서 바로 실행 · 전체화면 · 오프라인 지원</div>' +
-    '</div>' +
-    '<button id="pwaInstallBtn" style="padding:10px 20px;border:none;border-radius:10px;background:#7AACB8;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">설치</button>' +
-    '<button onclick="this.closest(\'#installBanner\').remove();localStorage.setItem(\'yeon_install_dismissed\',String(Date.now()))" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:0 4px;flex-shrink:0;opacity:.6;">✕</button>' +
-  '</div>';
-  document.body.appendChild(banner);
-
-  document.getElementById('pwaInstallBtn').onclick = function(){
-    if(_pwaInstallPrompt){
-      _pwaInstallPrompt.prompt();
-      _pwaInstallPrompt.userChoice.then(function(choice){
-        if(choice.outcome === 'accepted') banner.remove();
-        _pwaInstallPrompt = null;
-      });
-    }
-  };
-}
-
-// Service Worker 등록 + 새 버전 자동 감지
+// ===== PWA 서비스 워커 및 업데이트 처리 =====
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
     navigator.serviceWorker.register('./sw.js').then(function(reg){
-      // 업데이트 체크 (페이지 열 때마다)
       reg.update();
-      // 새 SW가 설치되면 사용자에게 알림 + 자동 새로고침
-      reg.addEventListener('updatefound', function(){
-        var newWorker = reg.installing;
-        if(!newWorker) return;
-        newWorker.addEventListener('statechange', function(){
-          if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
-            // 기존 SW가 있는 상태에서 새 SW 설치됨 → 사용자에게 알림
-            var bar = document.createElement('div');
-            bar.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#5A7A82;color:#fff;padding:12px 16px;text-align:center;font-size:14px;font-weight:600;z-index:99999;box-shadow:0 2px 8px rgba(0,0,0,.3);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:12px;';
-            bar.innerHTML = '<span>새 버전이 준비됐어요</span>'+
-              '<button style="padding:6px 16px;background:#fff;color:#5A7A82;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">지금 업데이트</button>';
-            bar.querySelector('button').onclick = function(){
-              newWorker.postMessage({type:'SKIP_WAITING'});
-              window.location.reload();
-            };
-            document.body.appendChild(bar);
-            // 10초 지나면 자동 업데이트
-            setTimeout(function(){
-              try { newWorker.postMessage({type:'SKIP_WAITING'}); } catch(e){}
-              window.location.reload();
-            }, 10000);
-          }
-        });
-      });
     }).catch(function(e){ console.log('SW 등록 실패:',e); });
 
-    // controller가 바뀌면 (새 SW 활성화) 자동 리로드 (중복 방지)
     var refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', function(){
       if(refreshing) return;
@@ -105,73 +36,6 @@ if('serviceWorker' in navigator){
     });
   });
 }
-
-// beforeinstallprompt 미지원 브라우저 (삼성, Safari, Firefox 등) → 수동 안내
-window.addEventListener('load', function(){
-  setTimeout(function(){
-    if(_pwaInstallPrompt) return; // Chrome 네이티브 설치 가능 → 위에서 처리됨
-    var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    if(isStandalone) return;
-    var dismissed = localStorage.getItem('yeon_install_dismissed');
-    if(dismissed && Date.now() - Number(dismissed) < 7*24*60*60*1000) return;
-    if(document.getElementById('installBanner')) return;
-
-    var ua = navigator.userAgent || '';
-    var isIOS = /iphone|ipad|ipod/i.test(ua);
-    var isSamsung = /SamsungBrowser/i.test(ua);
-    var isFirefox = /Firefox/i.test(ua);
-    var isMobile = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(ua);
-    // 데스크톱 브라우저 감지 (모바일이 아니고 iOS도 아님)
-    var isDesktop = !isMobile && !isIOS;
-    var isEdge = /Edg\//i.test(ua);
-    var isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
-
-    var icon = '', steps = '', title = '앱으로 설치하기';
-    if(isDesktop){
-      // PC — 주소창의 설치 아이콘 안내
-      if(isFirefox){
-        // Firefox 데스크톱은 PWA 설치 미지원
-        icon = '🦊';
-        title = '바로가기로 즐겨찾기';
-        steps = 'Firefox 는 PWA 설치를 지원하지 않아요. <strong>Ctrl+D</strong> 로 즐겨찾기에 추가하거나, <strong>Chrome/Edge</strong> 에서 앱으로 설치할 수 있어요.';
-      } else if(isEdge){
-        icon = '🖥️';
-        title = 'PC 앱으로 설치하기';
-        steps = '주소창 오른쪽의 <strong>설치 아이콘 ⊕</strong> 클릭 → <strong>"설치"</strong> · 또는 <strong>⋯ 메뉴</strong> → <strong>"앱" → "이 사이트를 앱으로 설치"</strong>';
-      } else {
-        // Chrome/기타 Chromium
-        icon = '🖥️';
-        title = 'PC 앱으로 설치하기';
-        steps = '주소창 오른쪽의 <strong>설치 아이콘 ⊕</strong> 클릭 → <strong>"설치"</strong> · 또는 <strong>⋮ 메뉴</strong> → <strong>"앱 설치" / "영풀 설치"</strong>' + (isMac ? ' · Mac 은 Dock 에 고정됩니다' : '');
-      }
-    } else if(isIOS){
-      icon = '📱';
-      steps = '<strong>Safari 하단</strong>의 공유 버튼 <strong style="font-size:18px;">⬆</strong> → <strong>"홈 화면에 추가"</strong>';
-    } else if(isSamsung){
-      icon = '📱';
-      steps = '<strong>하단 ≡ 메뉴</strong> → <strong>"현재 페이지 추가"</strong> → <strong>"홈 화면"</strong>';
-    } else if(isFirefox){
-      icon = '🦊';
-      steps = '<strong>⋮ 메뉴</strong> → <strong>"홈 화면에 추가"</strong> 또는 <strong>"설치"</strong>';
-    } else {
-      icon = '📲';
-      steps = '브라우저 <strong>⋮ 메뉴</strong> → <strong>"홈 화면에 추가"</strong> 또는 <strong>"앱 설치"</strong>';
-    }
-
-    var banner = document.createElement('div');
-    banner.id = 'installBanner';
-    banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#2C3E42,#3D5A5E);color:#fff;padding:16px 20px;z-index:99999;box-shadow:0 -4px 20px rgba(0,0,0,.25);animation:slideUp .4s ease;font-family:inherit;';
-    banner.innerHTML = '<div style="display:flex;align-items:center;gap:12px;max-width:500px;margin:0 auto;">' +
-      '<div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#7A9AA2,#3E5459);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#F0F4F5;flex-shrink:0;">영풀</div>' +
-      '<div style="flex:1;">' +
-        '<div style="font-size:14px;font-weight:700;">'+icon+' '+title+'</div>' +
-        '<div style="font-size:12px;opacity:.9;margin-top:3px;line-height:1.5;">'+steps+'</div>' +
-      '</div>' +
-      '<button onclick="this.closest(\'#installBanner\').remove();localStorage.setItem(\'yeon_install_dismissed\',String(Date.now()))" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:0 4px;flex-shrink:0;opacity:.6;">✕</button>' +
-    '</div>';
-    document.body.appendChild(banner);
-  }, 4000);
-});
 </script>
 <style>
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -801,6 +665,30 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
 .ie-text-input-wrap .ie-text-no{background:rgba(0,0,0,.08);color:#555;}
 .img-editor-options .ie-sz-btn[data-sz="m"]{width:36px;height:36px;}
 .img-editor-options .ie-sz-btn[data-sz="l"]{width:44px;height:44px;}
+
+/* PWA 설치 모달 팝인 애니메이션 */
+@keyframes pwaPopIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* 업데이트 알림 깜빡이는 LED 불빛 */
+.update-glowing-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 9px;
+  height: 9px;
+  background-color: #ff5252;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+  animation: updatePulse 1.5s infinite;
+}
+@keyframes updatePulse {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(255, 82, 82, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
+}
 </style>
 </head>
 <body>
@@ -838,8 +726,8 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
 <div class="app-bar">
   <div>
     <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:2px;">
-      <h1 id="appTitle">영풀 · 영어 완전학습</h1>
-      <span style="font-family: monospace; font-size:11px; font-weight:700; background:rgba(90, 122, 130, 0.12); color:var(--color-primary); padding:2px 6px; border-radius:4px; display:inline-block; line-height:1;">v6.1.1</span>
+      <h1 id="appTitle">영풀 V1.6 · 영어 완전학습</h1>
+      <span style="font-family: monospace; font-size:11px; font-weight:700; background:rgba(90, 122, 130, 0.12); color:var(--color-primary); padding:2px 6px; border-radius:4px; display:inline-block; line-height:1;">V1.6</span>
     </div>
 <script>
 (function(){
@@ -856,7 +744,7 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
       document.getElementById('appTitle').textContent = progName;
       document.title = progName;
     } else if(name){
-      document.getElementById('appTitle').textContent = name + ' · 영어 완전학습';
+      document.getElementById('appTitle').textContent = name + ' V1.6 · 영어 완전학습';
     }
   } catch(e){}
 })();
@@ -874,6 +762,14 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
   </div>
   <div style="display:flex;gap:4px;align-items:center;">
     <button id="appLoginBtn" onclick="showAuthModal()" style="padding:6px 14px;border:1px solid var(--color-primary);border-radius:8px;background:none;color:var(--color-primary);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;" onmouseover="this.style.background='var(--color-primary)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--color-primary)'">로그인</button>
+    <button id="appUpdateBtn" onclick="triggerAppUpdate()" style="display:none; position:relative; background:none; border:none; cursor:pointer; padding:6px; border-radius:50%; align-items:center; justify-content:center; width:44px; height:44px; outline:none; color:var(--color-primary);" title="새 업데이트 가능">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span class="update-glowing-dot"></span>
+    </button>
     <button class="refresh-btn" onclick="openSettingsModal()" title="설정">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     </button>
@@ -4435,7 +4331,7 @@ function goToPractice(filter) {
 
 // ===== 공유 시스템 (QR · 링크 복사 · 프린트) =====
 const SHARE_URL = 'https://yeon.ai.kr/yeongpul/yeong-pul.html';
-const SHARE_TITLE = '영풀v6.1.1 · 영어 완전학습';
+const SHARE_TITLE = '영풀 V1.6 · 영어 완전학습';
 const SHARE_TEXT = '오답 분석으로 영어 취약점을 정확히 짚어주는 학습 도우미';
 
 function openShareModal(){
@@ -14772,6 +14668,158 @@ function sendDrawingToAnalyze(){
     window._openImageEditor(d,function(ed){processOcrFromDataUrl(ed);});
   }catch(e){closeDrawingPadModal();console.error('그림판 캡처 오류',e);}
 }
+
+// --- PWA 설치 권장 모달 & 업데이트 감지 시스템 ---
+var _pwaInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  _pwaInstallPrompt = e;
+  setTimeout(showPwaInstallModal, 2000);
+});
+
+function showPwaInstallModal() {
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (isStandalone) return;
+  
+  var dismissed = localStorage.getItem('yeon_install_dismissed');
+  if (dismissed && Date.now() - Number(dismissed) < 7*24*60*60*1000) return;
+
+  var modal = document.getElementById('pwaInstallModal');
+  var area = document.getElementById('pwaInstallActionArea');
+  if (!modal || !area) return;
+
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  var isSamsung = /SamsungBrowser/i.test(ua);
+  var isFirefox = /Firefox/i.test(ua);
+  var isMobile = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(ua);
+  var isDesktop = !isMobile && !isIOS;
+  var isEdge = /Edg\//i.test(ua);
+  var isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
+
+  area.innerHTML = '';
+  
+  if (_pwaInstallPrompt) {
+    // Chrome/Android Native
+    var btn = document.createElement('button');
+    btn.style.cssText = 'width:100%; padding:14px; border:none; border-radius:12px; background:var(--color-primary); color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; transition:filter .2s; outline:none;';
+    btn.textContent = '앱 바로 설치하기';
+    btn.onmouseover = function(){ this.style.filter = 'brightness(0.92)'; };
+    btn.onmouseout = function(){ this.style.filter = 'none'; };
+    btn.onclick = function() {
+      _pwaInstallPrompt.prompt();
+      _pwaInstallPrompt.userChoice.then(function(choice) {
+        if (choice.outcome === 'accepted') {
+          closePwaInstallModal();
+        }
+        _pwaInstallPrompt = null;
+      });
+    };
+    area.appendChild(btn);
+  } else {
+    // Manual Path
+    var stepsDiv = document.createElement('div');
+    stepsDiv.style.cssText = 'background:rgba(0,0,0,0.03); border:1.5px solid var(--color-muted); border-radius:12px; padding:16px 14px; text-align:left; font-size:13px; line-height:1.6; color:var(--color-text-light);';
+    
+    var icon = '📲', steps = '';
+    if (isIOS) {
+      icon = '📱 Safari 설치 방법';
+      steps = '1. Safari 브라우저 하단의 <strong>공유 버튼(⬆)</strong>을 누릅니다.<br>2. 메뉴 리스트를 올려 <strong>"홈 화면에 추가"</strong>를 누릅니다.';
+    } else if (isSamsung) {
+      icon = '📱 삼성 브라우저 설치 방법';
+      steps = '1. 하단 <strong>≡ 메뉴</strong> 버튼을 누릅니다.<br>2. <strong>"현재 페이지 추가"</strong>를 누릅니다.<br>3. <strong>"홈 화면"</strong>을 누릅니다.';
+    } else if (isDesktop) {
+      if (isFirefox) {
+        icon = '🦊 Firefox 안내';
+        steps = 'Firefox 데스크톱은 PWA를 지원하지 않습니다. <strong>Ctrl+D</strong>로 북마크하거나, <strong>Chrome/Edge</strong>에서 열어 앱으로 설치할 수 있습니다.';
+      } else if (isEdge) {
+        icon = '🖥️ Edge 설치 방법';
+        steps = '주소창 오른쪽의 <strong>설치 아이콘(⊕)</strong>을 클릭 ➔ <strong>"설치"</strong>, 또는 <strong>⋯ 메뉴</strong> ➔ <strong>"앱" ➔ "이 사이트를 앱으로 설치"</strong>를 클릭합니다.';
+      } else {
+        icon = '🖥️ Chrome 설치 방법';
+        steps = '주소창 오른쪽의 <strong>설치 아이콘(⊕)</strong>을 클릭 ➔ <strong>"설치"</strong>, 또는 <strong>⋮ 메뉴</strong> ➔ <strong>"앱 설치"</strong>를 클릭합니다.';
+      }
+    } else {
+      icon = '📲 브라우저 설치 방법';
+      steps = '브라우저 우측 상단 <strong>메뉴(⋮)</strong> ➔ <strong>"홈 화면에 추가"</strong> 또는 <strong>"앱 설치"</strong>를 눌러주세요.';
+    }
+
+    stepsDiv.innerHTML = '<strong style="display:block; font-size:13.5px; color:var(--color-text); margin-bottom:8px;">' + icon + '</strong>' + steps;
+    area.appendChild(stepsDiv);
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closePwaInstallModal() {
+  var modal = document.getElementById('pwaInstallModal');
+  if (modal) modal.style.display = 'none';
+  localStorage.setItem('yeon_install_dismissed', String(Date.now()));
+}
+
+// 수동 PWA 감지용 ( beforeinstallprompt 지원 안 함 )
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    if (_pwaInstallPrompt) return;
+    showPwaInstallModal();
+  }, 4000);
+});
+
+// --- 실시간 서버 업데이트 체크 기능 ---
+function triggerAppUpdate() {
+  if (confirm("서버에 새로운 앱 버전(V1.6)이 업데이트되었습니다.\n최신 기능을 적용하기 위해 페이지를 새로고침하시겠습니까?")) {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let registration of registrations) {
+          registration.update();
+        }
+      });
+    }
+    window.location.href = window.location.pathname + '?v=' + Date.now();
+  }
+}
+
+function checkAppVersionFromServer() {
+  var currentAppVersion = '1.6';
+  fetch('../version.json?t=' + Date.now())
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data && data.version && data.version !== currentAppVersion) {
+        var updateBtn = document.getElementById('appUpdateBtn');
+        if (updateBtn) {
+          updateBtn.style.display = 'inline-flex';
+          updateBtn.title = '새 버전(V' + data.version + ') 업데이트 가능';
+        }
+      }
+    })
+    .catch(function(err) { console.log('Version check failed:', err); });
+}
+
+// 로드 시 실행 및 30초 주기 반복 체크
+window.addEventListener('load', function() {
+  checkAppVersionFromServer();
+  setInterval(checkAppVersionFromServer, 30000);
+});
 </script>
+
+<!-- PWA 설치 권장 모달 -->
+<div id="pwaInstallModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(4px);">
+  <div style="position:relative; width:100%; max-width:400px; background:var(--color-bg); border-radius:24px; padding:32px 24px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3); border:3px solid var(--color-primary); animation: pwaPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+    <div style="font-size:48px; margin-bottom:16px;">📲</div>
+    <h3 style="font-size:19px; font-weight:800; color:var(--color-text); margin-bottom:12px;">폰에 설치를 해야 잘 작동됩니다.</h3>
+    <p style="font-size:13.5px; color:var(--color-text-light); line-height:1.6; margin-bottom:24px; word-break:keep-all;">
+      홈 화면에 앱으로 추가하여 실행하면 전체 화면으로 더 넓게, 끊김 없이 쾌적하게 공부할 수 있어요!
+    </p>
+    
+    <div id="pwaInstallActionArea" style="margin-bottom:16px;">
+      <!-- 동적 채움 -->
+    </div>
+    
+    <button onclick="closePwaInstallModal()" style="background:none; border:none; color:var(--color-muted); font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:underline; outline:none;">
+      웹 브라우저로 계속하기
+    </button>
+  </div>
+</div>
+
 </body>
 </html>
