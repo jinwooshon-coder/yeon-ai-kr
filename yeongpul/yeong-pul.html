@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>영풀 · 영어 완전학습</title>
+<title>영풀 V1.6 · 영어 완전학습</title>
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#5A7A82">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="영풀">
+<meta name="apple-mobile-web-app-title" content="영풀 V1.6">
 <link rel="apple-touch-icon" href="icon.svg">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
@@ -21,82 +21,13 @@
   }
 })();
 
-// ===== PWA 설치 (진짜 앱처럼) =====
-var _pwaInstallPrompt = null;
-
-window.addEventListener('beforeinstallprompt', function(e){
-  e.preventDefault();
-  _pwaInstallPrompt = e;
-  // 설치 가능 → 배너 표시
-  setTimeout(showPwaInstallBanner, 2000);
-});
-
-function showPwaInstallBanner(){
-  if(!_pwaInstallPrompt) return;
-  var dismissed = localStorage.getItem('yeon_install_dismissed');
-  if(dismissed && Date.now() - Number(dismissed) < 7*24*60*60*1000) return;
-  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-  if(isStandalone) return;
-  if(document.getElementById('installBanner')) return;
-
-  var banner = document.createElement('div');
-  banner.id = 'installBanner';
-  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#2C3E42,#3D5A5E);color:#fff;padding:16px 20px;z-index:99999;box-shadow:0 -4px 20px rgba(0,0,0,.25);animation:slideUp .4s ease;font-family:inherit;';
-  banner.innerHTML = '<div style="display:flex;align-items:center;gap:12px;max-width:500px;margin:0 auto;">' +
-    '<div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#7A9AA2,#3E5459);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#F0F4F5;flex-shrink:0;">영풀</div>' +
-    '<div style="flex:1;">' +
-      '<div style="font-size:15px;font-weight:700;">영풀 앱 설치</div>' +
-      '<div style="font-size:12px;opacity:.8;margin-top:2px;">홈 화면에서 바로 실행 · 전체화면 · 오프라인 지원</div>' +
-    '</div>' +
-    '<button id="pwaInstallBtn" style="padding:10px 20px;border:none;border-radius:10px;background:#7AACB8;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;white-space:nowrap;">설치</button>' +
-    '<button onclick="this.closest(\'#installBanner\').remove();localStorage.setItem(\'yeon_install_dismissed\',String(Date.now()))" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:0 4px;flex-shrink:0;opacity:.6;">✕</button>' +
-  '</div>';
-  document.body.appendChild(banner);
-
-  document.getElementById('pwaInstallBtn').onclick = function(){
-    if(_pwaInstallPrompt){
-      _pwaInstallPrompt.prompt();
-      _pwaInstallPrompt.userChoice.then(function(choice){
-        if(choice.outcome === 'accepted') banner.remove();
-        _pwaInstallPrompt = null;
-      });
-    }
-  };
-}
-
-// Service Worker 등록 + 새 버전 자동 감지
+// ===== PWA 서비스 워커 및 업데이트 처리 =====
 if('serviceWorker' in navigator){
   window.addEventListener('load', function(){
     navigator.serviceWorker.register('./sw.js').then(function(reg){
-      // 업데이트 체크 (페이지 열 때마다)
       reg.update();
-      // 새 SW가 설치되면 사용자에게 알림 + 자동 새로고침
-      reg.addEventListener('updatefound', function(){
-        var newWorker = reg.installing;
-        if(!newWorker) return;
-        newWorker.addEventListener('statechange', function(){
-          if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
-            // 기존 SW가 있는 상태에서 새 SW 설치됨 → 사용자에게 알림
-            var bar = document.createElement('div');
-            bar.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#5A7A82;color:#fff;padding:12px 16px;text-align:center;font-size:14px;font-weight:600;z-index:99999;box-shadow:0 2px 8px rgba(0,0,0,.3);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:12px;';
-            bar.innerHTML = '<span>새 버전이 준비됐어요</span>'+
-              '<button style="padding:6px 16px;background:#fff;color:#5A7A82;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;">지금 업데이트</button>';
-            bar.querySelector('button').onclick = function(){
-              newWorker.postMessage({type:'SKIP_WAITING'});
-              window.location.reload();
-            };
-            document.body.appendChild(bar);
-            // 10초 지나면 자동 업데이트
-            setTimeout(function(){
-              try { newWorker.postMessage({type:'SKIP_WAITING'}); } catch(e){}
-              window.location.reload();
-            }, 10000);
-          }
-        });
-      });
     }).catch(function(e){ console.log('SW 등록 실패:',e); });
 
-    // controller가 바뀌면 (새 SW 활성화) 자동 리로드 (중복 방지)
     var refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', function(){
       if(refreshing) return;
@@ -105,73 +36,6 @@ if('serviceWorker' in navigator){
     });
   });
 }
-
-// beforeinstallprompt 미지원 브라우저 (삼성, Safari, Firefox 등) → 수동 안내
-window.addEventListener('load', function(){
-  setTimeout(function(){
-    if(_pwaInstallPrompt) return; // Chrome 네이티브 설치 가능 → 위에서 처리됨
-    var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-    if(isStandalone) return;
-    var dismissed = localStorage.getItem('yeon_install_dismissed');
-    if(dismissed && Date.now() - Number(dismissed) < 7*24*60*60*1000) return;
-    if(document.getElementById('installBanner')) return;
-
-    var ua = navigator.userAgent || '';
-    var isIOS = /iphone|ipad|ipod/i.test(ua);
-    var isSamsung = /SamsungBrowser/i.test(ua);
-    var isFirefox = /Firefox/i.test(ua);
-    var isMobile = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(ua);
-    // 데스크톱 브라우저 감지 (모바일이 아니고 iOS도 아님)
-    var isDesktop = !isMobile && !isIOS;
-    var isEdge = /Edg\//i.test(ua);
-    var isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
-
-    var icon = '', steps = '', title = '앱으로 설치하기';
-    if(isDesktop){
-      // PC — 주소창의 설치 아이콘 안내
-      if(isFirefox){
-        // Firefox 데스크톱은 PWA 설치 미지원
-        icon = '🦊';
-        title = '바로가기로 즐겨찾기';
-        steps = 'Firefox 는 PWA 설치를 지원하지 않아요. <strong>Ctrl+D</strong> 로 즐겨찾기에 추가하거나, <strong>Chrome/Edge</strong> 에서 앱으로 설치할 수 있어요.';
-      } else if(isEdge){
-        icon = '🖥️';
-        title = 'PC 앱으로 설치하기';
-        steps = '주소창 오른쪽의 <strong>설치 아이콘 ⊕</strong> 클릭 → <strong>"설치"</strong> · 또는 <strong>⋯ 메뉴</strong> → <strong>"앱" → "이 사이트를 앱으로 설치"</strong>';
-      } else {
-        // Chrome/기타 Chromium
-        icon = '🖥️';
-        title = 'PC 앱으로 설치하기';
-        steps = '주소창 오른쪽의 <strong>설치 아이콘 ⊕</strong> 클릭 → <strong>"설치"</strong> · 또는 <strong>⋮ 메뉴</strong> → <strong>"앱 설치" / "영풀 설치"</strong>' + (isMac ? ' · Mac 은 Dock 에 고정됩니다' : '');
-      }
-    } else if(isIOS){
-      icon = '📱';
-      steps = '<strong>Safari 하단</strong>의 공유 버튼 <strong style="font-size:18px;">⬆</strong> → <strong>"홈 화면에 추가"</strong>';
-    } else if(isSamsung){
-      icon = '📱';
-      steps = '<strong>하단 ≡ 메뉴</strong> → <strong>"현재 페이지 추가"</strong> → <strong>"홈 화면"</strong>';
-    } else if(isFirefox){
-      icon = '🦊';
-      steps = '<strong>⋮ 메뉴</strong> → <strong>"홈 화면에 추가"</strong> 또는 <strong>"설치"</strong>';
-    } else {
-      icon = '📲';
-      steps = '브라우저 <strong>⋮ 메뉴</strong> → <strong>"홈 화면에 추가"</strong> 또는 <strong>"앱 설치"</strong>';
-    }
-
-    var banner = document.createElement('div');
-    banner.id = 'installBanner';
-    banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#2C3E42,#3D5A5E);color:#fff;padding:16px 20px;z-index:99999;box-shadow:0 -4px 20px rgba(0,0,0,.25);animation:slideUp .4s ease;font-family:inherit;';
-    banner.innerHTML = '<div style="display:flex;align-items:center;gap:12px;max-width:500px;margin:0 auto;">' +
-      '<div style="width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#7A9AA2,#3E5459);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#F0F4F5;flex-shrink:0;">영풀</div>' +
-      '<div style="flex:1;">' +
-        '<div style="font-size:14px;font-weight:700;">'+icon+' '+title+'</div>' +
-        '<div style="font-size:12px;opacity:.9;margin-top:3px;line-height:1.5;">'+steps+'</div>' +
-      '</div>' +
-      '<button onclick="this.closest(\'#installBanner\').remove();localStorage.setItem(\'yeon_install_dismissed\',String(Date.now()))" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:0 4px;flex-shrink:0;opacity:.6;">✕</button>' +
-    '</div>';
-    document.body.appendChild(banner);
-  }, 4000);
-});
 </script>
 <style>
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
@@ -801,9 +665,46 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
 .ie-text-input-wrap .ie-text-no{background:rgba(0,0,0,.08);color:#555;}
 .img-editor-options .ie-sz-btn[data-sz="m"]{width:36px;height:36px;}
 .img-editor-options .ie-sz-btn[data-sz="l"]{width:44px;height:44px;}
+
+/* PWA 설치 모달 팝인 애니메이션 */
+@keyframes pwaPopIn {
+  from { transform: scale(0.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* 업데이트 알림 깜빡이는 LED 불빛 */
+.update-glowing-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 9px;
+  height: 9px;
+  background-color: #ff5252;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7);
+  animation: updatePulse 1.5s infinite;
+}
+@keyframes updatePulse {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0.7); }
+  70% { transform: scale(1.1); box-shadow: 0 0 0 8px rgba(255, 82, 82, 0); }
+  100% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(255, 82, 82, 0); }
+}
 </style>
 </head>
 <body>
+<div id="drawingPadModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
+ <div style="position:relative;width:96vw;height:90vh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#f8f2ea;border-bottom:1px solid #e8ddca;flex-shrink:0;">
+   <span style="font-size:15px;font-weight:700;color:#5a7a82;">그림판으로 입력</span>
+   <div style="display:flex;gap:8px;">
+    <button onclick="sendDrawingToAnalyze()" style="padding:8px 18px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">분석하기</button>
+    <button onclick="closeDrawingPadModal()" style="padding:8px 14px;border:1px solid #e8ddca;border-radius:10px;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;">닫기</button>
+   </div>
+  </div>
+  <iframe id="drawingPadFrame" src="" style="flex:1;width:100%;border:none;" allowfullscreen></iframe>
+ </div>
+</div>
+
 
 <!-- 시험지 모달 -->
 <div class="photo-modal" id="photoModal" onclick="closePhotoModal(event)">
@@ -824,7 +725,10 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
 <!-- 상단 바 -->
 <div class="app-bar">
   <div>
-    <h1 id="appTitle">영풀 · 영어 완전학습</h1>
+    <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:2px;">
+      <h1 id="appTitle">영풀 V1.6 · 영어 완전학습</h1>
+      <span style="font-family: monospace; font-size:11px; font-weight:700; background:rgba(90, 122, 130, 0.12); color:var(--color-primary); padding:2px 6px; border-radius:4px; display:inline-block; line-height:1;">V1.6</span>
+    </div>
 <script>
 (function(){
   try {
@@ -840,7 +744,7 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
       document.getElementById('appTitle').textContent = progName;
       document.title = progName;
     } else if(name){
-      document.getElementById('appTitle').textContent = name + ' · 영어 완전학습';
+      document.getElementById('appTitle').textContent = name + ' V1.6 · 영어 완전학습';
     }
   } catch(e){}
 })();
@@ -858,6 +762,14 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
   </div>
   <div style="display:flex;gap:4px;align-items:center;">
     <button id="appLoginBtn" onclick="showAuthModal()" style="padding:6px 14px;border:1px solid var(--color-primary);border-radius:8px;background:none;color:var(--color-primary);font-size:13px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap;" onmouseover="this.style.background='var(--color-primary)';this.style.color='#fff'" onmouseout="this.style.background='none';this.style.color='var(--color-primary)'">로그인</button>
+    <button id="appUpdateBtn" onclick="triggerAppUpdate()" style="display:none; position:relative; background:none; border:none; cursor:pointer; padding:6px; border-radius:50%; align-items:center; justify-content:center; width:44px; height:44px; outline:none; color:var(--color-primary);" title="새 업데이트 가능">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+      <span class="update-glowing-dot"></span>
+    </button>
     <button class="refresh-btn" onclick="openSettingsModal()" title="설정">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
     </button>
@@ -889,19 +801,6 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
   </div>
 </div>
 
-<!-- 그림판 모달 -->
-<div id="drawingPadModal" style="display:none;position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.6);align-items:center;justify-content:center;">
- <div style="position:relative;width:96vw;height:90vh;background:#fff;border-radius:16px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.4);">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;background:#f8f2ea;border-bottom:1px solid #e8ddca;flex-shrink:0;">
-   <span style="font-size:15px;font-weight:700;color:#5a7a82;">그림판으로 입력</span>
-   <div style="display:flex;gap:8px;">
-    <button onclick="sendDrawingToAnalyze()" style="padding:8px 18px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">분석하기</button>
-    <button onclick="closeDrawingPadModal()" style="padding:8px 14px;border:1px solid #e8ddca;border-radius:10px;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;">닫기</button>
-   </div>
-  </div>
-  <iframe id="drawingPadFrame" src="" style="flex:1;width:100%;border:none;" allowfullscreen></iframe>
- </div>
-</div>
 <!-- 로그인/회원가입 모달 -->
 <div class="print-modal-bg" id="authModal" onclick="if(event.target===this)closeAuthModal()">
   <div class="print-modal" style="max-width:400px;">
@@ -950,7 +849,7 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
       <input type="text" id="signupName" placeholder="이름" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:8px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
       <input type="text" id="signupEmail" placeholder="이메일 주소" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:8px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
       <input type="password" id="signupPw" placeholder="비밀번호 (6자 이상)" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:8px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
-      <input type="text" id="signupCode" placeholder="학원 등록 코드 (필수)" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:4px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
+      <input type="text" id="signupCode" placeholder="학원 코드 (선택사항)" style="width:100%;padding:12px 14px;border:2px solid var(--color-muted);border-radius:10px;font-family:inherit;font-size:15px;margin-bottom:4px;background:var(--color-surface);color:var(--color-text);box-sizing:border-box;">
       <p style="font-size:13px;color:var(--color-text-light);margin:0 0 12px 4px;">가입 후 설정에서 언제든 입력할 수 있습니다.</p>
       <button onclick="emailSignup()" style="width:100%;padding:12px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;margin-bottom:12px;">회원가입</button>
 
@@ -2034,9 +1933,6 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
     <textarea id="tlInput" class="text-input" placeholder="여기에 영어 문장이나 지문을 붙여넣으세요.&#10;&#10;예: If I were rich, I would travel the world. The book was so interesting that I couldn't put it down."></textarea>
     <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
       <button class="btn-primary" onclick="analyzeText()">분석하기</button>
-      <button class="btn-secondary" onclick="openDrawingPadModal()" title="그림판으로 입력">
-       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>그림판
-      </button>
       <button class="btn-secondary" onclick="loadTextSample()">샘플 불러오기</button>
       <button class="btn-secondary" onclick="clearTextInput()">지우기</button>
     </div>
@@ -3158,11 +3054,267 @@ body{font-family:'Noto Sans KR','Pretendard',-apple-system,BlinkMacSystemFont,'S
 
 <script>
 // ===== 학생 ID (로그인 정보에서 동적 로드) =====
-const STUDENT_ID = (function(){ try { var s=JSON.parse(sessionStorage.getItem('yeon_session')||'{}'); var a=JSON.parse(localStorage.getItem('yeon_auto_login')||'{}'); return s.memberId||a.memberId||'guest_'+Date.now(); } catch(e){ return 'guest_'+Date.now(); } })();
-const studentName = (function(){ try { var s=JSON.parse(sessionStorage.getItem('yeon_session')||'{}'); var a=JSON.parse(localStorage.getItem('yeon_auto_login')||'{}'); return s.name||a.name||'학생'; } catch(e){ return '학생'; } })();
+const STUDENT_ENROLLMENT_CODES = ["2EP9TA", "2MG4PQ", "2WWNZG", "3YM3B3", "4KZVPT", "4TKS2B", "5HA2WV", "5QMRGL", "64U5YL", "6EHNP4", "7FUQTX", "8SRWBW", "98U765", "9R4STZ", "AL7ETW", "CB4E3J", "CCTNUX", "CGUWRL", "CL2S5C", "CQDLBV", "D4G8QG", "D6CBF9", "DFU8EV", "EU9JNT", "EUY22K", "FHP879", "GP66QG", "HH5T75", "JCNAXF", "JEDVYB", "JUQTXC", "KV5UBB", "MCNZ3G", "P9PXN6", "QGFFTG", "QWFEQ5", "RW9WSA", "SBAG7P", "T7BG8M", "UQVQFY", "UWGWNQ", "V68PPZ", "VT6MZZ", "WZVRYW", "XLQRCU", "Y9CD2W", "YQV5KP", "YUCX4J", "YUKY2T", "ZWLF25"];
+const HUB_QUERY = new URLSearchParams(location.search);
+const HUB_QUERY_STUDENT_ID = HUB_QUERY.get('studentId') || '';
+const HUB_QUERY_STUDENT_NAME = HUB_QUERY.get('studentName') || '';
+const HUB_QUERY_MEMBERSHIP_TIER = HUB_QUERY.get('membershipTier') || '';
+const STUDENT_ID = (function(){
+  try {
+    var s=JSON.parse(sessionStorage.getItem('yeon_session')||'{}');
+    var a=JSON.parse(localStorage.getItem('yeon_auto_login')||'{}');
+    return HUB_QUERY_STUDENT_ID || s.memberId || a.memberId || localStorage.getItem('yeon_student_id') || ('guest_'+Date.now());
+  } catch(e){
+    return HUB_QUERY_STUDENT_ID || localStorage.getItem('yeon_student_id') || ('guest_'+Date.now());
+  }
+})();
+const studentName = (function(){
+  try {
+    var s=JSON.parse(sessionStorage.getItem('yeon_session')||'{}');
+    var a=JSON.parse(localStorage.getItem('yeon_auto_login')||'{}');
+    return HUB_QUERY_STUDENT_NAME || s.name || a.name || localStorage.getItem('yp_student_name') || '학생';
+  } catch(e){
+    return HUB_QUERY_STUDENT_NAME || localStorage.getItem('yp_student_name') || '학생';
+  }
+})();
 const SESSIONS_KEY = 'yeon_sessions_'+STUDENT_ID;
 const PLANNER_KEY  = 'yeon_planner_sync_'+STUDENT_ID;
+const HUB_SYNC_KEY = 'yeon_planner_sync_yeongpul_'+STUDENT_ID;
 const SERVER_KEY   = 'yeon_server_report_'+STUDENT_ID;
+const MEMBERSHIP_TIER_KEY = 'yp_membership_tier';
+const HUB_ALLOWED_ORIGINS = [
+  'https://jinwooshon-coder.github.io',
+  'https://yeonplanner.netlify.app',
+  'https://yeonplanning-teacher.netlify.app',
+  'https://yeon.ai.kr',
+  'https://yeon.ulsan.kr'
+];
+
+function hydrateHubStudentContext(){
+  try { localStorage.setItem('yeon_student_id', STUDENT_ID); } catch(e){}
+  try { localStorage.setItem('yp_student_name', studentName); } catch(e){}
+  try {
+    if (HUB_QUERY_MEMBERSHIP_TIER) localStorage.setItem(MEMBERSHIP_TIER_KEY, HUB_QUERY_MEMBERSHIP_TIER);
+  } catch(e){}
+}
+
+function getMembershipTier(){
+  try {
+    return HUB_QUERY_MEMBERSHIP_TIER || localStorage.getItem(MEMBERSHIP_TIER_KEY) || 'free';
+  } catch(e){
+    return HUB_QUERY_MEMBERSHIP_TIER || 'free';
+  }
+}
+
+function isPremiumMembership(){
+  var tier = getMembershipTier();
+  return tier === 'premium_student' || tier === 'academy';
+}
+
+function isPremiumTab(tabName){
+  return ['weakness', 'review', 'log', 'feedback'].indexOf(tabName) >= 0;
+}
+
+function getMembershipUpgradeMessage(tabName){
+  var tabLabels = {
+    weakness: '취약점 분석',
+    review: '복습',
+    log: '학습 기록',
+    feedback: '개선 요청'
+  };
+  var label = tabLabels[tabName] || '이 기능';
+  return label + '은(는) 학생 프리미엄 이상에서 열립니다.\n\n무료 체험에서는 오답 해설, 문장 학습, 수업, 어휘, 연습문제, 자가테스트까지 먼저 사용해볼 수 있습니다.';
+}
+
+function requestMembershipUpgrade(tabName){
+  alert(getMembershipUpgradeMessage(tabName));
+}
+
+function decoratePremiumTabs(){
+  document.querySelectorAll('.tab-btn[data-tab]').forEach(function(btn){
+    if (!isPremiumTab(btn.dataset.tab)) return;
+    if (btn.dataset.premiumDecorated === 'true') return;
+    btn.dataset.premiumDecorated = 'true';
+    btn.title = '학생 프리미엄 이상 기능';
+    btn.innerHTML = btn.innerHTML + ' <span style="font-size:10px;opacity:.72;">PRO</span>';
+  });
+}
+
+function renderMembershipBanner(){
+  if (isPremiumMembership()) return;
+  var existing = document.getElementById('membershipBanner');
+  if (existing) existing.remove();
+  var banner = document.createElement('div');
+  banner.id = 'membershipBanner';
+  banner.style.cssText = 'margin:12px 16px 0;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,rgba(90,122,130,.16),rgba(226,155,109,.14));border:1px solid rgba(90,122,130,.26);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;';
+  banner.innerHTML =
+    '<div>' +
+      '<div style="font-size:13px;font-weight:800;color:var(--color-text);margin-bottom:4px;">무료 체험으로 영풀 맛보는 중</div>' +
+      '<div style="font-size:12px;color:var(--color-text-light);line-height:1.6;">기본 학습은 바로 사용할 수 있고, 취약점 분석·복습·학습 기록·연플래너 전체 연동은 학생 프리미엄에서 열립니다.</div>' +
+    '</div>' +
+    '<button type="button" onclick="requestMembershipUpgrade(\'review\')" style="flex-shrink:0;padding:10px 12px;border:none;border-radius:10px;background:var(--color-primary);color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;">프리미엄 안내</button>';
+  var anchor = document.querySelector('.tab-nav');
+  if (anchor && anchor.parentNode) {
+    anchor.parentNode.insertBefore(banner, anchor.nextSibling);
+  }
+}
+
+function applyMembershipGateUI(){
+  decoratePremiumTabs();
+  renderMembershipBanner();
+}
+
+function isTrustedHubOrigin(origin){
+  if (location.protocol === 'file:') return true;
+  if (!origin || origin === 'null') return false;
+  if (origin === location.origin) return true;
+  return HUB_ALLOWED_ORIGINS.indexOf(origin) >= 0;
+}
+
+function loadHubWeakPoints(){
+  let weak = [];
+  try { weak = JSON.parse(localStorage.getItem('yeon_vocab_weak_'+STUDENT_ID)||'[]'); } catch(e){}
+  return Array.isArray(weak) ? weak.slice(0, 20).map(function(word){
+    return { id:'weak_'+word, label:word, type:'vocab', source:'wrong-answer' };
+  }) : [];
+}
+
+function loadHubVocabSummary(){
+  let wordTrack = {};
+  try { wordTrack = JSON.parse(localStorage.getItem('yeon_word_track_'+STUDENT_ID)||'{}'); } catch(e){}
+  return Object.keys(wordTrack).slice(0, 40).map(function(word){
+    var item = wordTrack[word] || {};
+    return {
+      word: word,
+      clicks: Number(item.click || item.clicks || 0),
+      listens: Number(item.listen || item.listens || 0),
+      wrong: Number(item.wrong || item.wrongs || 0),
+      lastSeenAt: item.lastSeenAt || item.updatedAt || null
+    };
+  });
+}
+
+function buildPlannerHubPayload(){
+  var sessions = [];
+  var legacyPlan = [];
+  try { sessions = JSON.parse(localStorage.getItem(SESSIONS_KEY)||'[]'); } catch(e){}
+  try { legacyPlan = JSON.parse(localStorage.getItem(PLANNER_KEY)||'[]'); } catch(e){}
+  var recentSessions = (Array.isArray(sessions) ? sessions : []).slice(-20).map(function(item){
+    return {
+      id: item.id,
+      date: item.date,
+      startISO: item.startISO || null,
+      endISO: item.endISO || null,
+      durationMin: Math.round((Number(item.durationSec || 0) / 60) * 10) / 10,
+      topic: item.topic || '',
+      label: item.label || '',
+      tab: item.tab || '',
+      source: item.source || 'yeongpul'
+    };
+  });
+  var reviewItems = (Array.isArray(legacyPlan) ? legacyPlan : []).slice(-40).map(function(item){
+    return {
+      entryId: item.entryId || ('review_'+Date.now()),
+      date: item.date || '',
+      category: item.category || '',
+      topic: item.topic || item.label || '',
+      label: item.label || item.topic || '',
+      done: !!item.done,
+      syncedToPlannerApp: !!item.syncedToPlannerApp
+    };
+  });
+  return {
+    subject: 'english',
+    subjectKey: 'yeongpul',
+    studentId: STUDENT_ID,
+    studentName: studentName,
+    sessions: recentSessions,
+    reviews: reviewItems,
+    todo: [],
+    weakPoints: loadHubWeakPoints(),
+    vocab: loadHubVocabSummary(),
+    metadata: {
+      app: 'yeongpul',
+      source: 'yeongpul',
+      url: location.href,
+      totalSessions: recentSessions.length,
+      totalReviewItems: reviewItems.length,
+      totalWeakPoints: loadHubWeakPoints().length
+    },
+    updatedAt: new Date().toISOString()
+  };
+}
+
+function broadcastHubPayload(payload){
+  if (!payload) payload = buildPlannerHubPayload();
+  try { localStorage.setItem(HUB_SYNC_KEY, JSON.stringify(payload)); } catch(e){}
+  try {
+    if (window.opener && !window.opener.closed) {
+      HUB_ALLOWED_ORIGINS.forEach(function(origin){
+        try { window.opener.postMessage({ type:'yeon-hub-subject-sync', payload: payload }, origin); } catch(e){}
+      });
+    }
+  } catch(e){}
+  try {
+    if (window.parent && window.parent !== window) {
+      HUB_ALLOWED_ORIGINS.forEach(function(origin){
+        try { window.parent.postMessage({ type:'yeon-hub-subject-sync', payload: payload }, origin); } catch(e){}
+      });
+    }
+  } catch(e){}
+  return payload;
+}
+
+function scheduleHubSync(){
+  clearTimeout(window.__yeongpulHubSyncTimer);
+  window.__yeongpulHubSyncTimer = setTimeout(function(){
+    broadcastHubPayload();
+  }, 120);
+}
+
+hydrateHubStudentContext();
+window.addEventListener('message', function(e){
+  if (!e.data || typeof e.data !== 'object') return;
+  if (!isTrustedHubOrigin(e.origin)) return;
+  if (e.data.type === 'yeon-hub-request-summary') {
+    var payload = broadcastHubPayload();
+    try {
+      if (e.source && typeof e.source.postMessage === 'function') {
+        e.source.postMessage({ type:'yeon-hub-summary', payload: payload }, e.origin || '*');
+      }
+    } catch(err){}
+  }
+  if (e.data.type === 'yeon-hub-context' && e.data.payload) {
+    try {
+      if (e.data.payload.studentId) localStorage.setItem('yeon_student_id', e.data.payload.studentId);
+      if (e.data.payload.studentName) localStorage.setItem('yp_student_name', e.data.payload.studentName);
+      if (e.data.payload.membershipTier) localStorage.setItem(MEMBERSHIP_TIER_KEY, e.data.payload.membershipTier);
+    } catch(err){}
+    scheduleHubSync();
+    applyMembershipGateUI();
+  }
+});
+window.addEventListener('load', scheduleHubSync);
+window.addEventListener('load', function(){
+  applyMembershipGateUI();
+  if (!isPremiumMembership() && isPremiumTab((location.hash || '').replace('#','').trim())) {
+    try { history.replaceState(null, '', '#analysis'); } catch(err){}
+  }
+});
+window.addEventListener('beforeunload', scheduleHubSync);
+document.addEventListener('click', scheduleHubSync, true);
+document.addEventListener('input', scheduleHubSync, true);
+document.addEventListener('change', scheduleHubSync, true);
+document.addEventListener('click', function(e){
+  var tabBtn = e.target && e.target.closest ? e.target.closest('.tab-btn[data-tab]') : null;
+  if (!tabBtn) return;
+  var tabName = tabBtn.dataset.tab || '';
+  if (!isPremiumMembership() && isPremiumTab(tabName)) {
+    e.preventDefault();
+    e.stopPropagation();
+    requestMembershipUpgrade(tabName);
+  }
+}, true);
 
 // ===== 사용자 활동 추적 (영풀 트래커) =====
 const YeonTracker = (function(){
@@ -3342,6 +3494,7 @@ function loadWordTrack(){
 }
 function saveWordTrack(data){
   try{ localStorage.setItem(WORD_TRACK_KEY, JSON.stringify(data)); }catch(e){}
+  scheduleHubSync();
 }
 
 // 단어 상호작용 기록 (listen, click, wrong, hover)
@@ -3495,6 +3648,10 @@ function examPhotoAnnotate(){
 
 // ===== 탭 전환 =====
 function switchTab(tabName) {
+  if (!isPremiumMembership() && isPremiumTab(tabName)) {
+    requestMembershipUpgrade(tabName);
+    tabName = 'analysis';
+  }
   // UI 전환 먼저 (세션 추적 에러가 나도 탭은 반드시 전환)
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
@@ -4173,8 +4330,8 @@ function goToPractice(filter) {
 }
 
 // ===== 공유 시스템 (QR · 링크 복사 · 프린트) =====
-const SHARE_URL = 'https://yeong-pul.netlify.app';
-const SHARE_TITLE = '영풀 · 영어 완전학습';
+const SHARE_URL = 'https://yeon.ai.kr/yeongpul/yeong-pul.html';
+const SHARE_TITLE = '영풀 V1.6 · 영어 완전학습';
 const SHARE_TEXT = '오답 분석으로 영어 취약점을 정확히 짚어주는 학습 도우미';
 
 function openShareModal(){
@@ -4298,11 +4455,12 @@ function printShareCard(){
       '<p class="desc">'+SHARE_TEXT+'</p>'+
       '<div class="foot">영풀 · 연프로젝트 학습 도우미</div>'+
     '</div>'+
-    '<\/div>'+
-    '<scr'+'ipt>setTimeout(function(){window.print();},500);<\/scr'+'ipt>'
+    '<script>setTimeout(function(){window.print();},500);<\/script>'+
+    '</body></html>'
   );
   win.document.close();
 }
+
 // ===== 업로드 영역 — 필기로 직접 그리기 =====
 // "틀린 문제를 올려 주세요" 안의 "필기로 그리기" 버튼에서 호출
 function openUploadDraw(){
@@ -5839,6 +5997,7 @@ function saveTomorrowPack(){
       syncedToPlannerApp: false
     });
     localStorage.setItem(PLANNER_KEY, JSON.stringify(plan));
+    scheduleHubSync();
   }catch(e){}
   alert('내일 ('+tmr.toISOString().slice(0,10)+') 학습 팩이 플래너에 예약되었습니다.\n복습 알림이 자동으로 동기화됩니다.');
 }
@@ -6032,6 +6191,7 @@ function saveTextToReview(){
       });
     });
     localStorage.setItem(PLANNER_KEY, JSON.stringify(plan));
+    scheduleHubSync();
   }catch(e){}
 
   // 학습 기록 타임라인에 로그
@@ -6157,6 +6317,7 @@ function syncToPlanner(record){
     syncedToPlannerApp: false  // 플래너 앱에서 pull 하면 true로 변경
   });
   try{ localStorage.setItem(PLANNER_KEY, JSON.stringify(arr)); }catch(e){}
+  scheduleHubSync();
 }
 
 // 본부 서버 / 선생님 리포트용 집계
@@ -8309,7 +8470,7 @@ function scanForAbuse(source, value){
   if (!value) return false;
   const s = String(value);
   const patterns = [
-    /<script[\s>]/i,                                    // 스크립트 주입
+    /<script[\s>]/i,                         // 스크립트 주입
     /javascript:/i,                          // XSS 프로토콜
     /on(error|load|click)\s*=/i,             // 인라인 이벤트 주입
     /union\s+select|drop\s+table|--\s*$/i,  // SQL 주입
@@ -8450,17 +8611,14 @@ function emailLogin(){
   alert('안녕하세요, '+acc.name+'님! 🎓\n로그인되었습니다.');
 }
 
-const STUDENT_ENROLLMENT_CODES = ["2EP9TA", "2MG4PQ", "2WWNZG", "3YM3B3", "4KZVPT", "4TKS2B", "5HA2WV", "5QMRGL", "64U5YL", "6EHNP4", "7FUQTX", "8SRWBW", "98U765", "9R4STZ", "AL7ETW", "CB4E3J", "CCTNUX", "CGUWRL", "CL2S5C", "CQDLBV", "D4G8QG", "D6CBF9", "DFU8EV", "EU9JNT", "EUY22K", "FHP879", "GP66QG", "HH5T75", "JCNAXF", "JEDVYB", "JUQTXC", "KV5UBB", "MCNZ3G", "P9PXN6", "QGFFTG", "QWFEQ5", "RW9WSA", "SBAG7P", "T7BG8M", "UQVQFY", "UWGWNQ", "V68PPZ", "VT6MZZ", "WZVRYW", "XLQRCU", "Y9CD2W", "YQV5KP", "YUCX4J", "YUKY2T", "ZWLF25"];
 function emailSignup(){
   try{
   const name = (document.getElementById('signupName').value||'').trim();
   const email = (document.getElementById('signupEmail').value||'').trim();
   const pw = document.getElementById('signupPw').value||'';
-  const code = (document.getElementById('signupCode') ? document.getElementById('signupCode').value : '').trim().toUpperCase();
   if(!name||!email||!pw){ alert('이름, 이메일, 비밀번호를 모두 입력해 주세요.'); return; }
   if(pw.length<6){ alert('비밀번호는 6자 이상이어야 합니다.'); return; }
   if(!email.includes('@')){ alert('올바른 이메일 형식을 입력해 주세요.'); return; }
-  if(!STUDENT_ENROLLMENT_CODES.includes(code)){ alert('학원 등록 코드가 올바르지 않습니다.\n선생님에게 받은 6자리 코드를 확인해 주세요.'); return; }
 
   const accounts = readAccounts();
 
@@ -9091,6 +9249,249 @@ function downloadCardAsImage(cardEl){
 }` : ''}
 
 <\/script>
+</body>
+</html>`;
+}
+
+const THEMES = {
+  default:{bg:'#F0F4F5',surface:'#D4E0E3',primary:'#5A7A82',muted:'#A8B5B8',text:'#2C3E42',textLight:'#6B8A90'},
+  warm:{bg:'#FFF8F2',surface:'#F0E0D0',primary:'#8B6F5E',muted:'#C4B0A0',text:'#3E2E22',textLight:'#8A7060'},
+  cool:{bg:'#F0F5FF',surface:'#D4E0F0',primary:'#4A6FA5',muted:'#A0B0C8',text:'#1E2E42',textLight:'#5A7A9A'},
+  forest:{bg:'#F0F5F0',surface:'#D0E0D4',primary:'#5A825E',muted:'#A0B8A4',text:'#1E3220',textLight:'#5A8A60'},
+  dark:{bg:'#1A1E22',surface:'#2A3038',primary:'#6AACB8',muted:'#4A5A62',text:'#E0E8EA',textLight:'#8AACB2'},
+  highcontrast:{bg:'#FFFFFF',surface:'#E8E8E8',primary:'#0050A0',muted:'#888888',text:'#000000',textLight:'#333333'}
+};
+function applyTheme(name){
+  const t = THEMES[name]; if(!t) return;
+  const r = document.documentElement.style;
+  r.setProperty('--color-bg',t.bg);
+  r.setProperty('--color-surface',t.surface);
+  r.setProperty('--color-primary',t.primary);
+  r.setProperty('--color-muted',t.muted);
+  r.setProperty('--color-text',t.text);
+  r.setProperty('--color-text-light',t.textLight);
+  document.querySelectorAll('.stg-theme-btn').forEach(b=>{
+    b.style.borderColor = b.dataset.theme===name?'var(--color-primary)':'transparent';
+  });
+  const s = getSettings(); s.theme=name; saveSettings(s);
+}
+// 글꼴 크기 조정 — 이우주(영풀 학생) 버그 리포트 반영 (v22)
+// 기존: body.style.fontSize 만 변경 → 자식의 px 고정값에 반영 안 되고 흔들림 발생
+// 개선: documentElement.zoom 으로 전체 비례 + 디바운스로 흔들림 제거
+let _fontSizeDebounce = null;
+let _fontSizeLast = 16;
+function applyFontSize(v, immediate){
+  const px = parseInt(v) || 16;
+  _fontSizeLast = px;
+  // 라벨은 즉시 업데이트 (반응성)
+  const label = document.getElementById('stgFontLabel');
+  if(label) label.textContent = px+'px';
+  // 실제 적용은 디바운스 (흔들림 방지)
+  clearTimeout(_fontSizeDebounce);
+  _fontSizeDebounce = setTimeout(function(){
+    _commitFontSize(px);
+  }, immediate ? 0 : 160);
+}
+function _commitFontSize(px){
+  const scale = px / 16;  // 기준 16px
+  // zoom 우선 (Chrome/Edge/Safari/모바일 잘 됨)
+  document.documentElement.style.zoom = scale;
+  // 보조: rem 기반 요소를 위해 root font-size도 함께 변경
+  document.documentElement.style.fontSize = px+'px';
+  const s = getSettings(); s.fontSize = px; saveSettings(s);
+}
+const _SVG = {
+  mic:    '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>',
+  female: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M12 13v8"/><path d="M9 18h6"/></svg>',
+  male:   '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="14" r="5"/><line x1="21" y1="3" x2="15" y2="9"/><polyline points="15 3 21 3 21 9"/></svg>',
+};
+function _voiceLabel(voice) {
+  const n = voice.name;
+  const langTag = voice.lang.startsWith('en-US') ? '미국 영어'
+    : voice.lang.startsWith('en-GB') ? '영국 영어'
+    : voice.lang.startsWith('en-AU') ? '호주 영어'
+    : voice.lang.startsWith('en-IN') ? '인도 영어'
+    : voice.lang;
+  const female = /zira|samantha|karen|victoria|tessa|fiona|moira|veena|siri|ava|susan|alice|amelie|anna|sara|alva|ioana|nora|ellen|kate|claire|serena|google\s+uk\s+english\s+female|google\s+us\s+english.*female/i.test(n);
+  const male   = /david|mark|daniel|alex|fred|jorge|lee|luca|rishi|xander|yannick|google\s+uk\s+english\s+male|google\s+us\s+english.*male/i.test(n);
+  const icon = female ? _SVG.female : male ? _SVG.male : _SVG.mic;
+  return { label: n, tag: langTag, icon };
+}
+
+function renderVoiceList() {
+  const container = document.getElementById('stgVoiceList');
+  const none = document.getElementById('stgVoiceNone');
+  if (!container) return;
+
+  const allVoices = window.speechSynthesis.getVoices();
+  const engVoices = allVoices.filter(v => v.lang.startsWith('en'));
+
+  if (!engVoices.length) {
+    container.style.display = 'none';
+    none.style.display = 'block';
+    return;
+  }
+  none.style.display = 'none';
+  container.style.display = 'flex';
+
+  const s = getSettings();
+  const saved = s.ttsVoiceName || '__default__';
+
+  // 기본(브라우저) 항목 먼저
+  const items = [
+    { name: '__default__', label: '기본', tag: '브라우저 기본', icon: _SVG.mic, lang: 'en-US' },
+    ...engVoices.map(v => ({ name: v.name, lang: v.lang, ...Object.assign({}, _voiceLabel(v)) }))
+  ];
+
+  container.innerHTML = items.map(item => {
+    const active = item.name === saved;
+    return `<div style="
+      display:flex;align-items:center;gap:10px;
+      padding:10px 14px;border-radius:10px;cursor:pointer;
+      border:2px solid ${active ? 'var(--color-primary)' : 'var(--color-surface)'};
+      background:${active ? 'rgba(90,122,130,0.08)' : 'var(--color-surface)'};
+      transition:all .15s;
+    " onclick="applyTtsVoice('${item.name.replace(/'/g,"\\'")}','${item.lang}',this)">
+      <span style="flex-shrink:0;display:flex;align-items:center;color:var(--color-primary);">${item.icon}</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:${active?700:500};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${item.label}</div>
+        <div style="font-size:11px;color:var(--color-text-light);">${item.tag}</div>
+      </div>
+      <button onclick="event.stopPropagation();_previewVoice('${item.name.replace(/'/g,"\\'")}','${item.lang}')"
+        style="flex-shrink:0;display:flex;align-items:center;gap:4px;background:none;border:1px solid var(--color-muted);border-radius:6px;padding:4px 8px;font-size:11px;color:var(--color-text-light);cursor:pointer;">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"/></svg> 미리듣기
+      </button>
+    </div>`;
+  }).join('');
+}
+
+function applyTtsVoice(name, lang, el) {
+  const s = getSettings();
+  s.ttsVoiceName = name === '__default__' ? null : name;
+  s.ttsVoiceLang = name === '__default__' ? 'en-US' : lang;
+  saveSettings(s);
+  // UI 갱신
+  const container = document.getElementById('stgVoiceList');
+  if (container) container.querySelectorAll('div[onclick]').forEach(d => {
+    const isActive = d === el;
+    d.style.borderColor = isActive ? 'var(--color-primary)' : 'var(--color-surface)';
+    d.style.background = isActive ? 'rgba(90,122,130,0.08)' : 'var(--color-surface)';
+    d.querySelector('div > div:first-child').style.fontWeight = isActive ? 700 : 500;
+  });
+}
+
+function _previewVoice(name, lang) {
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance('Hello! Nice to meet you.');
+  u.lang = lang || 'en-US';
+  u.rate = 0.9;
+  if (name !== '__default__') {
+    const v = window.speechSynthesis.getVoices().find(x => x.name === name);
+    if (v) u.voice = v;
+  }
+  window.speechSynthesis.speak(u);
+}
+
+// 음성 목록은 비동기 로드됨 — 변경 이벤트 대응
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => {
+    if (document.getElementById('settingsModal').classList.contains('open')) renderVoiceList();
+  };
+}
+function applyTtsSpeed(v){
+  document.getElementById('stgTtsLabel').textContent = parseFloat(v).toFixed(1)+'x';
+  const s = getSettings(); s.ttsSpeed=parseFloat(v); saveSettings(s);
+}
+function updateToggleUI(cb){
+  const knob = cb.parentElement.querySelector('.stg-toggle-knob');
+  const track = cb.nextElementSibling;
+  if(cb.checked){ track.style.background='var(--color-primary)'; knob.style.left='25px'; }
+  else { track.style.background='var(--color-muted)'; knob.style.left='3px'; }
+}
+function toggleBatterySave(on){
+  updateToggleUI(document.getElementById('stgBatterySave'));
+  if(on){
+    applyTheme('dark');
+    document.body.style.transition='none';
+    document.querySelectorAll('*').forEach(el=>{el.style.animationDuration='0s';el.style.transitionDuration='0s';});
+  } else {
+    const s = getSettings();
+    applyTheme(s.theme||'default');
+    document.querySelectorAll('*').forEach(el=>{el.style.animationDuration='';el.style.transitionDuration='';});
+    document.body.style.transition='';
+  }
+  const s = getSettings(); s.batterySave=on; saveSettings(s);
+}
+
+// 탭 순서 드래그
+let dragTabEl = null;
+function renderTabOrderList(){
+  const tabNav = document.querySelector('.tab-nav');
+  const btns = tabNav.querySelectorAll('.tab-btn');
+  const el = document.getElementById('stgTabOrder');
+  const tabLabels = {'analysis':'오답 해설','textlearn':'문장 학습','classwork':'수업','vocab':'어휘','weakness':'취약점 분석','practice':'연습문제','selftest':'자가테스트','review':'복습','log':'학습 기록','feedback':'개선 요청'};
+  el.innerHTML = '';
+  btns.forEach(btn=>{
+    const tab = btn.dataset.tab;
+    const item = document.createElement('div');
+    item.style.cssText = 'display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--color-surface);border-radius:8px;cursor:grab;user-select:none;';
+    item.draggable = true;
+    item.dataset.tab = tab;
+    item.innerHTML = '<span style="color:var(--color-muted);font-size:16px;">☰</span><span style="font-size:14px;font-weight:500;">'+( tabLabels[tab]||tab)+'</span>';
+    item.ondragstart = function(e){ dragTabEl=this; this.style.opacity='.5'; e.dataTransfer.effectAllowed='move'; };
+    item.ondragend = function(){ this.style.opacity='1'; dragTabEl=null; };
+    item.ondragover = function(e){ e.preventDefault(); e.dataTransfer.dropEffect='move'; this.style.borderTop='2px solid var(--color-primary)'; };
+    item.ondragleave = function(){ this.style.borderTop='none'; };
+    item.ondrop = function(e){
+      e.preventDefault(); this.style.borderTop='none';
+      if(dragTabEl && dragTabEl!==this){
+        el.insertBefore(dragTabEl, this);
+        applyTabOrder();
+      }
+    };
+    el.appendChild(item);
+  });
+}
+function applyTabOrder(){
+  const items = document.querySelectorAll('#stgTabOrder [data-tab]');
+  const tabNav = document.querySelector('.tab-nav');
+  const order = [];
+  items.forEach(item=>{
+    const tab = item.dataset.tab;
+    order.push(tab);
+    const btn = tabNav.querySelector('.tab-btn[data-tab="'+tab+'"]');
+    if(btn) tabNav.appendChild(btn);
+  });
+  const s = getSettings(); s.tabOrder=order; saveSettings(s);
+}
+function restoreTabOrder(){
+  const s = getSettings();
+  if(!s.tabOrder||!s.tabOrder.length) return;
+  const tabNav = document.querySelector('.tab-nav');
+  s.tabOrder.forEach(tab=>{
+    const btn = tabNav.querySelector('.tab-btn[data-tab="'+tab+'"]');
+    if(btn) tabNav.appendChild(btn);
+  });
+}
+
+function resetSettings(){
+  localStorage.removeItem(STG_KEY);
+  document.documentElement.style.cssText='';
+  document.body.style.fontSize='';
+  document.body.style.transition='';
+  location.reload();
+}
+
+function initSettings(){
+  const s = getSettings();
+  // 'default'(밝은 테마)로 저장된 기기도 dark로 전환
+  const theme = (!s.theme || s.theme === 'default') ? 'dark' : s.theme;
+  if(!s.theme || s.theme === 'default') { s.theme = 'dark'; saveSettings(s); }
+  applyTheme(theme);
+  if(s.fontSize) document.body.style.fontSize = s.fontSize+'px';
+  if(s.batterySave) toggleBatterySave(true);
+  restoreTabOrder();
+}
 
 // ===== 수업 관리 탭 =====
 const CW_NOTES_KEY = 'yeon_cw_notes_'+STUDENT_ID;
@@ -10133,7 +10534,7 @@ function markWordWeak(word){
   // 약한 단어 목록에 추가
   const weakKey = 'yeon_vocab_weak_'+STUDENT_ID;
   const weak = JSON.parse(localStorage.getItem(weakKey)||'[]');
-  if(!weak.includes(word)){weak.push(word);localStorage.setItem(weakKey,JSON.stringify(weak));}
+  if(!weak.includes(word)){weak.push(word);localStorage.setItem(weakKey,JSON.stringify(weak)); scheduleHubSync();}
   vocabNext();
 }
 
@@ -11914,6 +12315,7 @@ function confirmVocabReview(word, mean){
       });
     });
     localStorage.setItem(PLANNER_KEY, JSON.stringify(plan));
+    scheduleHubSync();
   }catch(e){ console.error('플래너 저장 실패',e); }
   // 복습 알림 등록 (localStorage)
   try {
@@ -14244,6 +14646,7 @@ function _handleUploadFile(file){
     });
   }
 })();
+
 function openDrawingPadModal(){
   var m=document.getElementById('drawingPadModal');if(!m)return;
   var f=document.getElementById('drawingPadFrame');
@@ -14266,6 +14669,157 @@ function sendDrawingToAnalyze(){
   }catch(e){closeDrawingPadModal();console.error('그림판 캡처 오류',e);}
 }
 
+// --- PWA 설치 권장 모달 & 업데이트 감지 시스템 ---
+var _pwaInstallPrompt = null;
+window.addEventListener('beforeinstallprompt', function(e){
+  e.preventDefault();
+  _pwaInstallPrompt = e;
+  setTimeout(showPwaInstallModal, 2000);
+});
+
+function showPwaInstallModal() {
+  var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+  if (isStandalone) return;
+  
+  var dismissed = localStorage.getItem('yeon_install_dismissed');
+  if (dismissed && Date.now() - Number(dismissed) < 7*24*60*60*1000) return;
+
+  var modal = document.getElementById('pwaInstallModal');
+  var area = document.getElementById('pwaInstallActionArea');
+  if (!modal || !area) return;
+
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  var isSamsung = /SamsungBrowser/i.test(ua);
+  var isFirefox = /Firefox/i.test(ua);
+  var isMobile = /Mobi|Android|iPhone|iPad|iPod|Windows Phone/i.test(ua);
+  var isDesktop = !isMobile && !isIOS;
+  var isEdge = /Edg\//i.test(ua);
+  var isMac = /Macintosh|Mac OS X/i.test(ua) && !isIOS;
+
+  area.innerHTML = '';
+  
+  if (_pwaInstallPrompt) {
+    // Chrome/Android Native
+    var btn = document.createElement('button');
+    btn.style.cssText = 'width:100%; padding:14px; border:none; border-radius:12px; background:var(--color-primary); color:#fff; font-size:15px; font-weight:700; cursor:pointer; font-family:inherit; transition:filter .2s; outline:none;';
+    btn.textContent = '앱 바로 설치하기';
+    btn.onmouseover = function(){ this.style.filter = 'brightness(0.92)'; };
+    btn.onmouseout = function(){ this.style.filter = 'none'; };
+    btn.onclick = function() {
+      _pwaInstallPrompt.prompt();
+      _pwaInstallPrompt.userChoice.then(function(choice) {
+        if (choice.outcome === 'accepted') {
+          closePwaInstallModal();
+        }
+        _pwaInstallPrompt = null;
+      });
+    };
+    area.appendChild(btn);
+  } else {
+    // Manual Path
+    var stepsDiv = document.createElement('div');
+    stepsDiv.style.cssText = 'background:rgba(0,0,0,0.03); border:1.5px solid var(--color-muted); border-radius:12px; padding:16px 14px; text-align:left; font-size:13px; line-height:1.6; color:var(--color-text-light);';
+    
+    var icon = '📲', steps = '';
+    if (isIOS) {
+      icon = '📱 Safari 설치 방법';
+      steps = '1. Safari 브라우저 하단의 <strong>공유 버튼(⬆)</strong>을 누릅니다.<br>2. 메뉴 리스트를 올려 <strong>"홈 화면에 추가"</strong>를 누릅니다.';
+    } else if (isSamsung) {
+      icon = '📱 삼성 브라우저 설치 방법';
+      steps = '1. 하단 <strong>≡ 메뉴</strong> 버튼을 누릅니다.<br>2. <strong>"현재 페이지 추가"</strong>를 누릅니다.<br>3. <strong>"홈 화면"</strong>을 누릅니다.';
+    } else if (isDesktop) {
+      if (isFirefox) {
+        icon = '🦊 Firefox 안내';
+        steps = 'Firefox 데스크톱은 PWA를 지원하지 않습니다. <strong>Ctrl+D</strong>로 북마크하거나, <strong>Chrome/Edge</strong>에서 열어 앱으로 설치할 수 있습니다.';
+      } else if (isEdge) {
+        icon = '🖥️ Edge 설치 방법';
+        steps = '주소창 오른쪽의 <strong>설치 아이콘(⊕)</strong>을 클릭 ➔ <strong>"설치"</strong>, 또는 <strong>⋯ 메뉴</strong> ➔ <strong>"앱" ➔ "이 사이트를 앱으로 설치"</strong>를 클릭합니다.';
+      } else {
+        icon = '🖥️ Chrome 설치 방법';
+        steps = '주소창 오른쪽의 <strong>설치 아이콘(⊕)</strong>을 클릭 ➔ <strong>"설치"</strong>, 또는 <strong>⋮ 메뉴</strong> ➔ <strong>"앱 설치"</strong>를 클릭합니다.';
+      }
+    } else {
+      icon = '📲 브라우저 설치 방법';
+      steps = '브라우저 우측 상단 <strong>메뉴(⋮)</strong> ➔ <strong>"홈 화면에 추가"</strong> 또는 <strong>"앱 설치"</strong>를 눌러주세요.';
+    }
+
+    stepsDiv.innerHTML = '<strong style="display:block; font-size:13.5px; color:var(--color-text); margin-bottom:8px;">' + icon + '</strong>' + steps;
+    area.appendChild(stepsDiv);
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closePwaInstallModal() {
+  var modal = document.getElementById('pwaInstallModal');
+  if (modal) modal.style.display = 'none';
+  localStorage.setItem('yeon_install_dismissed', String(Date.now()));
+}
+
+// 수동 PWA 감지용 ( beforeinstallprompt 지원 안 함 )
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    if (_pwaInstallPrompt) return;
+    showPwaInstallModal();
+  }, 4000);
+});
+
+// --- 실시간 서버 업데이트 체크 기능 ---
+function triggerAppUpdate() {
+  if (confirm("서버에 새로운 앱 버전(V1.6)이 업데이트되었습니다.\n최신 기능을 적용하기 위해 페이지를 새로고침하시겠습니까?")) {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (let registration of registrations) {
+          registration.update();
+        }
+      });
+    }
+    window.location.href = window.location.pathname + '?v=' + Date.now();
+  }
+}
+
+function checkAppVersionFromServer() {
+  var currentAppVersion = '1.6';
+  fetch('../version.json?t=' + Date.now())
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data && data.version && data.version !== currentAppVersion) {
+        var updateBtn = document.getElementById('appUpdateBtn');
+        if (updateBtn) {
+          updateBtn.style.display = 'inline-flex';
+          updateBtn.title = '새 버전(V' + data.version + ') 업데이트 가능';
+        }
+      }
+    })
+    .catch(function(err) { console.log('Version check failed:', err); });
+}
+
+// 로드 시 실행 및 30초 주기 반복 체크
+window.addEventListener('load', function() {
+  checkAppVersionFromServer();
+  setInterval(checkAppVersionFromServer, 30000);
+});
 </script>
+
+<!-- PWA 설치 권장 모달 -->
+<div id="pwaInstallModal" style="display:none; position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; padding:16px; backdrop-filter:blur(4px);">
+  <div style="position:relative; width:100%; max-width:400px; background:var(--color-bg); border-radius:24px; padding:32px 24px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.3); border:3px solid var(--color-primary); animation: pwaPopIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+    <div style="font-size:48px; margin-bottom:16px;">📲</div>
+    <h3 style="font-size:19px; font-weight:800; color:var(--color-text); margin-bottom:12px;">폰에 설치를 해야 잘 작동됩니다.</h3>
+    <p style="font-size:13.5px; color:var(--color-text-light); line-height:1.6; margin-bottom:24px; word-break:keep-all;">
+      홈 화면에 앱으로 추가하여 실행하면 전체 화면으로 더 넓게, 끊김 없이 쾌적하게 공부할 수 있어요!
+    </p>
+    
+    <div id="pwaInstallActionArea" style="margin-bottom:16px;">
+      <!-- 동적 채움 -->
+    </div>
+    
+    <button onclick="closePwaInstallModal()" style="background:none; border:none; color:var(--color-muted); font-size:12.5px; font-weight:600; cursor:pointer; text-decoration:underline; outline:none;">
+      웹 브라우저로 계속하기
+    </button>
+  </div>
+</div>
+
 </body>
 </html>

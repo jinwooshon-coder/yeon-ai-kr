@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>AI 시대, 우리 아이의 공부 — 학부모님께 드리는 글</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" rel="stylesheet">
+<style>
+:root{
+  --yp-ink:#1f2a2a;
+  --yp-deep:#2f5d62;
+  --yp-pine:#427a71;
+  --yp-accent:#c38d56;
+  --yp-sage:#dfe8de;
+  --yp-mist:#f4f1eb;
+  --yp-sand:#e7d9bf;
+  --yp-peach:#f3e7dd;
+  --yp-line:#d7d1c5;
+  --yp-card:#fffdf8;
+  --yp-white:#ffffff;
+  --yp-text-primary:var(--yp-ink);
+  --yp-text-secondary:#536060;
+  --yp-text-muted:#6a7676;
+  --yp-text-soft:#7b8686;
+  --yp-bg-page:
+    radial-gradient(circle at top left, rgba(195,141,86,0.10), transparent 22%),
+    radial-gradient(circle at bottom right, rgba(66,122,113,0.14), transparent 20%),
+    linear-gradient(180deg,#f8f5ef 0%,#f4f0e9 100%);
+  --yp-border-soft:1px solid rgba(66,122,113,0.10);
+  --yp-border-card:1px solid rgba(31,42,42,0.06);
+  --yp-shadow-soft:0 18px 40px rgba(37,49,49,0.08);
+  --yp-shadow-card:0 10px 24px rgba(37,49,49,0.06);
+  --yp-radius-hero:36px;
+  --yp-radius-xl:32px;
+  --yp-radius-lg:24px;
+  --yp-radius-md:20px;
+  --yp-radius-sm:16px;
+  --yp-radius-pill:999px;
+  --yp-font-title:"Noto Serif KR",serif;
+  --yp-font-body:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{font-family:var(--yp-font-body);color:var(--yp-text-primary);background:var(--yp-bg-page);line-height:1.7;-webkit-text-size-adjust:100%}
+body{min-height:100vh;padding:24px 16px 80px}
+
+.wrap{max-width:780px;margin:0 auto}
+
+/* 상단 액션 바 */
+.action-bar{
+  display:flex;justify-content:flex-end;gap:8px;
+  margin-bottom:16px;
+}
+.action-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 14px;border-radius:var(--yp-radius-pill);
+  background:rgba(255,255,255,0.85);
+  border:var(--yp-border-soft);
+  color:var(--yp-deep);
+  font-family:var(--yp-font-body);font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.action-btn:hover{background:var(--yp-deep);color:var(--yp-white);transform:translateY(-1px)}
+.action-btn svg{width:16px;height:16px}
+
+/* 히어로 영역 */
+.hero{
+  background:linear-gradient(150deg,rgba(66,122,113,0.09),rgba(243,231,221,0.55)),var(--yp-white);
+  border:var(--yp-border-soft);
+  border-radius:var(--yp-radius-hero);
+  padding:48px 32px;
+  text-align:center;
+  box-shadow:var(--yp-shadow-soft);
+  margin-bottom:32px;
+}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:var(--yp-radius-pill);
+  background:rgba(66,122,113,0.12);color:var(--yp-deep);
+  font-size:12px;font-weight:800;letter-spacing:0.04em;
+  margin-bottom:18px;
+}
+.hero h1{
+  font-family:var(--yp-font-title);
+  font-size:clamp(26px,5.5vw,38px);
+  font-weight:700;line-height:1.35;letter-spacing:-0.02em;
+  color:var(--yp-ink);
+  margin-bottom:14px;
+}
+.hero h1 strong{color:var(--yp-deep)}
+.hero .sub{
+  font-size:15px;color:var(--yp-text-secondary);
+  max-width:520px;margin:0 auto;
+}
+
+/* 섹션 공통 */
+.section{
+  background:var(--yp-card);
+  border:var(--yp-border-card);
+  border-radius:var(--yp-radius-lg);
+  padding:32px 24px;
+  margin-bottom:20px;
+  box-shadow:var(--yp-shadow-card);
+}
+.section-num{
+  display:inline-block;
+  font-family:var(--yp-font-title);font-size:14px;font-weight:700;
+  color:var(--yp-accent);letter-spacing:0.1em;
+  margin-bottom:8px;
+}
+.section h2{
+  font-family:var(--yp-font-title);
+  font-size:clamp(20px,4vw,26px);font-weight:700;
+  color:var(--yp-ink);line-height:1.4;
+  margin-bottom:20px;letter-spacing:-0.02em;
+}
+.section p{
+  font-size:15.5px;color:var(--yp-text-primary);
+  margin-bottom:14px;
+}
+.section p.lead{
+  font-size:16.5px;color:var(--yp-text-primary);font-weight:500;
+}
+.section p.muted{color:var(--yp-text-secondary);font-size:14.5px}
+
+/* 강조 박스 */
+.quote{
+  background:var(--yp-mist);
+  border-left:4px solid var(--yp-deep);
+  padding:18px 22px;border-radius:0 var(--yp-radius-sm) var(--yp-radius-sm) 0;
+  font-family:var(--yp-font-title);font-size:17px;line-height:1.6;
+  color:var(--yp-deep);
+  margin:18px 0;
+}
+
+/* 통계 카드 */
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:14px;margin:24px 0 8px;
+}
+.stat{
+  background:linear-gradient(160deg,rgba(66,122,113,0.06),rgba(195,141,86,0.04));
+  border:var(--yp-border-soft);
+  border-radius:var(--yp-radius-md);
+  padding:22px 18px;text-align:center;
+}
+.stat-num{
+  font-family:var(--yp-font-title);
+  font-size:clamp(28px,5vw,36px);font-weight:700;
+  color:var(--yp-deep);
+  display:block;margin-bottom:6px;letter-spacing:-0.02em;
+}
+.stat-num small{font-size:0.55em;font-weight:500;color:var(--yp-pine);margin-left:2px}
+.stat-text{font-size:13px;color:var(--yp-text-secondary);line-height:1.5}
+
+/* 비교 카드 */
+.compare{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin:18px 0;
+}
+.compare > div{
+  border-radius:var(--yp-radius-md);
+  padding:18px 16px;
+}
+.compare .before{
+  background:rgba(178,167,184,0.12);
+  border:1px solid rgba(178,167,184,0.25);
+}
+.compare .after{
+  background:rgba(66,122,113,0.10);
+  border:1px solid rgba(66,122,113,0.20);
+}
+.compare h4{
+  font-family:var(--yp-font-title);font-size:14px;font-weight:700;
+  margin-bottom:8px;
+}
+.compare .before h4{color:var(--yp-text-soft)}
+.compare .after h4{color:var(--yp-deep)}
+.compare p{font-size:14px;color:var(--yp-text-primary);margin:0;line-height:1.5}
+@media (max-width:480px){.compare{grid-template-columns:1fr}}
+
+/* 체크 리스트 */
+.checklist{list-style:none;margin:14px 0}
+.checklist li{
+  position:relative;padding-left:30px;margin-bottom:12px;
+  font-size:15px;color:var(--yp-text-primary);line-height:1.6;
+}
+.checklist li::before{
+  content:"";position:absolute;left:0;top:5px;
+  width:20px;height:20px;border-radius:50%;
+  background:var(--yp-deep);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='5,10 9,14 15,7'/></svg>");
+  background-repeat:no-repeat;background-position:center;
+}
+.checklist li strong{color:var(--yp-deep);font-weight:700}
+
+/* 약속 카드 */
+.promise{
+  background:linear-gradient(150deg,rgba(195,141,86,0.10),rgba(243,231,221,0.40)),var(--yp-white);
+  border-radius:var(--yp-radius-xl);
+  padding:32px 24px;
+  border:var(--yp-border-soft);
+  margin-bottom:20px;
+}
+.promise h2{color:var(--yp-deep)}
+.promise-list{list-style:none}
+.promise-list li{
+  display:flex;gap:14px;padding:14px 0;
+  border-bottom:1px dashed var(--yp-line);
+}
+.promise-list li:last-child{border-bottom:none}
+.promise-num{
+  flex-shrink:0;width:32px;height:32px;
+  background:var(--yp-deep);color:var(--yp-white);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--yp-font-title);font-weight:700;font-size:14px;
+}
+.promise-text{flex:1}
+.promise-text strong{
+  display:block;font-family:var(--yp-font-title);font-weight:700;
+  color:var(--yp-ink);font-size:15.5px;margin-bottom:4px;
+}
+.promise-text span{font-size:14px;color:var(--yp-text-secondary);line-height:1.55}
+
+/* 마무리 */
+.closing{
+  text-align:center;
+  padding:40px 24px;
+  background:linear-gradient(150deg,rgba(66,122,113,0.10),rgba(243,231,221,0.55)),var(--yp-white);
+  border-radius:var(--yp-radius-hero);
+  border:var(--yp-border-soft);
+  box-shadow:var(--yp-shadow-soft);
+}
+.closing .signature{
+  font-family:var(--yp-font-title);font-size:clamp(18px,3.5vw,22px);
+  color:var(--yp-deep);font-weight:500;line-height:1.6;
+  margin-bottom:8px;
+}
+.closing .author{
+  font-family:var(--yp-font-title);font-size:15px;color:var(--yp-text-secondary);
+  margin-top:18px;
+}
+.closing .author strong{color:var(--yp-ink);font-weight:700;font-size:17px;display:block;margin-top:4px}
+
+/* 인쇄 시 */
+@media print{
+  body{background:white;padding:0}
+  .action-bar{display:none}
+  .hero,.section,.promise,.closing{
+    box-shadow:none;border:1px solid #e0ddd5;
+    page-break-inside:avoid;
+  }
+  .stats{page-break-inside:avoid}
+}
+
+/* 작은 화면 미세 조정 */
+@media (max-width:520px){
+  body{padding:16px 12px 60px}
+  .hero{padding:36px 22px;border-radius:28px}
+  .section{padding:26px 20px}
+  .promise{padding:26px 20px}
+  .closing{padding:32px 20px;border-radius:28px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- 액션 바 -->
+  <div class="action-bar">
+    <button class="action-btn" onclick="window.print()" aria-label="인쇄하기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      인쇄하기
+    </button>
+    <button class="action-btn" onclick="copyLink()" aria-label="링크 복사">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      링크 복사
+    </button>
+  </div>
+
+  <!-- 히어로 -->
+  <header class="hero">
+    <span class="hero-badge">학부모님께 드리는 글</span>
+    <h1>AI 시대,<br>우리 아이의 공부는<br><strong>어떻게 달라져야 할까요?</strong></h1>
+    <p class="sub">지금 우리 아이에게 가장 시급한 공부, 그리고 우리 학원이 인공지능 수업을 시작한 이유를 차분히 말씀드립니다.</p>
+  </header>
+
+  <!-- 섹션 1: 인사 -->
+  <section class="section">
+    <div class="section-num">PROLOGUE</div>
+    <h2>먼저, 인사드립니다</h2>
+    <p class="lead">안녕하세요, 학부모님. 늘 아이의 공부와 미래를 함께 고민해 주셔서 감사합니다.</p>
+    <p>오늘 이 글을 드리는 이유는 단 하나입니다. <strong>지금 우리 아이에게 가장 시급한 공부가 무엇인지</strong>, 학부모님과 함께 생각해 보고 싶어서입니다.</p>
+    <p class="muted">그것이 바로, 우리 학원이 인공지능(AI) 수업을 시작하는 이유이기도 합니다.</p>
+  </section>
+
+  <!-- 섹션 2: 시대가 바뀌었습니다 -->
+  <section class="section">
+    <div class="section-num">01</div>
+    <h2>이미 시대가 바뀌었습니다</h2>
+    <p>몇 년 전만 해도 인공지능은 영화 속 이야기였습니다. 그러나 지금은 다릅니다. AI는 이미 우리 아이들의 일상 속으로 깊숙이 들어와 있습니다.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <span class="stat-num">5<small>일</small></span>
+        <div class="stat-text">ChatGPT 출시 후<br>사용자 100만 명 돌파까지 걸린 시간</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2<small>년</small></span>
+        <div class="stat-text">전 세계 학생 절반 이상이<br>AI 도구를 일상에서 사용하기까지</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">2030</span>
+        <div class="stat-text">현재의 직업 중 상당수가<br>AI와 협업하는 형태로 재편되는 시점</div>
+      </div>
+    </div>
+
+    <p class="muted">아이들이 살아갈 세상은, 우리가 자라온 세상과는 전혀 다른 모습일 것입니다. 학교 시험만 잘 본다고 준비되는 시대가 아닙니다.</p>
+  </section>
+
+  <!-- 섹션 3: 우리 아이가 마주할 변화 -->
+  <section class="section">
+    <div class="section-num">02</div>
+    <h2>우리 아이가 마주할 세 가지 변화</h2>
+    <p>AI는 단순히 새로운 기술 하나가 등장한 것이 아닙니다. 아이가 앞으로 살아가는 방식 자체를 바꿉니다.</p>
+
+    <div class="compare">
+      <div class="before">
+        <h4>지금까지의 공부</h4>
+        <p>외워서 답을 맞히는 능력</p>
+      </div>
+      <div class="after">
+        <h4>앞으로 필요한 공부</h4>
+        <p>좋은 질문을 던지고<br>AI와 함께 답을 찾는 능력</p>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="before">
+        <h4>지금까지의 직업</h4>
+        <p>한 분야의 지식을 깊이 아는 사람</p>
+      </div>
+      <div class="after">
+        <h4>앞으로의 직업</h4>
+        <p>AI를 도구로 활용해<br>여러 분야를 넘나드는 사람</p>
+      </div>
+    </div>
+
+    <div class="compare">
+      <div class="before">
+        <h4>지금까지의 사고력</h4>
+        <p>주어진 문제를 푸는 힘</p>
+      </div>
+      <div class="after">
+        <h4>앞으로의 사고력</h4>
+        <p>문제 자체를 정의하고<br>AI에게 잘 시키는 힘</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 섹션 4: 지금이 골든타임 -->
+  <section class="section">
+    <div class="section-num">03</div>
+    <h2>왜 지금이 가장 중요한 시기일까요?</h2>
+
+    <div class="quote">
+      "AI를 다루는 아이와, AI를 못 다루는 아이의 격차는<br>앞으로 점점 더 빠르게 벌어집니다."
+    </div>
+
+    <p>저는 이 격차를 직접 보고 있습니다. AI를 능숙하게 활용하는 아이는 같은 시간에 두 배, 세 배의 학습량을 소화합니다. 모르는 것을 그 자리에서 해결하고, 자기 수준에 맞는 설명을 받고, 자기만의 학습 방법을 찾아갑니다.</p>
+
+    <p>반면 AI를 두려워하거나 잘못된 방식으로 사용하는 아이는, 그저 답만 베껴오거나 오히려 사고력이 더 약해지기도 합니다. <strong>같은 도구를 두고도 결과는 정반대</strong>입니다.</p>
+
+    <p class="muted">학교 정규 교과에 AI가 본격적으로 들어오기까지는 시간이 걸립니다. 그 사이에 아이들은 벌써 차이가 나기 시작합니다. 그래서 지금이 골든타임입니다.</p>
+  </section>
+
+  <!-- 섹션 5: 우리가 가르치는 것 -->
+  <section class="section">
+    <div class="section-num">04</div>
+    <h2>저희가 가르치는 것은 '도구 사용법'이 아닙니다</h2>
+    <p>혹시 AI 수업이라고 하면, 단순히 챗GPT 쓰는 법을 알려주는 수업이라고 생각하실 수 있습니다. 저희는 그 이상을 가르칩니다.</p>
+
+    <ul class="checklist">
+      <li><strong>좋은 질문을 만드는 사고력</strong> — AI는 묻는 만큼만 답합니다. 아이가 깊이 있게 묻는 법을 익히게 합니다.</li>
+      <li><strong>AI의 답을 의심하고 검증하는 비판력</strong> — AI도 틀립니다. 그 답이 맞는지 스스로 판단할 수 있어야 합니다.</li>
+      <li><strong>안전하고 윤리적인 사용법</strong> — 표절, 개인정보, 거짓 정보 등 아이가 알아야 할 위험을 미리 가르칩니다.</li>
+      <li><strong>자기주도학습과의 결합</strong> — AI가 답을 대신 써주는 것이 아니라, 아이가 더 잘 공부하도록 돕는 도구가 되게 합니다.</li>
+      <li><strong>인공지능 시대의 인성</strong> — 기술이 아무리 발전해도 결국 사람이 중심입니다. 참사람으로 자라는 마음 공부도 함께합니다.</li>
+    </ul>
+  </section>
+
+  <!-- 섹션 6: 시너지 -->
+  <section class="section">
+    <div class="section-num">05</div>
+    <h2>자기주도학습 × AI = 가장 강력한 조합</h2>
+    <p>저희 학원이 오랫동안 다듬어 온 것은 <strong>자기주도학습</strong>과 <strong>5·2·5·5 복습법</strong>입니다. 여기에 AI가 더해지면 학습 효율이 비약적으로 올라갑니다.</p>
+
+    <ul class="checklist">
+      <li>모르는 부분을 그 자리에서 <strong>아이 수준에 맞게 다시 설명</strong>받습니다.</li>
+      <li>오답을 <strong>비슷한 유형의 문제로 자동 만들어</strong> 반복 학습합니다.</li>
+      <li>오늘 배운 내용을 <strong>AI와 대화하며 스스로 정리</strong>합니다.</li>
+      <li>5·2·5·5 복습 주기에 맞춰 <strong>AI가 복습 질문을 던져</strong>줍니다.</li>
+    </ul>
+
+    <p class="muted">AI가 공부를 대신해 주는 것이 아니라, <strong>아이가 스스로 공부하는 힘을 더 강하게 만들어 주는 것</strong> — 그것이 저희가 그리는 그림입니다.</p>
+  </section>
+
+  <!-- 학부모님께 드리는 약속 -->
+  <section class="promise">
+    <div class="section-num" style="color:var(--yp-accent)">PROMISE</div>
+    <h2>학부모님께 드리는 약속</h2>
+    <p style="color:var(--yp-text-secondary);font-size:15px;margin-bottom:18px">AI 수업을 시작하면서, 저는 학부모님께 다섯 가지를 약속드립니다.</p>
+
+    <ul class="promise-list">
+      <li>
+        <div class="promise-num">1</div>
+        <div class="promise-text">
+          <strong>아이의 사고력을 먼저 지키겠습니다</strong>
+          <span>AI에게 답을 받는 수업이 아니라, 아이가 먼저 생각한 뒤에 AI를 쓰는 수업으로 만들겠습니다.</span>
+        </div>
+      </li>
+      <li>
+        <div class="promise-num">2</div>
+        <div class="promise-text">
+          <strong>안전한 사용 환경을 만들겠습니다</strong>
+          <span>아이의 개인정보가 새지 않도록, 부적절한 콘텐츠에 노출되지 않도록 늘 살피겠습니다.</span>
+        </div>
+      </li>
+      <li>
+        <div class="promise-num">3</div>
+        <div class="promise-text">
+          <strong>윤리와 정직을 함께 가르치겠습니다</strong>
+          <span>AI로 숙제를 베끼는 일이 아닌, 정직하게 활용하는 자세를 같이 익히게 하겠습니다.</span>
+        </div>
+      </li>
+      <li>
+        <div class="promise-num">4</div>
+        <div class="promise-text">
+          <strong>지나친 의존을 막겠습니다</strong>
+          <span>AI 없이도 스스로 생각하고 공부할 수 있는 아이로 자라도록, 균형을 잡겠습니다.</span>
+        </div>
+      </li>
+      <li>
+        <div class="promise-num">5</div>
+        <div class="promise-text">
+          <strong>학부모님과 함께 가겠습니다</strong>
+          <span>아이의 변화와 배움을 정기적으로 공유드리고, 가정에서도 함께 지도하실 수 있도록 안내드리겠습니다.</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 마무리 -->
+  <section class="closing">
+    <p class="signature">
+      AI 시대는 이미 시작되었습니다.<br>
+      아이가 끌려가지 않고, 앞장서서 살아가도록<br>
+      <strong style="color:var(--yp-deep);font-weight:700">함께 준비하시지 않겠습니까?</strong>
+    </p>
+    <div class="author">
+      늘 한결같은 마음으로,
+      <strong>연소사 이진우 드림</strong>
+    </div>
+  </section>
+
+</div>
+
+<script>
+function copyLink(){
+  const url = window.location.href;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(url).then(function(){
+      showToast("링크가 복사되었습니다");
+    }).catch(function(){
+      fallbackCopy(url);
+    });
+  } else {
+    fallbackCopy(url);
+  }
+}
+function fallbackCopy(text){
+  const ta = document.createElement("textarea");
+  ta.value = text;
+  ta.style.position = "fixed";
+  ta.style.opacity = "0";
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand("copy"); showToast("링크가 복사되었습니다"); }
+  catch(e){ showToast("복사가 안 됩니다. 주소창을 길게 눌러 복사해 주세요."); }
+  document.body.removeChild(ta);
+}
+function showToast(msg){
+  const t = document.createElement("div");
+  t.textContent = msg;
+  t.style.cssText = "position:fixed;left:50%;bottom:32px;transform:translateX(-50%);background:#1f2a2a;color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;font-weight:600;font-family:Pretendard,sans-serif;z-index:9999;box-shadow:0 8px 24px rgba(0,0,0,0.18);opacity:0;transition:opacity .2s";
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){ t.style.opacity = "1"; });
+  setTimeout(function(){
+    t.style.opacity = "0";
+    setTimeout(function(){ t.remove(); }, 250);
+  }, 1800);
+}
+</script>
+
+</body>
+</html>

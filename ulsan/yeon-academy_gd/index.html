@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>연아카데미 강동점 — 스스로 생각하는 논술, 스스로 일어서는 연플래닝</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Noto+Serif+KR:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="yeon-planning.css">
+</head>
+<body>
+
+  <!-- ── 상단 회전 띠 (리더스 도입 #1) ── -->
+  <div class="promo-strip" id="promoStrip">
+    <span class="promo-item active" data-i="0"><span class="badge">직강</span> 스스로 생각하는 힘 — <strong>이진우 원장 논술 직강</strong></span>
+    <span class="promo-item" data-i="1"><span class="badge">강동</span> 스스로 일어서는 습관 — <strong>연플래닝 몰입 코칭</strong></span>
+    <span class="promo-item" data-i="2"><span class="badge">철학</span> 배려 · 배움 · 놀기 — <strong>연아카데미 강동점</strong></span>
+    <div class="promo-dots">
+      <span class="active" data-dot="0"></span>
+      <span data-dot="1"></span>
+      <span data-dot="2"></span>
+    </div>
+  </div>
+
+  <!-- ── 플랫폼 바 ── -->
+  <div class="platform-bar">
+    <a href="https://y-life.kr">y-life.kr</a>
+    <span class="sep">›</span>
+    <a href="../../">yeon.ai.kr</a>
+    <span class="sep">›</span>
+    <a href="../">울산</a>
+    <span class="sep">›</span>
+    <span class="current">연아카데미 강동점</span>
+  </div>
+
+  <!-- ── 헤더 ── -->
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a href="." class="site-brand">
+        <div class="brand-mark">연</div>
+        <div class="brand-text">
+          <div class="ko">연아카데미 강동점</div>
+          <span class="en">Yeon Academy Gangdong</span>
+        </div>
+      </a>
+      <nav id="nav">
+        <a href="#branches">지점 안내</a>
+        <a href="#method">연플래닝 학습법</a>
+        <a href="#courses">교육 코스</a>
+        <a href="#essay">생각하는 논술</a>
+        <a href="#gokgan">배움의 곳간</a>
+        <a href="#contact">교육상담</a>
+      </nav>
+      <button class="nav-toggle" onclick="document.getElementById('nav').classList.toggle('open')">≡</button>
+    </div>
+  </header>
+
+  <!-- ── 히어로 ── -->
+  <div class="hero">
+    <div class="hero-split">
+      <div class="hero-left">
+        <div class="edition">
+          <span>Yeon Academy · Gangdong</span>
+          <span class="issue">스스로 생각하고 스스로 일어서는 힘</span>
+        </div>
+        <h1 class="hero-title">
+          스스로 생각하는 <em>논술</em><br>스스로 일어서는 <em>연플래닝</em>
+        </h1>
+        <p class="hero-sub">
+          배려와 배움, 그리고 깊은 몰입의 교실.<br>
+          이진우 원장이 한 학기 동안 학생의 곁에서 사유의 깊이와 올바른 공부 습관을 함께 빚어갑니다.
+        </p>
+        <div class="hero-cta">
+          <a href="#contact" class="btn-main">상담 신청하기</a>
+          <a href="#method" class="btn-sub">학습법 알아보기</a>
+        </div>
+      </div>
+      <div class="kanji-panel">
+        <svg viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" style="width:100%; max-width:200px; height:auto;" aria-label="자기주도 학습 — 스스로 자나는 나무">
+          <!-- 책 (땅 역할) -->
+          <path d="M 30 200 Q 100 192 170 200 L 170 218 Q 100 210 30 218 Z" fill="#5D4037" opacity="0.85"/>
+          <path d="M 30 200 Q 100 192 170 200" fill="none" stroke="#3C3C38" stroke-width="1.5"/>
+          <line x1="100" y1="194" x2="100" y2="214" stroke="#F8F2EA" stroke-width="0.8" opacity="0.6"/>
+          <!-- 나무 줄기 -->
+          <path d="M 100 200 Q 98 170 102 140 Q 106 110 100 80" stroke="#5D4037" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+          <!-- 가지 1 (왼쪽) -->
+          <path d="M 101 150 Q 88 142 75 130" stroke="#5D4037" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- 가지 2 (오른쪽) -->
+          <path d="M 102 130 Q 118 124 130 110" stroke="#5D4037" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- 가지 3 (왼쪽 위) -->
+          <path d="M 100 105 Q 88 95 78 88" stroke="#5D4037" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <!-- 잎사귀 (작은 점들) -->
+          <circle cx="75" cy="130" r="6" fill="#B08E61" opacity="0.6"/>
+          <circle cx="68" cy="125" r="4" fill="#B08E61" opacity="0.5"/>
+          <circle cx="130" cy="110" r="6" fill="#B08E61" opacity="0.65"/>
+          <circle cx="138" cy="105" r="4" fill="#B08E61" opacity="0.5"/>
+          <circle cx="78" cy="88" r="5" fill="#B08E61" opacity="0.7"/>
+          <circle cx="72" cy="82" r="3.5" fill="#B08E61" opacity="0.55"/>
+          <!-- 새 잎 (꼭대기) -->
+          <ellipse cx="98" cy="74" rx="8" ry="14" fill="#B08E61" opacity="0.8" transform="rotate(-15 98 74)"/>
+          <ellipse cx="105" cy="68" rx="6" ry="11" fill="#B08E61" opacity="0.7" transform="rotate(20 105 68)"/>
+          <!-- 햇빛 (점선 원) -->
+          <circle cx="155" cy="48" r="18" fill="none" stroke="#B8955A" stroke-width="1" stroke-dasharray="2 3" opacity="0.7"/>
+          <circle cx="155" cy="48" r="9" fill="#F8C97A" opacity="0.4"/>
+          <!-- 緣 작게 -->
+          <text x="100" y="232" text-anchor="middle" font-family="serif" font-size="13" font-weight="700" fill="#5D4037" opacity="0.85">緣</text>
+        </svg>
+        <div class="kanji-meaning">스스로 생각하고 스스로 일어서는 배움</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 지점 안내 ── -->
+  <section id="branches" class="section">
+    <div class="section-label">Branch Guide</div>
+    <h2 class="section-title">지점 및 교육상담</h2>
+    <p class="section-sub">연아카데미 강동점을 중심으로 울산 지역 연계 지점을 안내합니다.</p>
+    <div class="branch-grid">
+      <!-- 강동점 (메인 강조) -->
+      <div class="branch-card primary-branch" style="border: 2px solid var(--thread); background: var(--bg-paper);">
+        <div class="branch-num" style="color: var(--wood);">Main</div>
+        <h3>연아카데미 강동점</h3>
+        <p><strong>본 사이트 지점 / 교육상담</strong><br>울산 북구 강동로 ○○○<br>yeon@y-life.com</p>
+        <span class="branch-tag" style="background: var(--wood); color: #fff;">교육 상담 중</span>
+      </div>
+      <!-- 시청점 (본원) -->
+      <div class="branch-card">
+        <div class="branch-num">01</div>
+        <h3>시청점 (본원)</h3>
+        <p>울산 남구 중앙로 (본원)<br>연플래닝 & 연아카데미 본원</p>
+        <span class="branch-tag">연계 지점</span>
+      </div>
+      <!-- 삼산점 -->
+      <div class="branch-card">
+        <div class="branch-num">02</div>
+        <h3>삼산점</h3>
+        <p>울산 남구 삼산동<br>삼산로 ○○○</p>
+        <span class="branch-tag">연계 지점</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 학습법 ── -->
+  <section id="method" class="section">
+    <div class="section-label">Learning Method</div>
+    <h2 class="section-title">연플래닝 학습법</h2>
+    <p class="section-sub">하게 만드는 것이 아니라, 하고 싶어지는 것.<br>배려, 배움, 놀기의 마음으로 5.2.5.5의 네 박자 의식적 몰입을 훈련합니다.</p>
+    <div class="method-grid">
+      <div class="method-card">
+        <div class="method-num">5</div>
+        <h3>5분 워밍업</h3>
+        <p>학습 전 뇌를 깨우는 준비 단계. 오늘 무엇을, 왜 공부할지 스스로 선언합니다.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">2</div>
+        <h3>2분 목표 설정</h3>
+        <p>구체적이고 측정 가능한 목표를 2분 안에 한 문장으로 씁니다. 모호함을 없앱니다.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">5</div>
+        <h3>5단계 심화</h3>
+        <p>이해 → 요약 → 설명 → 응용 → 가르치기. 단순 암기를 넘어 깊이 있는 이해로.</p>
+      </div>
+      <div class="method-card">
+        <div class="method-num">5</div>
+        <h3>5분 점검</h3>
+        <p>학습 후 스스로 채점하고 빈틈을 기록합니다. 다음 세션의 시작점이 됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 핵심 3개 비교 카드 (리더스 도입 #3) ── -->
+  <section id="core" class="section">
+    <div class="headline-band">
+      <div class="pre">연플래닝의 세 가지 기둥</div>
+      <h2>스스로 일어서는 힘, 여기 <em>세 줄기</em>.</h2>
+    </div>
+    <div class="core-compare">
+      <div class="compare-card">
+        <div class="compare-photo" role="img" aria-label="5.2.5.5 학습법 이미지 (예정)" style="background-image: linear-gradient(180deg, rgba(29,29,27,0.05) 0%, rgba(29,29,27,0.45) 100%), url('img/M-01.png'); background-size: cover; background-position: center;">
+          <span class="compare-photo-caption">METHOD · 01</span>
+        </div>
+        <div class="compare-body">
+          <div class="compare-num">METHOD · 01</div>
+          <h3>5.2.5.5 학습법</h3>
+          <div class="sub">5분·2분·5시간·5일</div>
+          <p>망각의 곡선 위에 얹는 네 박자의 호흡.</p>
+        </div>
+        <svg class="compare-watermark" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <line x1="10" y1="40" x2="70" y2="40" stroke="#5D4037" stroke-width="1.5" stroke-dasharray="2 2" stroke-linecap="round"/>
+          <circle cx="10" cy="40" r="5" fill="none" stroke="#5D4037" stroke-width="1.5"/>
+          <circle cx="30" cy="40" r="5" fill="none" stroke="#5D4037" stroke-width="1.5"/>
+          <circle cx="50" cy="40" r="5" fill="none" stroke="#5D4037" stroke-width="1.5"/>
+          <circle cx="70" cy="40" r="5" fill="none" stroke="#5D4037" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="compare-card">
+        <div class="compare-photo" role="img" aria-label="100일 습관 이미지 (예정)" style="background-image: linear-gradient(180deg, rgba(29,29,27,0.05) 0%, rgba(29,29,27,0.45) 100%), url('img/M-02.png'); background-size: cover; background-position: center;">
+          <span class="compare-photo-caption">METHOD · 02</span>
+        </div>
+        <div class="compare-body">
+          <div class="compare-num">METHOD · 02</div>
+          <h3>100일 습관</h3>
+          <div class="sub">작은 하나, 100일 동안</div>
+          <p>의지가 아니라 시스템이 만드는 자기주도.</p>
+        </div>
+        <svg class="compare-watermark" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <g transform="translate(15,12)" fill="none" stroke="#5D4037" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="0" y="0" width="4" height="4"/>
+            <rect x="8" y="0" width="4" height="4"/>
+            <rect x="16" y="0" width="4" height="4"/>
+            <rect x="24" y="0" width="4" height="4"/>
+            <rect x="32" y="0" width="4" height="4"/>
+            <rect x="0" y="8" width="4" height="4"/>
+            <rect x="8" y="8" width="4" height="4"/>
+            <rect x="16" y="8" width="4" height="4"/>
+            <rect x="24" y="8" width="4" height="4"/>
+            <rect x="32" y="8" width="4" height="4"/>
+          </g>
+        </svg>
+      </div>
+      <div class="compare-card">
+        <div class="compare-photo" role="img" aria-label="의식적 몰입 이미지 (예정)" style="background-image: linear-gradient(180deg, rgba(29,29,27,0.05) 0%, rgba(29,29,27,0.45) 100%), url('img/M-03.png'); background-size: cover; background-position: center;">
+          <span class="compare-photo-caption">METHOD · 03</span>
+        </div>
+        <div class="compare-body">
+          <div class="compare-num">METHOD · 03</div>
+          <h3>의식적 몰입</h3>
+          <div class="sub">집중 — 흩어짐 — 돌아옴</div>
+          <p>오래가 아니라 깊게, 마음을 가라앉히는 의식부터.</p>
+        </div>
+        <svg class="compare-watermark" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="40" cy="30" r="22" fill="none" stroke="#5D4037" stroke-width="1.5"/>
+          <circle cx="40" cy="30" r="14" fill="none" stroke="#5D4037" stroke-width="1.5"/>
+          <circle cx="40" cy="30" r="6" fill="none" stroke="#5D4037" stroke-width="1.5"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 이런 학생에게 추천 (리더스 도입 #4) ── -->
+  <section id="who" class="section">
+    <div class="headline-band">
+      <div class="pre">연플래닝은 이런 학생에게 닿습니다</div>
+      <h2>혹시, <em>지금의 너</em>인가요.</h2>
+    </div>
+    <div class="persona-grid">
+      <div class="persona-card with-photo" style="background-image: linear-gradient(180deg, rgba(29,29,27,0.10), rgba(29,29,27,0.65)), url('img/P-01.png'); background-size: cover; background-position: center;">
+        <div class="persona-photo-body">
+          <span class="persona-photo-tag">HABIT</span>
+          <p>매번 새로 시작하느라<br>지쳐 있는 학생</p>
+        </div>
+      </div>
+      <div class="persona-card quote-style">
+        <div class="quote-mark">"</div>
+        <p>세 시간을 앉아 있었는데, 머리엔 아무것도 안 남아요.<span class="quote-by">— 고1 ○○ 학생</span></p>
+      </div>
+      <div class="persona-card with-photo" style="background-image: linear-gradient(180deg, rgba(29,29,27,0.10), rgba(29,29,27,0.65)), url('img/P-02.png'); background-size: cover; background-position: center;">
+        <div class="persona-photo-body">
+          <span class="persona-photo-tag">PLAN</span>
+          <p>누가 시켜야<br>겨우 책상에 앉는 학생</p>
+        </div>
+      </div>
+      <div class="persona-card quote-style">
+        <div class="quote-mark">"</div>
+        <p>학원을 세 군데 다녔는데, 성적이 그대로예요.<span class="quote-by">— 중3 ○○ 학생</span></p>
+      </div>
+      <div class="persona-card with-photo" style="background-image: linear-gradient(180deg, rgba(29,29,27,0.10), rgba(29,29,27,0.65)), url('img/P-03.png'); background-size: cover; background-position: center;">
+        <div class="persona-photo-body">
+          <span class="persona-photo-tag">EXAM</span>
+          <p>시험 앞에서<br>마음부터 흔들리는 학생</p>
+        </div>
+      </div>
+      <div class="persona-card quote-style">
+        <div class="quote-mark">"</div>
+        <p>이번 학기엔, 한 번만 제대로 바뀌어 보고 싶어요.<span class="quote-by">— 고2 ○○ 학생</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 코스 ── -->
+  <section id="courses" class="section">
+    <div class="section-label">Courses</div>
+    <h2 class="section-title">교육 코스 안내</h2>
+    <p class="section-sub">스스로 일어서는 연플래닝과 깊이 사유하는 논술, 두 날개로 스스로 서는 힘을 기릅니다.</p>
+    
+    <div class="course-container">
+      <!-- 연플래닝 코스 -->
+      <div class="course-group type-planning">
+        <h3 class="course-group-title">
+          연플래닝 코스 <span class="course-group-subtitle">(습관과 몰입)</span>
+        </h3>
+        <div class="course-list">
+          <div class="course-item">
+            <div class="course-num">Ⅰ</div>
+            <div class="course-info">
+              <h3>입문 코스</h3>
+              <p>공부 습관이 없는 학생을 위한 기초 과정. 하루 1시간 자기주도 학습 루틴 만들기.</p>
+            </div>
+            <span class="course-tag secondary">초·중등</span>
+          </div>
+          <div class="course-item">
+            <div class="course-num">Ⅱ</div>
+            <div class="course-info">
+              <h3>의식적 몰입 코스</h3>
+              <p>집중력이 부족한 학생을 위한 신화 과정. 포모도로 + 5.2.5.5 학습법 완전 적용.</p>
+            </div>
+            <span class="course-tag secondary">중·고등</span>
+          </div>
+          <div class="course-item">
+            <div class="course-num">Ⅲ</div>
+            <div class="course-info">
+              <h3>수능·내신 플래닝 코스</h3>
+              <p>시험 목표가 뚜렷한 고등학생을 위한 전략 과정. 과목별 로드맵 설계부터 실전 플래닝까지.</p>
+            </div>
+            <span class="course-tag primary">고등 전용</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 연아카데미 논술 코스 -->
+      <div class="course-group type-essay">
+        <h3 class="course-group-title">
+          연아카데미 논술 코스 <span class="course-group-subtitle">(사유와 표현)</span>
+        </h3>
+        <div class="course-list">
+          <div class="course-item">
+            <div class="course-num">Ⅰ</div>
+            <div class="course-info">
+              <h3>초·중등 독서논술 코스</h3>
+              <p>깊이 읽고 바르게 생각하는 힘을 기릅니다. 글쓰기의 기본 근육을 탄탄히 다지는 첫걸음.</p>
+            </div>
+            <span class="course-tag secondary">초·중등</span>
+          </div>
+          <div class="course-item">
+            <div class="course-num">Ⅱ</div>
+            <div class="course-info">
+              <h3>중·고등 수행·학술글쓰기 코스</h3>
+              <p>학교 수행평가와 학술적 글쓰기에 대응하는 코스. 구조적이고 논리적인 문장력을 기릅니다.</p>
+            </div>
+            <span class="course-tag secondary">중·고등</span>
+          </div>
+          <div class="course-item">
+            <div class="course-num">Ⅲ</div>
+            <div class="course-info">
+              <h3>대입 시그니처 논술 코스</h3>
+              <p>대입 논술 전형을 위한 원장 직강 집중 대비 과정. 기출 분석부터 1:1 대면 첨삭까지 완벽 밀착.</p>
+            </div>
+            <span class="course-tag primary">원장 직강</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 논술 — 단 하나의 단과 수업 ── -->
+  <section id="essay" class="feature-class">
+    <div class="feature-class-inner">
+      <div>
+        <div class="label">Philosophy of Writing</div>
+        <h2>단 하나의 배움을 권해야 한다면<br>그것은 스스로 생각하는 <em>논술</em>입니다</h2>
+        <p class="quote">"글을 쓴다는 것은 자신의 내면을 들여다보고 사유의 영토를 넓히는 일입니다. 스스로 생각하고 표현하는 근육을 기를 때, 비로소 자기주도적인 삶과 배움이 시작됩니다."</p>
+        <ul class="why-list">
+          <li>배움과 생각을 잇는 다리: 읽고 사유하며, 자신의 문장으로 세상을 담아냅니다.</li>
+          <li>의식적인 몰입의 정수: 단 한 편의 글을 끝까지 완성해 내는 끈기와 성취를 배웁니다.</li>
+          <li>배려와 배움의 확장: 타인의 글을 읽고 경청하며, 생각의 지평을 넓힙니다.</li>
+          <li>일시적인 성적이 아닌 평생의 지적 자산: 대입 논술부터 학술 글쓰기까지 이어지는 튼튼한 뿌리.</li>
+        </ul>
+        <div class="signature">연아카데미 원장 이진우</div>
+      </div>
+      <div>
+        <div class="video-frame">
+          <iframe
+            src="https://www.youtube.com/embed/h7gYs1vJK9s"
+            title="연아카데미 논술 수업 — 생각의 폭을 넓히는 수업"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen></iframe>
+        </div>
+        <div class="video-caption">연아카데미 논술 수업 · 영상으로 보기</div>
+      </div>
+    </div>
+  <!-- ── [추후 추가 예정] 수학 강사진 소개 영역 ── -->
+  <!-- 
+  <section id="math" class="section">
+    <div class="section-label">Mathematics</div>
+    <h2 class="section-title">수학 교육 과정 및 강사 소개</h2>
+    <p class="section-sub">스스로 문제를 해결하는 수학적 사유의 힘을 기릅니다. (정보 등록 예정)</p>
+  </section>
+  -->
+
+  <!-- ── 곳간 ── -->
+  <section id="gokgan" class="section">
+    <div class="section-label">Learning Storehouse</div>
+    <h2 class="section-title">배움의 곳간</h2>
+    <p class="section-sub">배움과 사유의 기록이 차곡차곡 쌓이는 자리. 논술과 플래닝, 마음을 보살피는 글들을 매주 한 편씩 나눕니다.</p>
+
+    <!-- 코너 소개 띠 -->
+    <div class="gokgan-intro">
+      <div class="gokgan-seal">곳간</div>
+      <div class="gokgan-intro-body">
+        <strong>곳간(庫間)</strong>은 옛 한옥에서 한 해의 살림을 차곡차곡 쟁여두던 곳입니다.
+        「<strong>곳간</strong>」은 스스로 생각하는 힘을 기르는 논술 자료부터 올바른 공부 습관을 돕는 플래닝 도구까지, 배움의 살림살이가 쌓이는 자리입니다.
+        한 편 한 편이 모여 한 권의 살림책이 됩니다.
+      </div>
+    </div>
+
+    <!-- 보기 토글 -->
+    <div class="view-toggle">
+      <button type="button" id="viewBtnTopic" class="active">주제별 모아보기</button>
+      <button type="button" id="viewBtnBoard">게시판으로 보기</button>
+    </div>
+
+    <!-- 검색 & 필터 -->
+    <div class="board-toolbar">
+      <div class="board-search">
+        <input type="text" id="boardSearch" placeholder="제목·내용으로 검색" aria-label="검색어 입력" />
+        <button type="button" onclick="filterBoard()">SEARCH</button>
+      </div>
+      <div class="board-filters">
+        <button class="filter-chip active" data-cat="전체">전체</button>
+        <button class="filter-chip" data-cat="학습법">학습법</button>
+        <button class="filter-chip" data-cat="도구·자료">도구·자료</button>
+        <button class="filter-chip" data-cat="시간관리">시간관리</button>
+        <button class="filter-chip" data-cat="멘탈·동기">멘탈·동기</button>
+        <button class="filter-chip" data-cat="과목별">과목별</button>
+        <button class="filter-chip" data-cat="시험·입시">시험·입시</button>
+      </div>
+    </div>
+
+    <!-- 주제별 모아보기 -->
+    <div class="topic-section" id="topicView"></div>
+
+    <!-- 게시판 -->
+    <table class="board" id="boardTable" style="display:none;">
+      <thead>
+        <tr>
+          <th class="center">No.</th>
+          <th class="center">분류</th>
+          <th>제목</th>
+          <th class="center">날짜</th>
+          <th class="right">읽음</th>
+          <th class="center">공유</th>
+        </tr>
+      </thead>
+      <tbody id="boardBody"></tbody>
+    </table>
+
+    <nav class="board-pagination" id="boardPagination" aria-label="페이지 이동" style="display:none;">
+      <a class="arrow" href="#">‹</a>
+      <span class="current">1</span>
+      <a href="#">2</a>
+      <a href="#">3</a>
+      <a class="arrow" href="#">›</a>
+    </nav>
+
+    <div class="gokgan-empty" id="boardEmpty" style="display:none;">
+      <div class="t">검색 결과가 없습니다</div>
+      <div class="d">다른 키워드나 분류로 다시 시도해보세요.</div>
+    </div>
+  </section>
+
+  <!-- SNS 공유 팝오버 -->
+  <div class="share-pop" id="sharePop" role="dialog" aria-label="공유하기">
+    <div class="share-pop-head" id="sharePopTitle">이 글 공유하기</div>
+    <div class="share-pop-sub">한 번의 클릭으로 여러 곳에 뿌리세요</div>
+    <div class="share-pop-grid">
+      <button class="share-pop-btn" data-sns="kakao" type="button"><svg viewBox="0 0 24 24"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.85 1.84 5.34 4.6 6.74-.2.69-.71 2.5-.81 2.89-.13.48.18.48.37.35.15-.1 2.39-1.62 3.36-2.27.83.12 1.69.19 2.48.19 5.52 0 10-3.58 10-8s-4.48-7.9-10-7.9z" fill="#FEE500"/></svg>카카오톡</button>
+      <button class="share-pop-btn" data-sns="band" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#21C531"/><text x="12" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="9" fill="#fff">B</text></svg>밴드</button>
+      <button class="share-pop-btn" data-sns="story" type="button"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#FAB900"/><text x="12" y="16" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="#fff">s</text></svg>스토리</button>
+      <button class="share-pop-btn" data-sns="facebook" type="button"><svg viewBox="0 0 24 24"><path d="M22 12a10 10 0 10-11.5 9.9V14.9H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.5 2.9h-2.3v7A10 10 0 0022 12z" fill="#1877F2"/></svg>페이스북</button>
+      <button class="share-pop-btn" data-sns="x" type="button"><svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231z" fill="#000"/></svg>X</button>
+      <button class="share-pop-btn" data-sns="insta" type="button"><svg viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FEDA77"/><stop offset="50%" stop-color="#F58529"/><stop offset="100%" stop-color="#DD2A7B"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="5" fill="url(#ig)"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="#fff"/></svg>인스타</button>
+      <button class="share-pop-btn" data-sns="copy" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg>URL 복사</button>
+      <button class="share-pop-btn" data-sns="native" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M3 21h18"/></svg>기기 공유</button>
+    </div>
+  </div>
+  <div class="share-toast" id="shareToast">URL이 복사되었습니다 ✓</div>
+
+  <!-- ── 함께 들으면 좋은 코스 (리더스 도입 #5) ── -->
+  <section id="crosssell" class="section">
+    <div class="headline-band">
+      <div class="pre">한 코스가 다른 코스를 부릅니다</div>
+      <h2>같이 들으면 <em>두 배</em>가 되는 묶음.</h2>
+    </div>
+    <div class="crosssell">
+      <div class="crosssell-card">
+        <div class="cross-icon">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4v20l5-3 5 3 5-3 5 3 4-2V2L22 4l-5-3-5 3-5-3L2 4z"/><line x1="8" y1="9" x2="20" y2="9"/><line x1="8" y1="14" x2="20" y2="14"/></svg>
+        </div>
+        <h4>입문 + 의식적 몰입</h4>
+        <p>습관과 집중, 두 축을 한 학기 안에.</p>
+      </div>
+      <div class="crosssell-card">
+        <div class="cross-icon">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="11"/><circle cx="14" cy="14" r="7"/><circle cx="14" cy="14" r="3"/></svg>
+        </div>
+        <h4>내신·수능 + 멘탈 코칭</h4>
+        <p>흔들리는 마음까지 같이 잡는 한 묶음.</p>
+      </div>
+      <div class="crosssell-card">
+        <div class="cross-icon">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="22" height="20" rx="2"/><line x1="3" y1="11" x2="25" y2="11"/><line x1="9" y1="2" x2="9" y2="8"/><line x1="19" y1="2" x2="19" y2="8"/><polyline points="9,17 12,20 19,14"/></svg>
+        </div>
+        <h4>의식적 몰입 + 100일 습관</h4>
+        <p>고학년의 자기주도를 한 학기에 완성.</p>
+      </div>
+      <div class="crosssell-card">
+        <div class="cross-icon">
+          <svg viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 22v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="11" cy="8" r="4"/><path d="M25 22v-2a4 4 0 0 0-3-3.87"/><path d="M19 4.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h4>전 코스 + 학부모 간담회</h4>
+        <p>매월 한 번, 가정으로 이어지는 자리.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 연소사 학술·강연 활동 (리더스 도입 #6 신뢰) ── -->
+  <section id="activity" class="section">
+    <div class="headline-band">
+      <div class="pre">12년의 발자취</div>
+      <h2>교실 안팎에서 함께 자라는 <em>교육 공동체</em>.</h2>
+    </div>
+    <div class="activity-tabs">
+      <button class="activity-tab active" data-year="all" type="button">전체</button>
+      <button class="activity-tab" data-year="2026" type="button">2026</button>
+      <button class="activity-tab" data-year="2025" type="button">2025</button>
+      <button class="activity-tab" data-year="2024" type="button">2024</button>
+      <button class="activity-tab" data-year="2023" type="button">2023</button>
+    </div>
+    <div class="activity-timeline" id="activityList">
+      <div class="activity-row featured" data-year="2026">
+        <div class="activity-date">2026-05</div>
+        <div class="activity-body">
+          <div class="activity-title">삼산 연 AI 학습코칭 아카데미 개원 — 자기주도 + 정서 코칭 통합 모델 시범 운영</div>
+          <div class="activity-meta">울산 · 분점 1호점</div>
+        </div>
+        <div class="activity-photo" role="img" aria-label="개원식 사진 자리"></div>
+      </div>
+      <div class="activity-row featured" data-year="2026">
+        <div class="activity-date">2026-04</div>
+        <div class="activity-body">
+          <div class="activity-title">y-life.kr 정식 오픈 — 연아카데미 12년의 교육 철학을 시민 무료 플랫폼으로 공개</div>
+          <div class="activity-meta">웹·온라인 강연</div>
+        </div>
+        <div class="activity-photo" role="img" aria-label="런칭 화면 자리" style="background-image: linear-gradient(180deg, rgba(29,29,27,0.05), rgba(29,29,27,0.4)), url('img/A-02.png'); background-size: cover; background-position: center;"></div>
+      </div>
+      <div class="activity-row featured" data-year="2026">
+        <div class="activity-date">2026-02</div>
+        <div class="activity-body">
+          <div class="activity-title">수풀AI 학습 도우미 도입 — 학생 풀이 과정을 3가지 방식으로 안내하는 AI 코칭</div>
+          <div class="activity-meta">학원 자체 개발</div>
+        </div>
+        <div class="activity-photo" role="img" aria-label="수풀AI 화면 자리" style="background: linear-gradient(180deg, rgba(29,29,27,0.05), rgba(29,29,27,0.4)), linear-gradient(135deg, #d8c6a3 0%, #3e2a22 100%);"></div>
+      </div>
+      <div class="activity-row" data-year="2025">
+        <div class="activity-date">2025-11</div>
+        <div class="activity-body">
+          <div class="activity-title">울산 ○○중학교 학부모 강연 — "자녀가 스스로 공부하게 되는 100일"</div>
+          <div class="activity-meta">학부모 대상 · 200명 참석</div>
+        </div>
+      </div>
+      <div class="activity-row" data-year="2025">
+        <div class="activity-date">2025-09</div>
+        <div class="activity-body">
+          <div class="activity-title">연플래너 앱 베타 출시 — 5.2.5.5 복습 박자를 디지털로 자동 추적</div>
+          <div class="activity-meta">학원 학생 우선 공개</div>
+        </div>
+      </div>
+      <div class="activity-row" data-year="2025">
+        <div class="activity-date">2025-06</div>
+        <div class="activity-body">
+          <div class="activity-title">스무고개 상담카드 v2 — 신입 상담 첫 시간을 게임형 탐색으로 바꾼 도구</div>
+          <div class="activity-meta">학원 자체 도구 · 누적 상담 300건+</div>
+        </div>
+      </div>
+      <div class="activity-row" data-year="2024">
+        <div class="activity-date">2024-10</div>
+        <div class="activity-body">
+          <div class="activity-title">의식적 몰입 워크숍 — 학원 학생 대상 분기 1회 정기 운영</div>
+          <div class="activity-meta">학원 내부 · 12회기 누적</div>
+        </div>
+      </div>
+      <div class="activity-row" data-year="2024">
+        <div class="activity-date">2024-05</div>
+        <div class="activity-body">
+          <div class="activity-title">"100일 습관 트래커" 종이 양식 → 디지털 전환 시작</div>
+          <div class="activity-meta">학원 자체 자료 무료 배포</div>
+        </div>
+      </div>
+      <div class="activity-row" data-year="2023">
+        <div class="activity-date">2023-08</div>
+        <div class="activity-body">
+          <div class="activity-title">"5.2.5.5 학습법" 정식 명명 — 12년 임상 끝에 학원 공식 메서드로 채택</div>
+          <div class="activity-meta">학원 내부 표준</div>
+        </div>
+      </div>
+      <div class="activity-row" data-year="2023">
+        <div class="activity-date">2023-03</div>
+        <div class="activity-body">
+          <div class="activity-title">"배려·배움·놀기" 3원형 교육 철학 정립</div>
+          <div class="activity-meta">학원 운영 철학 공식화</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--ink-faint); margin-top:14px; text-align:center; font-style:italic;">※ 위 활동은 학원 운영 일지 기준 발췌. 강연·집필 일정은 학원 사정에 따라 변동될 수 있습니다.</p>
+  </section>
+
+  <!-- ── 더 들여다보는 연아카데미 (영상 갤러리) ── -->
+  <section id="story" class="story-class">
+    <div class="story-class-inner">
+      <div class="story-class-head">
+        <div class="label">In His Own Words</div>
+        <h2>더 들여다보는 <em>연아카데미</em></h2>
+        <p class="lead" style="max-width:680px; margin:0 auto;">교실에서 어떤 배움이 일어나는지, 왜 이 철학인지, 아이들에게 무엇을 남겨주고자 하는지 — 원장의 목소리로 직접 전합니다. 교육의 가장 중요한 본질은 결국 마주 앉는 사람입니다.</p>
+      </div>
+      <div class="story-class-grid">
+        <div class="story-video-card">
+          <div class="video-frame">
+            <iframe
+              src="https://www.youtube.com/embed/Vp-l5nMmtng"
+              title="원장이 직접 들려주는 연아카데미 이야기"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+          </div>
+          <div>
+            <div class="video-title">이진우 원장이 들려주는 — 연아카데미 이야기</div>
+            <div class="video-desc">왜 자기주도이며 왜 논술인지 — 12년 동안 교실에서 아이들과 부대끼며 깨달은 교육 철학을 전합니다.</div>
+          </div>
+        </div>
+        <div class="story-video-card">
+          <div class="video-frame">
+            <iframe
+              src="https://www.youtube.com/embed/MhyeGNRqCHQ"
+              title="연아카데미 수업·코칭 현장"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+          </div>
+          <div>
+            <div class="video-title">수업·코칭 현장 — 아이와 마주 앉아 나누는 배움</div>
+            <div class="video-desc">단순한 지식 전달을 넘어, 아이 스스로 생각의 길을 열어갈 수 있도록 돕는 코칭의 현장입니다.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 가치 선언 3개 카드 (리더스 도입 #9) ── -->
+  <section class="values-band">
+    <div class="headline-band" style="padding-top:0;">
+      <div class="pre">연아카데미 강동점의 약속</div>
+      <h2>정직 · <em>따뜻</em> · 동행, 세 약속.</h2>
+    </div>
+    <div class="values-grid">
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14" cy="14" r="7"/><line x1="20" y1="20" x2="26" y2="26"/><line x1="11" y1="14" x2="17" y2="14"/></svg>
+        </div>
+        <h3>정직한 평가</h3>
+        <p>듣기 좋은 말 대신, 사실 그대로.<br>가짜 위안이 아니라 진짜 출발점을 드립니다.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 5c-1.7 0-3.3.7-4.5 1.9L16 7.4l-.5-.5C14.3 5.7 12.7 5 11 5 7.7 5 5 7.7 5 11c0 5.5 11 13 11 13s11-7.5 11-13c0-3.3-2.7-6-6-6z"/></svg>
+        </div>
+        <h3>따뜻한 코칭</h3>
+        <p>학습은 머리만의 일이 아닙니다.<br>마음이 가라앉은 자리에서, 공부는 비로소 시작됩니다.</p>
+      </div>
+      <div class="value-card">
+        <div class="value-icon">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="9" r="3"/><circle cx="21" cy="9" r="3"/><path d="M5 26c0-4 3-7 6-7s6 3 6 7"/><path d="M15 26c0-4 3-7 6-7s6 3 6 7"/></svg>
+        </div>
+        <h3>변함없는 동행</h3>
+        <p>한 학기로 끝나는 학원이 아닙니다.<br>자기주도가 자리 잡을 때까지, 가족 같은 호흡으로.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 상담 신청 ── -->
+  <section id="contact">
+    <div class="contact-band">
+      <h2>배움의 첫걸음, 함께 시작하시겠습니까.</h2>
+      <p>차분한 차 한 잔과 함께, 아이의 생각과 습관에 대해 나누는 시간입니다.</p>
+      <a href="mailto:yeon@y-life.com" class="btn-contact">교육상담 신청하기</a>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="ci-label">Email</div>
+          <div class="ci-val">yeon@y-life.com</div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">대표 주소 (강동점)</div>
+          <div class="ci-val">울산 북구 강동로 ○○○</div>
+        </div>
+        <div class="contact-item">
+          <div class="ci-label">교육 상담</div>
+          <div class="ci-val">yeon.ai.kr / y-life.kr</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUICK 사이드바 (리더스 도입 #8 — 상시 CTA) ── -->
+  <nav class="quick-side" aria-label="빠른 메뉴">
+    <a href="http://pf.kakao.com/" target="_blank" rel="noopener" title="카톡 상담">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </span>
+      <span>카톡 상담</span>
+    </a>
+    <a href="mailto:yeon@y-life.com" title="무료 상담 신청">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </span>
+      <span>무료 상담</span>
+    </a>
+    <a href="#gokgan" title="곳간 들여다보기">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      </span>
+      <span>곳간</span>
+    </a>
+    <a href="#branches" title="지점 안내">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </span>
+      <span>지점</span>
+    </a>
+    <a href="#activity" title="활동·후기">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </span>
+      <span>활동</span>
+    </a>
+    <button type="button" class="top-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})" title="맨 위로">
+      <span class="icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+      </span>
+      <span>TOP</span>
+    </button>
+  </nav>
+
+  <!-- ── 푸터 ── -->
+  <footer class="site-footer">
+    <p style="font-style:italic; font-family:'Noto Serif KR', serif; opacity:0.85;">생각이 깊어지고 습관이 단단해지는 공간, 연아카데미.</p>
+    <p>연아카데미 강동점 &nbsp;·&nbsp; <a href="https://yeon.ai.kr">yeon.ai.kr</a> &nbsp;·&nbsp; <a href="https://y-life.kr">y-life.kr</a></p>
+    <p style="margin-top:6px;">© 2026 연아카데미 강동점. All rights reserved.</p>
+  </footer>
+
+  <script src="yeon-planning.js"></script>
+</body>
+</html>
