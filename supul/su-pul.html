@@ -3727,7 +3727,7 @@ function updateSubTabBar(groupKey, activePanel) {
 }
 
 // ===== 알림 닷 시스템 =====
-const NOTIF_KEY = 'yeon_notif_'+(typeof STUDENT_ID!=='undefined'?STUDENT_ID:'gangdongwon');
+const NOTIF_KEY = 'yeon_notif_'+(typeof STUDENT_ID!=='undefined'?STUDENT_ID:'supul');
 function loadNotif(){
  try{ return JSON.parse(localStorage.getItem(NOTIF_KEY)||'{}'); }
  catch(e){ return {}; }
@@ -6797,7 +6797,7 @@ function saveLevelToDB(){
 
 // ===== 친구 초대 (추천인 코드 포함) =====
 function buildShareLink(){
- return 'https://su-pul.netlify.app/gangdongwon.html?ref='+STUDENT_ID;
+ return 'https://yeon.ai.kr/supul/su-pul.html?ref='+STUDENT_ID;
 }
 function copyShareLink(btn){
  const url = buildShareLink();
@@ -8573,7 +8573,7 @@ function renderTimeline() {
  });
 
  // 동적으로 추가된 기록도 포함
- const dynamicLogs = JSON.parse(localStorage.getItem('yeon_log_gangdongwon') || '[]');
+ const dynamicLogs = JSON.parse(localStorage.getItem('yeon_log_supul') || '[]');
  dynamicLogs.forEach(dl => {
  if (logFilter !== 'all' && dl.type !== logFilter) return;
  if (search) {
@@ -8810,9 +8810,9 @@ function renderTextLearnHistory(){
 
 // 동적 기록 추가 함수
 function addLogEntry(entry) {
- const logs = JSON.parse(localStorage.getItem('yeon_log_gangdongwon') || '[]');
+ const logs = JSON.parse(localStorage.getItem('yeon_log_supul') || '[]');
  logs.unshift(entry);
- localStorage.setItem('yeon_log_gangdongwon', JSON.stringify(logs));
+ localStorage.setItem('yeon_log_supul', JSON.stringify(logs));
  renderTimeline();
 }
 
@@ -9097,11 +9097,11 @@ function fbFilterCategory(cat, btn) {
 
 // localStorage 저장/로드
 function saveFbToStorage() {
- try { localStorage.setItem('yeon_fb_gangdongwon', JSON.stringify(fbPosts)); } catch(e) {}
+ try { localStorage.setItem('yeon_fb_supul', JSON.stringify(fbPosts)); } catch(e) {}
 }
 function loadFbFromStorage() {
  try {
- const data = localStorage.getItem('yeon_fb_gangdongwon');
+ const data = localStorage.getItem('yeon_fb_supul');
  if (data) { fbPosts = JSON.parse(data); fbRenderList(); }
  } catch(e) {}
 }
@@ -14495,7 +14495,7 @@ function calcJourneyProgress(){
  try{ testHist = JSON.parse(localStorage.getItem(TEST_HISTORY_KEY)||'[]'); }catch(e){}
  var growthData = loadGrowthData();
  var logs = [];
- try{ logs = JSON.parse(localStorage.getItem('yeon_log_gangdongwon')||'[]'); }catch(e){}
+ try{ logs = JSON.parse(localStorage.getItem('yeon_log_supul')||'[]'); }catch(e){}
 
  // 학습량 점수 (최대 30점): 로그 수 기반
  var logScore = Math.min(30, logs.length * 0.5);

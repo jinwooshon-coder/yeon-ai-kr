@@ -45,13 +45,14 @@ window.YEON_CONFIG = {
   APP_NAME: '수풀AI · 수학 학습',
 
   // ============================================
-  // 무료 체험 정책
+  // 무료 체험 정책 (pricing.json v4 기준)
   // ============================================
   TRIAL: {
-    TOTAL_DAYS: 30,
+    TOTAL_DAYS: 7,           // 가입 후 7일 전체 체험
+    FREE_MONTHLY_AI: 10,     // 체험 종료 후 무료 유지 시 월 AI 질문 10회
     PHASE1_DAYS: 7,
-    PHASE1_QUOTA: 3,
-    PHASE2_QUOTA: 1
+    PHASE1_QUOTA: 99,        // 체험 기간 중 무제한
+    PHASE2_QUOTA: 0          // 체험 종료 후 무료 플랜으로 전환
   },
 
   // ============================================
@@ -75,89 +76,104 @@ window.YEON_CONFIG = {
   },
 
   // ============================================
-  // 유료 이용료 — 5단 자동 승급 요금제
+  // 유료 이용료 — 연라이프 공식 요금제 v4 (2026-06-06 확정)
+  // 단일 출처: C:\Claud-Antigravity\pricing.json
   // ============================================
   // 핵심 원칙:
-  //  - 모든 단계는 "모든 기능 무제한 사용 가능". 티어별 기능 제한 없음.
-  //  - 차이는 오직 "월 세션 한도"뿐.
-  //  - 한도 초과 시 해당 월에 한해 한 단계 위 요금제가 자동 적용되어 끊김 없이 학습 지속.
-  //  - 최대 한도는 T5 (50만원). 그 이상은 청구되지 않음.
-  //  - 학부모 명의 계좌이체/카카오페이를 기본 결제 수단으로 유도해 전산 기록을 명확히 남긴다.
-  //  - 심리적으로 적당한 가격 간격 (20k → 45k → 99k → 199k → 499k) 으로 선택 피로를 낮춘다.
+  //  - "모든 앱·기록은 평생 무료. 가격은 AI가 얼마나 거들어 주는가의 차이."
+  //  - 한도 초과 시 자동 승급 없음 — 사용자가 직접 선택해서 올린다.
+  //  - 결제자: 학부모 명의 (학원코드+별명+PIN 가입, 이메일 불필요)
+  //  - 한 번 결제 = 모든 연 앱 적용 (크로스앱 통합 멤버십)
+  //  - AI 엔진: 무료/저가=Haiku, 입문=Sonnet, 프리미엄~=Opus. 화면에 모델명 노출 금지.
   PRICING: {
     CURRENCY: 'KRW',
     BILLING_CYCLE_DAYS: 30,
-    // 기본 진입 요금 (사용자가 처음 선택하는 베이스)
-    DEFAULT_TIER: 'T1',
-    // 초과 시 자동으로 한 단계 위 요금제 적용 (동일 월 내, 다음 달 재선택 가능)
-    AUTO_UPGRADE: true,
-    // 5단 선택 옵션 — 모든 티어 동일 기능, 차이는 세션 한도뿐
-    TIERS: [
+    DEFAULT_TIER: 'free',
+    AUTO_UPGRADE: false,   // 자동 승급 금지 — 사용자가 직접 선택
+    DEMO_MODE: true,       // 실제 과금 OFF (PG 연동 전까지 유지)
+
+    // 보급 4단 (기록·앱은 무료, AI 사용량만 차등)
+    BASIC_TIERS: [
       {
-        id: 'T1',
-        name: '라이트',
-        tagline: '가볍게 시작',
-        price: 20000,
-        sessions: 30,
-        dailyAvg: 1,
-        bestFor: '처음 시작하는 학생 · 주 2~3회 복습',
-        highlight: false
+        id: 'free',
+        name: '무료',
+        price: 0,
+        per: '평생',
+        for: '스스로 기록하는 학습자',
+        highlight: false,
+        features: ['모든 앱·기록 평생 무제한', '자동 약점·복습 코칭', '가입 1주 전체 체험', '이후 AI 월 10번 질문', '광고 약간']
       },
       {
-        id: 'T2',
-        name: '스탠다드',
-        tagline: '꾸준히 습관',
-        price: 45000,
-        sessions: 80,
-        dailyAvg: 2,
-        bestFor: '매일 꾸준히 학습하는 중학생 · 평일 루틴',
-        highlight: false
+        id: 'light',
+        name: '가볍게',
+        price: 3000,
+        per: '월',
+        for: '가끔 물어봄 · 부모 결제 연습',
+        highlight: false,
+        features: ['광고 없음', '간단·빠른 풀이 무제한', '꼼꼼한 풀이 주 3~4번']
       },
       {
-        id: 'T3',
-        name: '포커스',
-        tagline: '집중 공부',
-        price: 99000,
-        sessions: 200,
-        dailyAvg: 6,
-        bestFor: '시험 대비 · 주말 집중 · 상위권 목표',
-        highlight: true  // 인기(추천) 티어 — 심리적 기준점
+        id: 'basic',
+        name: '기본',
+        price: 5000,
+        per: '월',
+        for: '자주 물어봄',
+        highlight: false,
+        features: ['꼼꼼한 풀이 하루 2~3번', '약점 자동 정리']
       },
       {
-        id: 'T4',
-        name: '마스터',
-        tagline: '심화 학습',
-        price: 199000,
-        sessions: 450,
-        dailyAvg: 15,
-        bestFor: '수능/내신 집중기 · 하루 여러 시간 학습',
-        highlight: false
-      },
-      {
-        id: 'T5',
-        name: '언리미티드',
-        tagline: '전과목 풀 가동',
-        price: 499000,
-        sessions: 9999,           // 실질 무제한 — 한도 체크용 값
-        dailyAvg: 50,
-        bestFor: '전과목 동시 학습 · 여러 앱 생태계 풀 활용',
-        highlight: false
+        id: 'starter',
+        name: '입문',
+        price: 10000,
+        per: '월',
+        for: '매일 꾸준히',
+        highlight: true,   // 추천 티어
+        features: ['꼼꼼한 풀이 하루 5번', '깊은 분석 가끔', '시험 대비 모드']
       }
     ],
-    // 결제 수단: 학부모 명의 우선, 현금/타인 이체는 기록 불명확하므로 권장하지 않음
+
+    // 프리미엄 3단 (학원·과외 대체 수준)
+    PREMIUM_TIERS: [
+      {
+        id: 'premium',
+        name: '프리미엄',
+        price: 100000,
+        per: '월',
+        for: '학원 한 곳 대체',
+        highlight: false,
+        features: ['꼼꼼한 풀이 무제한', '깊은 분석 하루 3번', '주 1회 코칭 리포트', '가족 2명']
+      },
+      {
+        id: 'master',
+        name: '마스터',
+        price: 300000,
+        per: '월',
+        for: '학원+과외 대체',
+        highlight: false,
+        features: ['깊은 분석 사실상 무제한', '실시간 즉답 코칭', '가족 3명']
+      },
+      {
+        id: 'unlimited',
+        name: '언리미티드',
+        price: 500000,
+        per: '월',
+        for: '최상위 집중',
+        highlight: false,
+        features: ['모든 것 무제한', '전담 학습 매니저', '가족 다수']
+      }
+    ],
+
+    // 결제 수단: 학부모 명의 우선
     PREFERRED_METHODS: ['parent_bank_transfer', 'parent_kakaopay'],
-    // 부모 안내 페이지 경로 — 부모님께 공유할 상세 설명서
     PARENT_INFO_URL: 'parent.html',
-    // 입금 정보 (부모님께 공유되는 내용)
     DEPOSIT_INFO: {
       BANK_NAME: '카카오뱅크',
       ACCOUNT_NUMBER: '3333-37-1080249',
       ACCOUNT_HOLDER: '이진우',
       KAKAOPAY_LINK: ''
     },
-    // 과거 호환용 (레거시 코드가 읽을 수 있음) — TIERS 로 이전 완료
-    MIN: 20000,
-    MAX: 499000
+    MIN: 0,
+    MAX: 500000
   },
 
   // ============================================

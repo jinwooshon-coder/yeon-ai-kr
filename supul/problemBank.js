@@ -23,7 +23,7 @@ const META = {
 
  schoolLevels: { elem:'초등', mid:'중등', high:'고등', univ:'대학+' },
 
- // gangdongwon.html 의 togglePracticePart 키와 1:1 매칭
+ // su-pul.html 의 togglePracticePart 키와 1:1 매칭
  parts: {
   number:      '수와 연산',
   algebra:     '문자와 식',
